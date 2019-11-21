@@ -139,8 +139,8 @@ wiod.new <- merge(wiod.new, cpc.conversion, by.x = "isic.short", by.y = "isic4")
 library("WDI")
 countries <- gtalibrary::country.names
 
-# CURRENCY IN THE YEAR 2014
-year = 2014
+# CURRENCY IN THE YEAR 2016
+year = 2016
 xchange <- WDI(indicator="DPANUSSPB", start=year, end=year, extra=T)
 
 # ADD HONG KONG ISO3
