@@ -12,7 +12,7 @@ library(splitstackshape)
 
 wdpath = '0 report production/GTA 25/code/exploratory/191120 Exploratory Request SE/'
 output.path = "0 report production/GTA 25/code/exploratory/191120 Exploratory Request SE/results/"
-
+data.path = "0 report production/GTA 25/code/exploratory/191120 Exploratory Request SE/data/" 
 
 gta_setwd()
 
@@ -113,6 +113,7 @@ wiod.new.freq <- cSplit(wiod.new.freq, "wiod.new.freq",".")
 names(wiod.new.freq) <- c("freq","country","variable","code")
 wiod.new <- merge(wiod.new, wiod.new.freq, by=c("country","variable","code"))
 wiod.new$value.new <- wiod.new$value/wiod.new$freq
+wiod.new$freq <- NULL
 
 # LOAD ISIC AND CPC CONVERSION TABLE
 cpc.conversion <- read.csv("definitions/hs-to-sic/isic4 to cpc21.csv",sep=";")
@@ -132,8 +133,16 @@ cpc.conversion <- unique(cpc.conversion)
 # MERGE WITH WIOD DATA
 wiod.new <- merge(wiod.new, cpc.conversion, by.x = "isic.short", by.y = "isic4")
 
-## JF need to accoutn for 1:n conversion in ISIC:CPC; divide by number of CPC per ISIC code.
-
+# ACCOUNTING FOR 1:n RELATIONSHIP BETWEEN CPC AND ISIC CODES
+wiod.new.freq <- as.data.frame(paste0(wiod.new$country,".",wiod.new$variable,".",wiod.new$isic.short,".",wiod.new$code))
+wiod.new.freq <- as.data.frame(table(wiod.new.freq))
+wiod.new.freq <- cSplit(wiod.new.freq, "wiod.new.freq",".")
+names(wiod.new.freq) <- c("freq","country","variable","isic.short","code")
+wiod.new.freq$isic.short <- as.character(wiod.new.freq$isic.short)
+wiod.new.freq$isic.short <- sprintf("%02s",wiod.new.freq$isic.short) 
+wiod.new.freq$isic.short <- substr(wiod.new.freq$isic.short,1,2)
+wiod.new <- merge(wiod.new, wiod.new.freq, by=c("country","variable","isic.short","code"))
+wiod.new$value.new.2 <- wiod.new$value.new/wiod.new$freq
 
 # CURRENCIES ARE LOCAL CURRENCIES (AS PER DESCRIPTION OF WIOD) CONVERT TO US DOLLAR
 library("WDI")
@@ -148,10 +157,23 @@ xchange$iso3c[xchange$country == "Hong Kong China"] <- "HKG"
 
 xchange=subset(xchange, is.na(DPANUSSPB)==F & year == year & iso3c %in% unique(wiod.new$country))[,c("iso3c","DPANUSSPB","year")]
 
-# MERGE XCHANGE RATES WITH WIOD.NEW
-wiod.new <- merge(wiod.new, xchange, by.x="country",by.y="iso3c") ### THE NUMBER OF ROWS for wiod.new increases here. It should stay the same.
+# Load taiwanese dollar and south korean exchange rate separately
+korea <- read.csv(paste0(data.path,"exchange rates oecd 2016.csv"))
+xchange <- rbind(xchange, data.frame(iso3c = "KOR",
+                                     DPANUSSPB = korea$Value[korea$LOCATION == "KOR"],
+                                     year = 2016))
+twnd <- read.csv(paste0(data.path,"US per TWD xchange rate 2016.csv"),sep=";")
+twnd$X0.029912 <- 1/twnd$X0.029912
+xchange <- rbind(xchange, data.frame(iso3c = "TWN",
+                                     DPANUSSPB = mean(twnd$X0.029912),
+                                     year = 2016))
 
-wiod.new$usd.value <- wiod.new$value.new/wiod.new$DPANUSSPB
+# MERGE XCHANGE RATES WITH WIOD.NEW
+wiod.new <- merge(wiod.new, xchange, by.x="country",by.y="iso3c")
+
+# ONLY UPDATE VALUES FOR "VA" AS EMPLOYEES MUSTN'T BE UPDATED
+wiod.new$usd.value <- wiod.new$value.new.2
+wiod.new$usd.value[wiod.new$variable=="VA"] <- (wiod.new$value.new.2[wiod.new$variable=="VA"]/wiod.new$DPANUSSPB[wiod.new$variable=="VA"])*1000000
 
 # AGGREGATE RESULTS FOR CPC SECTORS AND GO/EMPE
 wiod.new.all <- aggregate(usd.value ~ variable + cpc21, wiod.new, function(x) sum(x))
@@ -170,13 +192,14 @@ wiod.empe <- subset(wiod.new.all, variable == "EMPE")
 wiod.empe <- wiod.empe[with(wiod.empe, order(-usd.value)),]
 row.names(wiod.empe) <- NULL
 wiod.empe <- wiod.empe[c(1:10),]
+wiod.empe$usd.value <- wiod.empe$usd.value*1000
 
 names(wiod.empe) <- c("CPC","var","Number of Employees","CPC Name")
 wiod.empe <- wiod.empe[,c("CPC","Number of Employees","CPC Name")]
 write.xlsx(wiod.empe, file=paste0(output.path, "Largest sectors in employment 2014.xlsx"),sheetName="Number of employees", row.names=F)
 
-# GET TOP 10 FOR GDP (NUMBER OF EMPLOYEES)
-wiod.gdp <- subset(wiod.new.all, variable == "GO")
+# GET TOP 10 FOR GDP
+wiod.gdp <- subset(wiod.new.all, variable == "VA")
 wiod.gdp <- wiod.gdp[with(wiod.gdp, order(-usd.value)),]
 row.names(wiod.gdp) <- NULL
 wiod.gdp <- wiod.gdp[c(1:10),]
