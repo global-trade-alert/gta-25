@@ -80,7 +80,7 @@ wiod <- wiod[,c("country","variable","code","2014")]
 wiod <- subset(wiod, ! code %in% c(LETTERS,"R_S"))
 
 # SUBSET TO VARIABLES EMPE AND GO
-wiod <- subset(wiod, variable %in% c("EMPE","GO"))
+wiod <- subset(wiod, variable %in% c("EMPE","VA"))
 row.names(wiod) <- NULL
 
 # TRANSFORM code COLUMN TO PROPER ISIC CODES
