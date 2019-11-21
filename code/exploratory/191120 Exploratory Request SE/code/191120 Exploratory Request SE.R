@@ -151,11 +151,11 @@ xchange=subset(xchange, is.na(DPANUSSPB)==F & year == year & iso3c %in% unique(w
 # MERGE XCHANGE RATES WITH WIOD.NEW
 wiod.new <- merge(wiod.new, xchange, by.x="country",by.y="iso3c") ### THE NUMBER OF ROWS for wiod.new increases here. It should stay the same.
 
-wiod.new$real.value <- wiod.new$value.new/wiod.new$DPANUSSPB
+wiod.new$usd.value <- wiod.new$value.new/wiod.new$DPANUSSPB
 
 # AGGREGATE RESULTS FOR CPC SECTORS AND GO/EMPE
-wiod.new.all <- aggregate(real.value ~ variable + cpc21, wiod.new, function(x) sum(x))
-# wiod.new.ldc <- aggregate(real.value ~ variable + cpc21, subset(wiod.new, country %in% subset(countries, is.ldc == T)$iso_code), function(x) sum(x))
+wiod.new.all <- aggregate(usd.value ~ variable + cpc21, wiod.new, function(x) sum(x))
+# wiod.new.ldc <- aggregate(usd.value ~ variable + cpc21, subset(wiod.new, country %in% subset(countries, is.ldc == T)$iso_code), function(x) sum(x))
 
 # ADD CPC NAMES
 wiod.new.all <- unique(merge(wiod.new.all, subset(cpc.names, cpc.digit.level == 2)[,c("cpc","cpc.name")], by.x="cpc21", by.y = "cpc"))
@@ -167,7 +167,7 @@ length(wiod.cty[wiod.cty %in% subset(countries, is.ldc == T)$iso_code])
 
 # GET TOP 10 FOR EMPLOYMENT (NUMBER OF EMPLOYEES)
 wiod.empe <- subset(wiod.new.all, variable == "EMPE")
-wiod.empe <- wiod.empe[with(wiod.empe, order(-real.value)),]
+wiod.empe <- wiod.empe[with(wiod.empe, order(-usd.value)),]
 row.names(wiod.empe) <- NULL
 wiod.empe <- wiod.empe[c(1:10),]
 
@@ -177,7 +177,7 @@ write.xlsx(wiod.empe, file=paste0(output.path, "Largest sectors in employment 20
 
 # GET TOP 10 FOR GDP (NUMBER OF EMPLOYEES)
 wiod.gdp <- subset(wiod.new.all, variable == "GO")
-wiod.gdp <- wiod.gdp[with(wiod.gdp, order(-real.value)),]
+wiod.gdp <- wiod.gdp[with(wiod.gdp, order(-usd.value)),]
 row.names(wiod.gdp) <- NULL
 wiod.gdp <- wiod.gdp[c(1:10),]
 
