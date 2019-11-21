@@ -149,7 +149,8 @@ xchange$iso3c[xchange$country == "Hong Kong China"] <- "HKG"
 xchange=subset(xchange, is.na(DPANUSSPB)==F & year == year & iso3c %in% unique(wiod.new$country))[,c("iso3c","DPANUSSPB","year")]
 
 # MERGE XCHANGE RATES WITH WIOD.NEW
-wiod.new <- merge(wiod.new, xchange, by.x="country",by.y="iso3c")
+wiod.new <- merge(wiod.new, xchange, by.x="country",by.y="iso3c") ### THE NUMBER OF ROWS for wiod.new increases here. It should stay the same.
+
 wiod.new$real.value <- wiod.new$value.new/wiod.new$DPANUSSPB
 
 # AGGREGATE RESULTS FOR CPC SECTORS AND GO/EMPE
