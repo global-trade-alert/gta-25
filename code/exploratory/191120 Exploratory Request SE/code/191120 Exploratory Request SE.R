@@ -47,6 +47,11 @@ trade.data$cpc <- as.character(trade.data$cpc)
 trade.data$cpc <- sprintf("%03s",trade.data$cpc) 
 trade.data$cpc <- substr(trade.data$cpc,1,2)
 
+
+# remove oil altogether
+trade.data=subset(trade.data, cpc!=12)
+
+
 # LARGEST EXPORT SECTORS
 exp.sectors=merge(aggregate(trade.value~cpc,trade.data,sum), subset(cpc.names, cpc.digit.level==2), by='cpc')
 
