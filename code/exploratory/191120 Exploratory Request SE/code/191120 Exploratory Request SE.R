@@ -4,6 +4,8 @@ rm(list=ls())
 # With respect to the former 2 criteria does that outfit https://data.wiiw.ac.at/ or UNIDO have this data? Also, please identify from the 2017 trade data the five largest sectors exported by the LDCs."
 # From the above, exclude resources and raw materials in the trade figures, please.
 
+# Can you please expand the top 10 to the top 25 but only for the GDP and employment numbers?
+
 library(gtalibrary)
 library(stringr)
 library(bit64)
@@ -191,7 +193,7 @@ length(wiod.cty[wiod.cty %in% subset(countries, is.ldc == T)$iso_code])
 wiod.empe <- subset(wiod.new.all, variable == "EMPE")
 wiod.empe <- wiod.empe[with(wiod.empe, order(-usd.value)),]
 row.names(wiod.empe) <- NULL
-wiod.empe <- wiod.empe[c(1:10),]
+wiod.empe <- wiod.empe[c(1:25),]
 wiod.empe$usd.value <- wiod.empe$usd.value*1000
 
 names(wiod.empe) <- c("CPC","var","Number of Employees","CPC Name")
@@ -202,7 +204,7 @@ write.xlsx(wiod.empe, file=paste0(output.path, "Largest sectors in employment 20
 wiod.gdp <- subset(wiod.new.all, variable == "VA")
 wiod.gdp <- wiod.gdp[with(wiod.gdp, order(-usd.value)),]
 row.names(wiod.gdp) <- NULL
-wiod.gdp <- wiod.gdp[c(1:10),]
+wiod.gdp <- wiod.gdp[c(1:25),]
 
 names(wiod.gdp) <- c("CPC","var","GDP","CPC Name")
 wiod.gdp <- wiod.gdp[,c("CPC","GDP","CPC Name")]
