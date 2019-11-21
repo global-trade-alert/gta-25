@@ -132,6 +132,9 @@ cpc.conversion <- unique(cpc.conversion)
 # MERGE WITH WIOD DATA
 wiod.new <- merge(wiod.new, cpc.conversion, by.x = "isic.short", by.y = "isic4")
 
+## JF need to accoutn for 1:n conversion in ISIC:CPC; divide by number of CPC per ISIC code.
+
+
 # CURRENCIES ARE LOCAL CURRENCIES (AS PER DESCRIPTION OF WIOD) CONVERT TO US DOLLAR
 library("WDI")
 countries <- gtalibrary::country.names
