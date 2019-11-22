@@ -20,7 +20,7 @@ if (1 %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.
   fig1 = ggplot() + geom_line(data=published.ids, aes(x=published.by, y=intervention.count, col=group), size=1.1) + 
     scale_x_date(name = 'Documented by',date_breaks = "1 year") + 
     scale_y_continuous(name= 'Total harmful interventions', breaks=seq(0,900,100), labels=seq(0,900,100)) + 
-    gta_theme() + labs(color='Published by dates') 
+    gta_theme() + labs(color='Documented by dates') 
   
   gta_plot_saver(fig1, 
                  figures.path,
