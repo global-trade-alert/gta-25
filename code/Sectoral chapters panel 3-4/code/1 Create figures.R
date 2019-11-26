@@ -22,6 +22,7 @@ gta_colour_palette()
 order.names <- data.frame(country = c("United States of America","China",c(g20.member.names[! g20.member.names %in% c("United States of America", "China")])), order = c(seq(1,19,1)))
 plot.names <- data.frame(country = c("USA","China",c(g20.member.names[! g20.member.names %in% c("United States of America", "China","United Kingdom")]),"UK"), order = c(seq(1,19,1)))
 blank.set <- data.frame(order.y = rep(seq(1,19,1),19), order.x = rep(1:19, each=19))
+blank.set.middle <- data.frame(order.x=seq(1,19,1),order.y=seq(1,19,1))
 
 # Figure 9 create graph ------------------------------------------------------
 
@@ -47,7 +48,8 @@ fig9.create <- function(sct) {
     
   fig9 <- ggplot(data=subset(fig9.data, sector==sct))+
     geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill=gta_colour$red[4], color="#FFFFFF", size=0.2, na.rm = F)+
-    geom_tile(aes(x=order.x, y=order.y, fill=`2019`), color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(aes(x=order.y, y=order.x, fill=`2019`), color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(data=blank.set.middle, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
     gta_theme(x.bottom.angle = 45)+
     scale_fill_gradientn(name="Percentage of bilateral exports \nfacing importer\'s trade distortions", 
                          colours = c(gta_colour$red[4], gta_colour$red[1]), values=c(0,0.25,0.50,0.75,1), 
@@ -61,6 +63,7 @@ fig9.create <- function(sct) {
           panel.border=element_rect(size=1, colour="grey",fill = "transparent"), 
           axis.text.x.bottom = element_text(hjust = 1)
     )
+  
   return(fig9)
   }
 
@@ -84,7 +87,8 @@ fig10.create <- function(sct) {
   
   fig10 <- ggplot(data=subset(fig10.data, sector==sct))+
     geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill=gta_colour$green[4], color="#FFFFFF", size=0.2, na.rm = F)+
-    geom_tile(aes(x=order.x, y=order.y, fill=`2019`), color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(aes(x=order.y, y=order.x, fill=`2019`), color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(data=blank.set.middle, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
     gta_theme(x.bottom.angle = 45)+
     scale_fill_gradientn(name="Percentage of bilateral exports \nprofiting of importer\'s trade remedies", 
                          colours = c(gta_colour$green[4], gta_colour$green[1]), values=c(0,0.25,0.50,0.75,1), 
@@ -128,11 +132,12 @@ fig11.create <- function(sct) {
   
   fig11 <- ggplot(data=subset(fig11.data, sector==sct))+
     geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
-    geom_tile(aes(x=order.x, y=order.y, fill=change), color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(aes(x=order.y, y=order.x, fill=change), color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(data=blank.set.middle, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
     gta_theme(x.bottom.angle = 45)+
     scale_fill_gradientn(name="Change in bilateral exports \nfacing importer\'s trade distortions \nfrom pre 2017 to today",
                          colours = c(gta_colour$green[1], "#FFFFFF", gta_colour$red[1]),values=rescale(c(min(subset(fig11.data, sector == sct)$change),0,max(subset(fig11.data, sector == sct)$change))), 
-                         breaks=waiver(),
+                         breaks=waiver(), labels = percent,
                          guide=guide_colorbar(barwidth=15, title.position = "top", hjust=1, label.hjust=0.3))+
     scale_y_continuous(breaks=seq(1,max(fig11.data$order.y),1), labels=plot.names$country, sec.axis = sec_axis(~., breaks=seq(1,max(fig11.data$order.y),1), labels=plot.names$country, name = "Importing country"))+
     scale_x_continuous(breaks=seq(1,max(fig11.data$order.x),1),labels=plot.names$country)+
@@ -173,20 +178,20 @@ fig12.create <- function(sct) {
   
   fig12 <- ggplot(data=subset(fig12.data, sector==sct))+
     geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
-    geom_tile(aes(x=order.x, y=order.y, fill=change), color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(aes(x=order.y, y=order.x, fill=change), color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(data=blank.set.middle, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
     gta_theme(x.bottom.angle = 45)+
-    scale_fill_gradientn(name="Change in bilateral exports \nfacing importer\'s trade remedies from pre 2017 to today", 
-                         colours = c(gta_colour$green[1], "#FFFFFF", gta_colour$red[1]), values=c(min(subset(fig12.data, sector == sct)$change),0,max(subset(fig12.data, sector == sct)$change)), 
-                         breaks=waiver(), labels=percent,
+    scale_fill_gradientn(name="Change in bilateral exports \nfacing importer\'s trade remedies from pre 2017 to today",
+                         colours = c(gta_colour$red[1], "#FFFFFF", gta_colour$green[1]),values=rescale(c(min(subset(fig12.data, sector == sct)$change),0,max(subset(fig12.data, sector == sct)$change))), 
+                         breaks=waiver(), labels = percent,
                          guide=guide_colorbar(barwidth=15, title.position = "top", hjust=1, label.hjust=0.3))+
     scale_y_continuous(breaks=seq(1,max(fig12.data$order.y),1), labels=plot.names$country, sec.axis = sec_axis(~., breaks=seq(1,max(fig12.data$order.y),1), labels=plot.names$country, name = "Importing country"))+
     scale_x_continuous(breaks=seq(1,max(fig12.data$order.x),1),labels=plot.names$country)+
     labs(x="Exporting countries",y="Importing countries")+
     theme(panel.background = element_blank(), 
-          panel.border=element_rect(size=1, colour="grey",fill = "transparent"), 
+          panel.border=element_rect(size=1, colour="gray",fill = "transparent"), 
           axis.text.x.bottom = element_text(hjust = 1)
     )
-  
   return(fig12)
 }
 
