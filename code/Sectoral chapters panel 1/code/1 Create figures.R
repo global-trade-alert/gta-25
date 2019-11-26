@@ -5,6 +5,7 @@ library(stringr)
 library(tidyverse)
 library(ggplot2)
 library(gridExtra)
+library(xlsx)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
@@ -157,7 +158,7 @@ fig4.data$order[fig4.data$hits == "2"] <- 4
 fig4.data$order[fig4.data$hits == "3 - 5"] <- 3
 fig4.data$order[fig4.data$hits == "6 - 10"] <- 2
 fig4.data$order[fig4.data$hits == "11 or more"] <- 1
-fig4.data <- fig4.data[with(fig4.data, order(order)),]
+fig4.data <- fig4.data[with(fig4.data, order(-order)),]
 row.names(fig4.data) <- NULL
 fig4.data$year <- as.numeric(as.character(fig4.data$year))
 
@@ -181,10 +182,10 @@ fig4.create <- function(sct) {
                      y.left.limits = c(0,1),
                      y.right.enable = F,
                      fill.legend.title = "Number of countries hit",
-                     fill.palette = c(gta_colour$qualitative),
-                     fill.legend.col = 5)+
+                     fill.palette = c(gta_colour$qualitative[c(5:1)]),
+                     fill.legend.col = 5,
+                     fill.labels = unique(fig4.data$hits))+
     gta_theme()
-  
   return(fig4)
 }
 
