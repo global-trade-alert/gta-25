@@ -36,7 +36,8 @@ sct.cov.harmful$type="harmful"
 sct.cov.liberalising$type="liberalising"
 
 fig1.data <- rbind(sct.cov.harmful, sct.cov.liberalising)
-# sct=28
+
+write.xlsx(fig1.data, file=paste0(output.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Coverages")
 
 fig1.create <- function(sct) {
     
@@ -53,7 +54,7 @@ fig1.create <- function(sct) {
                      data.x="year",
                      data.y="coverages",
                      x.bottom.name = "Year",
-                     x.bottom.breaks = seq(2009,2019,2),
+                     x.bottom.breaks = seq(2009,2019,1),
                      y.left.name = "Share of sectoral exports affected",
                      y.left.limits = c(0,1),
                      y.left.labels = percent,
@@ -78,6 +79,8 @@ load(paste0(data.path,"Sector coverages types harmful.Rdata"))
 sct.cov.harmful$type="all"
 fig2.data <- rbind(sct.cov.types.harmful, sct.cov.harmful)
 
+write.xlsx(fig2.data, file=paste0(output.path,"Table for Figure 2.xlsx"),row.names=F, sheetName = "Coverages")
+
 fig2.create <- function(sct) {
 
   fig2 <- ggplot(data=subset(fig2.data, sector == sct))+
@@ -89,7 +92,7 @@ fig2.create <- function(sct) {
                      data.x="year",
                      data.y="coverages",
                      x.bottom.name = "Year",
-                     x.bottom.breaks = seq(2009,2019,2),
+                     x.bottom.breaks = seq(2009,2019,1),
                      y.left.name = "Share of sectoral exports affected",
                      y.left.limits = c(0,1),
                      y.left.labels = percent,
@@ -113,6 +116,8 @@ load(paste0(data.path,"Sector coverages types liberalising.Rdata"))
 sct.cov.harmful$type="all"
 fig3.data <- rbind(sct.cov.types.liberalising, sct.cov.harmful)
 
+write.xlsx(fig3.data, file=paste0(output.path,"Table for Figure 3.xlsx"),row.names=F, sheetName = "Coverages")
+
 fig3.create <- function(sct) {
   
   fig3 <- ggplot(data=subset(fig3.data, sector == sct))+
@@ -124,7 +129,7 @@ fig3.create <- function(sct) {
                      data.x="year",
                      data.y="coverages",
                      x.bottom.name = "Year",
-                     x.bottom.breaks = seq(2009,2019,2),
+                     x.bottom.breaks = seq(2009,2019,1),
                      y.left.name = "Share of sectoral exports affected",
                      y.left.limits = c(0,1),
                      y.left.labels = percent,
@@ -147,14 +152,16 @@ fig3.create <- function(sct) {
 load(paste0(data.path,"Sector coverages hit brackets.Rdata"))
 
 fig4.data <- sct.cov.hit.brkts
-fig4.data$order[fig4.data$hits == "1"] <- 1
-fig4.data$order[fig4.data$hits == "2"] <- 2
+fig4.data$order[fig4.data$hits == "1"] <- 5
+fig4.data$order[fig4.data$hits == "2"] <- 4
 fig4.data$order[fig4.data$hits == "3 - 5"] <- 3
-fig4.data$order[fig4.data$hits == "6 - 10"] <- 4
-fig4.data$order[fig4.data$hits == "11 or more"] <- 5
+fig4.data$order[fig4.data$hits == "6 - 10"] <- 2
+fig4.data$order[fig4.data$hits == "11 or more"] <- 1
 fig4.data <- fig4.data[with(fig4.data, order(order)),]
 row.names(fig4.data) <- NULL
 fig4.data$year <- as.numeric(as.character(fig4.data$year))
+
+write.xlsx(fig4.data[,c("sector","year","coverages","hits")], file=paste0(output.path,"Table for Figure 4.xlsx"),row.names=F, sheetName = "Coverages")
 
 fig4.create <- function(sct) {
   
@@ -167,7 +174,7 @@ fig4.create <- function(sct) {
                      data.x="year",
                      data.y="coverages",
                      x.bottom.name = "Year",
-                     x.bottom.breaks = seq(2009,2019,2),
+                     x.bottom.breaks = seq(2009,2019,1),
                      x.bottom.limits = c(2008.5,2019.5),
                      y.left.name = "Share of sectoral exports affected",
                      y.left.labels = percent,
