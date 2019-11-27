@@ -173,7 +173,7 @@ if (run.calc) {
     cov.parked <- trade.coverage.estimates
     cov.parked$type <- "pre.populist"
     
-    gta_trade_coverage(gta.evaluation = c("Red","Amber"),
+    gta_trade_coverage(gta.evaluation = c("Green"),
                        implementation.period = c(NA,cutoff),
                        implementer.role = "importer",
                        importers = g20.members,
