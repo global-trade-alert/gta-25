@@ -67,3 +67,5 @@ names(sa.src.yr)=c("year","is.source.official","sa.count")
 
 save(sa.src.yr, file=paste0(data.path,'state act sources.Rdata'))
 
+gta_sql_pool_close()
+gta_sql_kill_connections()
