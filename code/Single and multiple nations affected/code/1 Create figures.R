@@ -57,11 +57,11 @@ fig1.create <- function(prd) {
                                        c(10,15,20,15, "Measures affecting \na single jurisdiction"),
                                        c(10,15,15,10, round(subset(fig1.data, mast.chapter == "TARIFF" & period == prd & nations.affected == "one")$coverages,3)),
                                        c(10,15,10,5, round(subset(fig1.data, mast.chapter == "NOT.TARIFF" & period == prd & nations.affected == "one")$coverages,3)),
-                                       c(10,15,5,0, round(subset(fig1.data, mast.chapter == "P" & period == prd & nations.affected == "one")$coverages,3)),
+                                       c(10,15,5,0, round(subset(fig1.data, mast.chapter == "export incentives" & period == prd & nations.affected == "one")$coverages,3)),
                                        c(15,20,20,15, "Measures affecting \nmultiple jurisdictions"),
                                        c(15,20,15,10, round(subset(fig1.data, mast.chapter == "TARIFF" & period == prd & nations.affected == "multiple")$coverages,3)),
                                        c(15,20,10,5, round(subset(fig1.data, mast.chapter == "NOT.TARIFF" & period == prd & nations.affected == "multiple")$coverages,3)),
-                                       c(15,20,5,0, round(subset(fig1.data, mast.chapter == "P" & period == prd & nations.affected == "multiple")$coverages,3))))
+                                       c(15,20,5,0, round(subset(fig1.data, mast.chapter == "export incentives" & period == prd & nations.affected == "multiple")$coverages,3))))
     
     
     coordinates$V1 <- as.numeric(as.character(coordinates$V1))

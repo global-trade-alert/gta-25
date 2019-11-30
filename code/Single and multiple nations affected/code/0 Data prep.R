@@ -107,7 +107,7 @@ if (run.calc) {
     }
     
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
-                       affected.flows = c("outward.subsidy"),
+                       affected.flows = c("outward subsidy"),
                        coverage.period = c(2019,2019),
                        implementation.period = c(periods[[p]][1],periods[[p]][2]),
                        nr.exporters = c(2,999),
