@@ -7,6 +7,7 @@ library(plyr)
 library(data.table)
 library(ggplot2)
 library(openxlsx)
+library(gridExtra)
 
 gta_setwd()
 dev.path='0 dev/gta-25-ks/code/'
@@ -26,22 +27,17 @@ load(paste0(path,'data/fig 5.Rdata'))
 write.xlsx(lapply(unique(data.fig5$cpc),function(x) subset(data.fig5, cpc==x)),
            file=paste0(path,'tables & figures/fig 5 data.xlsx'))
 
-fig5=function(sct){  
+fig5.create=function(sct){  
   fig5 <- ggplot(data=subset(data.fig5, cpc==sct)) + geom_point(aes(x=sct.share, y=cov.change)) +
     gta_theme() + xlab('National import share 2016') + ylab('Change in sectoral import share protected 2017-2019')
   
-  gta_plot_saver(fig5, 
-                 paste0(path,'tables & figures/'),
-                 paste0('Figure 5 - ',sct))
-}
-
-if (5 %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.fig)){
+  # gta_plot_saver(fig5, 
+  #                paste0(path,'tables & figures/'),
+  #                paste0('Figure 5 - ',sct))
   
-for(sct in sectors) fig5(sct)  
+  return(fig5)
   
 }
-
-
 
 # Chart 6 -----------------------------------------------------------------
 
@@ -53,21 +49,17 @@ load(paste0(path,'data/fig 6.Rdata'))
 write.xlsx(lapply(unique(data.fig6$sector),function(x) subset(data.fig6, sector==x)),
            file=paste0(path,'tables & figures/fig 6 data.xlsx'))
 
-fig6=function(sct){  
+fig6.create=function(sct){  
   fig6 <- ggplot(data=subset(data.fig6, sector==sct)) + geom_point(aes(x=curr.rel.change, y=cov.change)) +
     gta_theme() + xlab('Relative currency change (avg 2019 versus 2017)') + ylab('Change in sectoral import share protected 2017-2019')
   
-  gta_plot_saver(fig6, 
-                 paste0(path,'tables & figures/'),
-                 paste0('Figure 6 - ',sct))
-}
-
-if (6 %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.fig)){
+  # gta_plot_saver(fig6, 
+  #                paste0(path,'tables & figures/'),
+  #                paste0('Figure 6 - ',sct))
   
-  for(sct in sectors) fig6(sct)  
+  return(fig6)
   
 }
-
 
 # Chart 7 -----------------------------------------------------------------
 
@@ -80,21 +72,18 @@ load(paste0(path,'data/fig 7.Rdata'))
 write.xlsx(lapply(unique(data.fig7$sector),function(x) subset(data.fig7, sector==x)),
            file=paste0(path,'tables & figures/fig 7 data.xlsx'))
 
-fig7=function(sct){  
+fig7.create=function(sct){  
   fig7 <- ggplot(data=subset(data.fig7, sector==sct)) + geom_point(aes(x=sect.trade.share, y=change.sct.imp.share)) +
     gta_theme() + xlab('Sectoral trade balance divided by total sectoral trade') + ylab('National sectoral import affected by non-tariff measures')
   
-  gta_plot_saver(fig7, 
-                 paste0(path,'tables & figures/'),
-                 paste0('Figure 7 - ',sct))
-}
-
-if (7 %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.fig)){
+  # gta_plot_saver(fig7, 
+  #                paste0(path,'tables & figures/'),
+  #                paste0('Figure 7 - ',sct))
   
-  for(sct in sectors) fig7(sct)  
+  return(fig7)
+  
   
 }
-
 
 # Chart 8 -----------------------------------------------------------------
 
@@ -105,17 +94,48 @@ load(paste0(path,'data/fig 8.Rdata'))
 write.xlsx(lapply(unique(data.fig8$sector),function(x) subset(data.fig8, sector==x)),
            file=paste0(path,'tables & figures/fig 8 data.xlsx'))
 
-fig8=function(sct){  
+fig8.create=function(sct){  
   fig8 <- ggplot(data=subset(data.fig8, sector==sct)) + geom_point(aes(x=incentives.change, y=cov.change)) +
     gta_theme() + xlab('Share of sectoral exports that benefit from incentives') + ylab('Change in sectoral import share protected 2017-2019')
   
-  gta_plot_saver(fig8, 
-                 paste0(path,'tables & figures/'),
-                 paste0('Figure 8 - ',sct))
+  # gta_plot_saver(fig8, 
+  #                paste0(path,'tables & figures/'),
+  #                paste0('Figure 8 - ',sct))
+  
+  return(fig8)
+  
 }
 
-if (8 %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.fig)){
+
+# Create panels per sector ------------------------------------------------
+
+for (sct in sectors) {
   
-  for(sct in sectors) fig8(sct)  
+  if (all(c(5,6) %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.fig))){
+    fig5 <- fig5.create(sct)
+    fig6 <- fig6.create(sct)
+    figA <- grid.arrange(fig5, fig6, nrow=2)
+    gta_plot_saver(plot = figA,
+                   path = paste0(path,'tables & figures/'),
+                   name = paste0("Figure Panel 2 A (5-6) - Sector ",sct),
+                   cairo_ps = T,
+                   height = 29.7,
+                   width = 21)
+  }
   
+  if (all(c(7,8) %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.fig))){
+    fig7 <- fig7.create(sct)
+    fig8 <- fig8.create(sct)
+    figB <- grid.arrange(fig7, fig8, nrow=2)
+    gta_plot_saver(plot = figB,
+                   path = paste0(path,'tables & figures/'),
+                   name = paste0("Figure Panel 2 B (7-8) - Sector ",sct),
+                   cairo_ps = T,
+                   height = 29.7,
+                   width = 21)
+  }
 }
+
+
+
+
