@@ -229,6 +229,19 @@ save(data.fig7, file=paste0(path,'data/fig 7.Rdata'))
 
 # chart 8  ----------------------------------------------------------------
 #Chart 8: Scatter plot for G20. Y-axis same as graph 5 and 6. X-axis shows the share of sectoral exports that benefit from incentives.
+#PL: Suggestion for correct X-axis: used data slicer to get the right interventions and then merge the trade data - problem: master sliced does not include DMs
+
+# gta_data_slicer(implementing.country = 'G20',
+#               gta.evaluation = c("Red", "Amber"),
+#                cpc.sectors = codes, keep.cpc = T,
+#                implementation.period = c("2016-01-01", "2019-12-31"), keep.implementation.na = F,
+#                intervention.ids = manually.removed.interventions, keep.interventions = F,
+#                affected.flows = "outward subsidy",
+#                implementation.level = c("subnational"), keep.level = F,
+#                eligible.firms = c("firm-specific"),keep.firms = F)
+# master.sliced = cSplit(master.sliced, which(colnames(master.sliced)=="affected.product"), direction="long", sep=", ")
+# master.sliced = subset(master.sliced, affected.product %in% subset(cpc.to.hs, cpc %in% codes)$hs)
+
 
 sct.incentives <- data.frame()
 for (sct in sectors) {
