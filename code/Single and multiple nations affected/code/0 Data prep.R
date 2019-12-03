@@ -18,7 +18,7 @@ run.calc=T
 trade.data.year = "base"
 
 # LIST OF PERIODS TO BE ITERATED
-periods <- list(c("2017-01-01",cutoff),c("2014-01-01",break.date),c("2008-11-01",break.date))
+periods <- list(c("2017-01-01",cutoff),c("2014-01-01",break.date),c("2009-01-01",break.date))
 
 # LIST OF MAST CHAPTERS TO BE ITERATED AND IF THEY SHOULD BE KEPT OR NOT
 mast.chapters <- list(c("TARIFF",T), c("TARIFF",F))
@@ -42,7 +42,7 @@ if (run.calc) {
     for (m in 1:length(mast.chapters)) {
       gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                          affected.flows = c("inward"),
-                         coverage.period = c(2019,2019),
+                         coverage.period = c(year(periods[[p]][1]),year(periods[[p]][2])),
                          implementation.period = c(periods[[p]][1],periods[[p]][2]),
                          mast.chapters = mast.chapters[[m]][1],
                          keep.mast = mast.chapters[[m]][2]==T,
@@ -54,25 +54,28 @@ if (run.calc) {
       if(mast.chapters[[m]][2]==F) {
         mast.chapter <- paste0("NOT.",mast.chapter)
       }
-      
+      #Average coverage
+      cov.avg <- mean(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
       single.nation.cov <- rbind(single.nation.cov, data.frame(mast.chapter=mast.chapter,
                                                                nations.affected="one",
                                                                period=p,
-                                                               coverages=as.numeric(trade.coverage.estimates[ncol(trade.coverage.estimates)])))
+                                                               coverages=cov.avg))
     }
     
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("outward subsidy"),
-                       coverage.period = c(2019,2019),
+                       coverage.period = c(year(periods[[p]][1]),year(periods[[p]][2])),
                        implementation.period = c(periods[[p]][1],periods[[p]][2]),
                        nr.exporters = c(1,1),
                        incl.exporters.strictness = "ONE",
                        trade.data = trade.data.year)
     
+    cov.avg <- mean(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
+    
     single.nation.cov <- rbind(single.nation.cov, data.frame(mast.chapter="export incentives",
                                                              nations.affected="one",
                                                              period=p,
-                                                             coverages=as.numeric(trade.coverage.estimates[ncol(trade.coverage.estimates)])))
+                                                             coverages=cov.avg))
     
     
   }
@@ -90,7 +93,7 @@ if (run.calc) {
     for (m in 1:length(mast.chapters)) {
       gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                          affected.flows = c("inward"),
-                         coverage.period = c(2019,2019),
+                         coverage.period = c(year(periods[[p]][1]),year(periods[[p]][2])),
                          implementation.period = c(periods[[p]][1],periods[[p]][2]),
                          mast.chapters = mast.chapters[[m]][1],
                          keep.mast = mast.chapters[[m]][2]==T,
@@ -102,23 +105,27 @@ if (run.calc) {
         mast.chapter <- paste0("NOT.",mast.chapter)
       }
       
+      cov.avg <- mean(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
+      
       multiple.nation.cov <- rbind(multiple.nation.cov, data.frame(mast.chapter=mast.chapter,
                                                                nations.affected="multiple",
                                                                period=p,
-                                                               coverages=as.numeric(trade.coverage.estimates[ncol(trade.coverage.estimates)])))
+                                                               coverages=cov.avg))
     }
     
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("outward subsidy"),
-                       coverage.period = c(2019,2019),
+                       coverage.period = c(year(periods[[p]][1]),year(periods[[p]][2])),
                        implementation.period = c(periods[[p]][1],periods[[p]][2]),
                        nr.exporters = c(2,999),
                        trade.data = trade.data.year)
     
+    cov.avg <- mean(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
+    
     multiple.nation.cov <- rbind(multiple.nation.cov, data.frame(mast.chapter="export incentives",
                                                                  nations.affected="multiple",
                                                                  period=p,
-                                                                 coverages=as.numeric(trade.coverage.estimates[ncol(trade.coverage.estimates)])))
+                                                                 coverages=cov.avg))
     
   }
   rm(trade.coverage.estimates)
