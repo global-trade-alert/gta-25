@@ -95,7 +95,7 @@ fig2.create <- function() {
     geom_point(data=subset(fig1.data, exporter == "Upper middle income countries"), aes(x=order+0.2, y=coverages, colour = type),size=5)+
     geom_point(data=subset(fig1.data, exporter == "Lower middle income countries"), aes(x=order-0.2, y=coverages, colour = type),size=5)+
     geom_vline(xintercept = c(seq(1.5,5.5,1)),colour="#dadada")+
-    gta_plot_wrapper(data = subset(fig1.data, exporter %in% c("Lower middle income countries","African Union")),
+    gta_plot_wrapper(data = subset(fig1.data, exporter %in% c("Lower middle income countries","Upper middle income countries")),
                      data.x = "order",
                      data.y = "coverages",
                      colour.labels = c("Harmful","Liberalising"),
