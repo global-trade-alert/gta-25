@@ -15,6 +15,8 @@ data.path = paste0(wdpath,"data/")
 
 run.calc=T
 
+trade.data.year = 2018
+
 # Figure 1 data prep ------------------------------------------------------
 
 # Graph 1: Y-axis shows the share of bilateral exports of LDCs/African Union
@@ -40,7 +42,7 @@ if (run.calc) {
                          keep.importers = T,
                          implementer.role = "importer",
                          coverage.period = c(2019,2019),
-                         trade.data = 2017)
+                         trade.data = trade.data.year)
       
       dest.markets.cov <- rbind(dest.markets.cov, data.frame(importer = dest.markets.names[dst],
                                                              exporter = targeted.names[trg],
@@ -56,7 +58,7 @@ if (run.calc) {
                          keep.importers = T,
                          implementer.role = "importer",
                          coverage.period = c(2019,2019),
-                         trade.data = 2017)
+                         trade.data = trade.data.year)
       
       dest.markets.cov <- rbind(dest.markets.cov, data.frame(importer = dest.markets.names[dst],
                                                              exporter = targeted.names[trg],
