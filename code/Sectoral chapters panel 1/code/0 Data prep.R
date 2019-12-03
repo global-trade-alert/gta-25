@@ -7,12 +7,15 @@ library(tidyverse)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
-source('0 report production/GTA 25/help files/GTA 25 cutoff and definitions.R')
 
-this.chapter=c(paste0("Sectoral chapters - Sector ",paste0(sectors)))
 
-wdpath = "0 dev/gta-25-pb/code/Sectoral chapters panel 1/"
-data.path = paste0(wdpath,"data/")
+directories=gta25_setup(internal.name="Sectoral chapters panel 1",
+                        in.dev=F,
+                        author=NULL,
+                        wipe.data=T,
+                        wipe.figs=T)
+
+data.path = directories$data.path
 
 run.calc=T
 
