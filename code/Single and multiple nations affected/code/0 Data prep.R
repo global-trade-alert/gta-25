@@ -18,7 +18,7 @@ run.calc=T
 trade.data.year = 2018
 
 # LIST OF PERIODS TO BE ITERATED
-periods <- list(c("2017-01-01",cutoff),c("2014-01-01",break.date),c("2008-01-01",break.date))
+periods <- list(c("2017-01-01",cutoff),c("2014-01-01",break.date),c("2008-11-01",break.date))
 
 # LIST OF MAST CHAPTERS TO BE ITERATED AND IF THEY SHOULD BE KEPT OR NOT
 mast.chapters <- list(c("TARIFF",T), c("TARIFF",F))
