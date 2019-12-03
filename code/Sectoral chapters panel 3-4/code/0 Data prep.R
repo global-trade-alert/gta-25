@@ -212,5 +212,3 @@ if (run.calc) {
   }
   save(sct.g20.change.liberalising, file=paste0(data.path,"G20 sector coverage change - liberalising.Rdata"))
 }
-
-load(paste0(data.path,"G20 sector coverage change - liberalising.Rdata"))
