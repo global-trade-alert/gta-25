@@ -8,9 +8,9 @@ gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 source('0 report production/GTA 25/help files/GTA 25 cutoff and definitions.R')
 
-this.chapter=c(paste0("Variance in sectoral to total trade"))
+this.chapter=c(paste0("Variation in annual sectoral and global trade"))
 
-wdpath = "0 dev/gta-25-pb/code/Variance in sectoral to total trade/"
+wdpath = "0 dev/gta-25-pb/code/Variation in annual sectoral and global trade/"
 data.path = paste0(wdpath,"data/")
 
 run.calc=T
@@ -24,6 +24,7 @@ run.calc=T
 # sectoral trade varied compared to that of world trade.
 
 # Calculate total trade and trade per sectors ------------------------------------------------------
+
 if (run.calc) {
   # Get Trade data for 2005 and 2006
   load("data/comtrade/comtrade replica 2005-2016 - HS 2012 - balanced.RData")

@@ -14,8 +14,8 @@ source('0 report production/GTA 25/help files/GTA 25 cutoff and definitions.R')
 this.chapter=c(paste0("Sectoral chapters - Sector ",paste0(sectors)))
 
 wdpath = "0 dev/gta-25-pb/"
-output.path = paste0(wdpath,"tables & figures/Variance in sectoral to total trade/")
-data.path = paste0(wdpath,"code/Variance in sectoral to total trade/data/")
+output.path = paste0(wdpath,"tables & figures/Variation in annual sectoral and global trade/")
+data.path = paste0(wdpath,"code/Variation in annual sectoral and global trade/data/")
 
 gta_colour_palette()
 
@@ -74,7 +74,7 @@ for (sct in sectors) {
 
   gta_plot_saver(plot = fig1,
                  path = paste0(output.path),
-                 name = paste0("Figure Panel 1 - Sector ",sct),
+                 name = paste0("Figure 1 - Sector ",sct),
                  cairo_ps = T,
                  width = 21)
   
