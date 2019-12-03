@@ -15,6 +15,8 @@ data.path = paste0(wdpath,"data/")
 
 run.calc=T
 
+trade.data.year = 2018
+
 # LIST OF PERIODS TO BE ITERATED
 periods <- list(c("2017-01-01",cutoff),c("2014-01-01",break.date),c("2008-01-01",break.date))
 
@@ -46,7 +48,7 @@ if (run.calc) {
                          keep.mast = mast.chapters[[m]][2]==T,
                          nr.exporters = c(1,1),
                          incl.exporters.strictness = "ONE",
-                         trade.data = 2017)
+                         trade.data = trade.data.year)
       
       mast.chapter = mast.chapters[[m]][1]
       if(mast.chapters[[m]][2]==F) {
@@ -65,7 +67,7 @@ if (run.calc) {
                        implementation.period = c(periods[[p]][1],periods[[p]][2]),
                        nr.exporters = c(1,1),
                        incl.exporters.strictness = "ONE",
-                       trade.data = 2017)
+                       trade.data = trade.data.year)
     
     single.nation.cov <- rbind(single.nation.cov, data.frame(mast.chapter="export incentives",
                                                              nations.affected="one",
@@ -93,7 +95,7 @@ if (run.calc) {
                          mast.chapters = mast.chapters[[m]][1],
                          keep.mast = mast.chapters[[m]][2]==T,
                          nr.exporters = c(2,999),
-                         trade.data = 2017)
+                         trade.data = trade.data.year)
       
       mast.chapter = mast.chapters[[m]][1]
       if(mast.chapters[[m]][2]==F) {
@@ -111,7 +113,7 @@ if (run.calc) {
                        coverage.period = c(2019,2019),
                        implementation.period = c(periods[[p]][1],periods[[p]][2]),
                        nr.exporters = c(2,999),
-                       trade.data = 2017)
+                       trade.data = trade.data.year)
     
     multiple.nation.cov <- rbind(multiple.nation.cov, data.frame(mast.chapter="export incentives",
                                                                  nations.affected="multiple",
