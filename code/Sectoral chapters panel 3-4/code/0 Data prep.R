@@ -14,6 +14,7 @@ wdpath = "0 dev/gta-25-pb/code/Sectoral chapters panel 3-4/"
 data.path = paste0(wdpath,"data/")
 
 run.calc=T
+trade.data.year = 2018
 
 # Figure 9 data prep ------------------------------------------------------
 
@@ -41,7 +42,7 @@ if (run.calc) {
                        cpc.sectors = codes,
                        keep.cpc = T,
                        coverage.period = c(2019,2019),
-                       trade.data = 2017)
+                       trade.data = trade.data.year)
     
     names(trade.coverage.estimates) <- c("importer","exporter","hits",2019)
     temp <- trade.coverage.estimates[,c("importer","exporter",2019)]
@@ -76,7 +77,7 @@ if (run.calc) {
                        cpc.sectors = codes,
                        keep.cpc = T,
                        coverage.period = c(2019,2019),
-                       trade.data = 2017)
+                       trade.data = trade.data.year)
     
     names(trade.coverage.estimates) <- c("importer","exporter","hits",2019)
     temp <- trade.coverage.estimates[,c("importer","exporter",2019)]
@@ -119,7 +120,7 @@ if (run.calc) {
                        cpc.sectors = codes,
                        keep.cpc = T,
                        coverage.period = c(2019,2019),
-                       trade.data = 2017)
+                       trade.data = trade.data.year)
     
     cov.parked <- trade.coverage.estimates
     cov.parked$type <- "pre.populist"
@@ -136,7 +137,7 @@ if (run.calc) {
                        cpc.sectors = codes,
                        keep.cpc = T,
                        coverage.period = c(2019,2019),
-                       trade.data = 2017)
+                       trade.data = trade.data.year)
     
     trade.coverage.estimates$type <- "populist"
     
@@ -177,7 +178,7 @@ if (run.calc) {
                        cpc.sectors = codes,
                        keep.cpc = T,
                        coverage.period = c(2019,2019),
-                       trade.data = 2017)
+                       trade.data = trade.data.year)
     
     cov.parked <- trade.coverage.estimates
     cov.parked$type <- "pre.populist"
@@ -194,7 +195,7 @@ if (run.calc) {
                        cpc.sectors = codes,
                        keep.cpc = T,
                        coverage.period = c(2019,2019),
-                       trade.data = 2017)
+                       trade.data = trade.data.year)
     
     trade.coverage.estimates$type <- "populist"
     
