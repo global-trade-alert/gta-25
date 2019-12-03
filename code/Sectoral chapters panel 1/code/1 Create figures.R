@@ -13,7 +13,7 @@ source('0 report production/GTA 25/help files/GTA 25 cutoff and definitions.R')
 
 this.chapter=c(paste0("Sectoral chapters - Sector ",paste0(sectors)))
 
-wdpath = "0 dev/gta-25/"
+wdpath = "0 dev/gta-25-pb/"
 output.path = paste0(wdpath,"tables & figures/Sectoral chapters panel 1/")
 data.path = paste0(wdpath,"code/Sectoral chapters panel 1/data/")
 
@@ -44,13 +44,13 @@ fig1.create <- function(sct) {
     
     fig1 <- ggplot(data=subset(fig1.data, sector == sct))+
     geom_rect(data=data.frame(), aes(xmin=2017, xmax=Inf, ymin=-Inf, ymax=Inf), fill=pop.shade, alpha=0.3)+
-    geom_text(aes(x=2017, y=Inf, label="Populist era"), hjust=-0.1, vjust=2, color = pop.text, lineheight = 1)+
+    geom_text(aes(x=2017, y=Inf, label="Populist\n era"), hjust=-0.1, vjust=1.4, color = pop.text, lineheight = 1)+
     geom_text(aes(x=-Inf, y=Inf, label="Pre-populist era"), hjust=-0.1, vjust=2, color = gta_colour$grey[1], lineheight = 1)+
     geom_line(aes(x=year, y=coverages, colour=type), size = 1)+
     geom_point(aes(x=2019-0.2, y=glo.cov.harmful),size=3, colour=gta_colour$red[1])+
     geom_point(aes(x=2019-0.2, y=glo.cov.liberalising),size=3, colour=gta_colour$green[1])+
-    geom_text(aes(x=2019-0.2, y=glo.cov.harmful, label=paste0("Share of global\nexports affected | ",round(glo.cov.harmful,3)*100,"%")), colour=gta_colour$red[1], hjust=1, nudge_x = -0.3)+
-    geom_text(aes(x=2019-0.2, y=glo.cov.liberalising, label=paste0("Share of global\nexports affected | ",round(glo.cov.liberalising,3)*100,"%")), colour=gta_colour$green[1], hjust=1, nudge_x = -0.3)+
+    geom_text(aes(x=2019-0.2, y=glo.cov.harmful, label=paste0("Share of global\nexports affected: ",round(glo.cov.harmful,3)*100,"%")), colour=gta_colour$red[1], hjust=1, nudge_x = -0.3)+
+    geom_text(aes(x=2019-0.2, y=glo.cov.liberalising, label=paste0("Share of global\nexports affected: ",round(glo.cov.liberalising,3)*100,"%")), colour=gta_colour$green[1], hjust=1, nudge_x = -0.3)+
     gta_plot_wrapper(data=subset(fig1.data, sector == sct),
                      data.x="year",
                      data.y="coverages",
@@ -65,7 +65,7 @@ fig1.create <- function(sct) {
                      colour.palette = c(gta_colour$red[1],gta_colour$green[1]),
                      colour.legend.col = 2)+
     gta_theme()
-    
+  
   return(fig1)
   }
 
@@ -86,7 +86,7 @@ fig2.create <- function(sct) {
 
   fig2 <- ggplot(data=subset(fig2.data, sector == sct))+
     geom_rect(data=data.frame(), aes(xmin=2017, xmax=Inf, ymin=-Inf, ymax=Inf), fill=pop.shade, alpha=0.3)+
-    geom_text(aes(x=2017, y=Inf, label="Populist era"), hjust=-0.1, vjust=2, color = pop.text, lineheight = 1)+
+    geom_text(aes(x=2017, y=Inf, label="Populist\n era"), hjust=-0.1, vjust=1.4, color = pop.text, lineheight = 1)+
     geom_text(aes(x=-Inf, y=Inf, label="Pre-populist era"), hjust=-0.1, vjust=2, color = gta_colour$grey[1], lineheight = 1)+
     geom_line(aes(x=year, y=coverages, colour=type), size = 1)+
     gta_plot_wrapper(data=subset(fig2.data, sector == sct),
@@ -99,11 +99,11 @@ fig2.create <- function(sct) {
                      y.left.labels = percent,
                      y.right.enable = F,
                      colour.labels = c("Export incentives","All except export incentives","Subsidies", "Tariffs","All"),
-                     colour.legend.title = "MAST chapters",
-                     colour.palette = c(gta_colour$qualitative),
-                     colour.legend.col = 3)+
+                     colour.legend.title = "Trade distortions in force",
+                     colour.palette = c(gta_colour$qualitative[c(1:4)],gta_colour$red[1]),
+                     colour.legend.col = 2)+
     gta_theme()
-
+  
   return(fig2)
 }
 
@@ -114,8 +114,8 @@ fig2.create <- function(sct) {
 # and (3) tariff reductions. Add shading for populist, pre-populist era.
 
 load(paste0(data.path,"Sector coverages types liberalising.Rdata"))
-sct.cov.harmful$type="all"
-fig3.data <- rbind(sct.cov.types.liberalising, sct.cov.harmful)
+sct.cov.liberalising$type="all"
+fig3.data <- rbind(sct.cov.types.liberalising, sct.cov.liberalising)
 
 write.xlsx(fig3.data, file=paste0(output.path,"Table for Figure 3.xlsx"),row.names=F, sheetName = "Coverages")
 
@@ -123,7 +123,7 @@ fig3.create <- function(sct) {
   
   fig3 <- ggplot(data=subset(fig3.data, sector == sct))+
     geom_rect(data=data.frame(), aes(xmin=2017, xmax=Inf, ymin=-Inf, ymax=Inf), fill=pop.shade, alpha=0.3)+
-    geom_text(aes(x=2017, y=Inf, label="Populist era"), hjust=-0.1, vjust=2, color = pop.text, lineheight = 1)+
+    geom_text(aes(x=2017, y=Inf, label="Populist\n era"), hjust=-0.1, vjust=1.4, color = pop.text, lineheight = 1)+
     geom_text(aes(x=-Inf, y=Inf, label="Pre-populist era"), hjust=-0.1, vjust=2, color = gta_colour$grey[1], lineheight = 1)+
     geom_line(aes(x=year, y=coverages, colour=type), size = 1)+
     gta_plot_wrapper(data=subset(fig3.data, sector == sct),
@@ -136,10 +136,11 @@ fig3.create <- function(sct) {
                      y.left.labels = percent,
                      y.right.enable = F,
                      colour.labels = c("Subsidies","Tariffs", "All"),
-                     colour.legend.title = "MAST chapters",
-                     colour.palette = c(gta_colour$qualitative),
+                     colour.legend.title = "Commercial policy reforms",
+                     colour.palette = c(gta_colour$qualitative[c(1:2)],gta_colour$green[1]),
                      colour.legend.col = 2)+
     gta_theme()
+  
   return(fig3)
 }
 
@@ -168,7 +169,7 @@ fig4.create <- function(sct) {
   
   fig4 <- ggplot(data=subset(fig4.data, sector == sct))+
     geom_rect(data=data.frame(),aes(xmin=2017, xmax=Inf, ymin=-Inf, ymax=Inf), fill=pop.shade, alpha=0.3)+
-    geom_text(aes(x=2017, y=Inf, label="Populist era"), hjust=-0.1, vjust=2, color = pop.text, lineheight = 1)+
+    geom_text(aes(x=2017, y=Inf, label="Populist\n era"), hjust=-0.1, vjust=1.4, color = pop.text, lineheight = 1)+
     geom_text(aes(x=-Inf, y=Inf, label="Pre-populist era"), hjust=-0.1, vjust=2, color = gta_colour$grey[1], lineheight = 1)+
     geom_bar(aes(x=year, y=coverages, fill=forcats::fct_inorder(hits)), stat="identity", position="stack")+
     gta_plot_wrapper(data=subset(fig4.data, sector == sct),
@@ -181,11 +182,12 @@ fig4.create <- function(sct) {
                      y.left.labels = percent,
                      y.left.limits = c(0,1),
                      y.right.enable = F,
-                     fill.legend.title = "Number of countries hit",
-                     fill.palette = c(gta_colour$qualitative[c(5:1)]),
-                     fill.legend.col = 5,
+                     fill.legend.title = "Number of times hit",
+                     fill.palette = rev(c(gta_colour$red.shades(5))),
+                     fill.legend.col = 3,
                      fill.labels = unique(fig4.data$hits))+
     gta_theme()
+  
   return(fig4)
 }
 
@@ -206,14 +208,14 @@ for (sct in sectors) {
 
   gta_plot_saver(plot = figA,
                  path = paste0(output.path),
-                 name = paste0("Figure Panel 1 A - Sector ",sct),
+                 name = paste0("Figure Panel 1 A (1-2) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   
   gta_plot_saver(plot = figB,
                  path = paste0(output.path),
-                 name = paste0("Figure Panel 1 B - Sector ",sct),
+                 name = paste0("Figure Panel 1 B (3-4) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
@@ -221,7 +223,7 @@ for (sct in sectors) {
   # Four plots per page, not really feasible
   gta_plot_saver(plot = figC,
                  path = paste0(output.path),
-                 name = paste0("Figure Panel 1 C - Sector ",sct),
+                 name = paste0("Figure Panel 1 C (1-4) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)

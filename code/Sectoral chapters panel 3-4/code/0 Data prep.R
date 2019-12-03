@@ -10,10 +10,11 @@ source('0 report production/GTA 25/help files/GTA 25 cutoff and definitions.R')
 
 this.chapter=c(paste0("Sectoral chapters - Sector ",paste0(sectors)))
 
-wdpath = "0 dev/gta-25/code/Sectoral chapters panel 3-4/"
+wdpath = "0 dev/gta-25-pb/code/Sectoral chapters panel 3-4/"
 data.path = paste0(wdpath,"data/")
 
 run.calc=T
+trade.data.year = 2018
 
 # Figure 9 data prep ------------------------------------------------------
 
@@ -40,7 +41,8 @@ if (run.calc) {
                        group.exporters = F,
                        cpc.sectors = codes,
                        keep.cpc = T,
-                       coverage.period = c(2019,2019))
+                       coverage.period = c(2019,2019),
+                       trade.data = trade.data.year)
     
     names(trade.coverage.estimates) <- c("importer","exporter","hits",2019)
     temp <- trade.coverage.estimates[,c("importer","exporter",2019)]
@@ -74,7 +76,8 @@ if (run.calc) {
                        group.exporters = F,
                        cpc.sectors = codes,
                        keep.cpc = T,
-                       coverage.period = c(2019,2019))
+                       coverage.period = c(2019,2019),
+                       trade.data = trade.data.year)
     
     names(trade.coverage.estimates) <- c("importer","exporter","hits",2019)
     temp <- trade.coverage.estimates[,c("importer","exporter",2019)]
@@ -98,6 +101,8 @@ load(paste0(data.path,"G20 sector exports coverages - liberalising.Rdata"))
 # Graph will have 3 shades (green for negative change, 
 # white for zero change and red for positive change).
 
+# Use absolute change in share, instead of relative change.
+
 if (run.calc) {
   
   sct.g20.change.harmful <- data.frame()
@@ -114,7 +119,8 @@ if (run.calc) {
                        group.exporters = F,
                        cpc.sectors = codes,
                        keep.cpc = T,
-                       coverage.period = c(2019,2019))
+                       coverage.period = c(2019,2019),
+                       trade.data = trade.data.year)
     
     cov.parked <- trade.coverage.estimates
     cov.parked$type <- "pre.populist"
@@ -130,7 +136,8 @@ if (run.calc) {
                        group.exporters = F,
                        cpc.sectors = codes,
                        keep.cpc = T,
-                       coverage.period = c(2019,2019))
+                       coverage.period = c(2019,2019),
+                       trade.data = trade.data.year)
     
     trade.coverage.estimates$type <- "populist"
     
@@ -139,7 +146,7 @@ if (run.calc) {
     temp <- temp[,c("importer","exporter","type",2019)]
     temp$sector=sct
     temp <- pivot_wider(data = temp, names_from = "type", values_from = "2019")
-    temp$change <- (temp$populist/temp$pre.populist)-1
+    temp$change <- (temp$populist-temp$pre.populist)
     sct.g20.change.harmful <- rbind(sct.g20.change.harmful, temp[,c("importer","exporter","change","sector","populist","pre.populist")])
   }
   save(sct.g20.change.harmful, file=paste0(data.path,"G20 sector coverage change - harmful.Rdata"))
@@ -151,6 +158,8 @@ load(paste0(data.path,"G20 sector coverage change - harmful.Rdata"))
 # Figure 12 data prep ------------------------------------------------------
 
 # Chart 12: Same as chart 11, but for liberalising measures.
+
+# Use absolute change in share, instead of relative change.
 
 if (run.calc) {
   
@@ -168,7 +177,8 @@ if (run.calc) {
                        group.exporters = F,
                        cpc.sectors = codes,
                        keep.cpc = T,
-                       coverage.period = c(2019,2019))
+                       coverage.period = c(2019,2019),
+                       trade.data = trade.data.year)
     
     cov.parked <- trade.coverage.estimates
     cov.parked$type <- "pre.populist"
@@ -184,7 +194,8 @@ if (run.calc) {
                        group.exporters = F,
                        cpc.sectors = codes,
                        keep.cpc = T,
-                       coverage.period = c(2019,2019))
+                       coverage.period = c(2019,2019),
+                       trade.data = trade.data.year)
     
     trade.coverage.estimates$type <- "populist"
     
@@ -193,7 +204,7 @@ if (run.calc) {
     temp <- temp[,c("importer","exporter","type",2019)]
     temp$sector=sct
     temp <- pivot_wider(data = temp, names_from = "type", values_from = "2019")
-    temp$change <- (temp$populist/temp$pre.populist)-1
+    temp$change <- (temp$populist-temp$pre.populist)
     sct.g20.change.liberalising <- rbind(sct.g20.change.liberalising, temp[,c("importer","exporter","change","sector","populist","pre.populist")])
   }
   save(sct.g20.change.liberalising, file=paste0(data.path,"G20 sector coverage change - liberalising.Rdata"))

@@ -11,10 +11,12 @@ source('0 report production/GTA 25/help files/GTA 25 cutoff and definitions.R')
 
 this.chapter=c(paste0("Sectoral chapters - Sector ",paste0(sectors)))
 
-wdpath = "0 dev/gta-25/code/Sectoral chapters panel 1/"
+wdpath = "0 dev/gta-25-pb/code/Sectoral chapters panel 1/"
 data.path = paste0(wdpath,"data/")
 
 run.calc=T
+
+trade.data.year = 2018
 
 # Figure 1 data prep ------------------------------------------------------
 
@@ -33,7 +35,8 @@ if (run.calc) {
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        cpc.sectors = codes,
                        keep.cpc = T,
-                       implementation.period = c(NA,cutoff))
+                       implementation.period = c(NA,cutoff),
+                       trade.data = trade.data.year)
     sct.cov.harmful <- rbind(sct.cov.harmful, data.frame(sector=sct,
                                                            year=seq(2009,2019,1),
                                                            coverages=as.numeric(trade.coverage.estimates[1,c(4:14)])))
@@ -53,7 +56,8 @@ if (run.calc) {
     gta_trade_coverage(gta.evaluation = c("Green"),
                        cpc.sectors = codes,
                        keep.cpc = T,
-                       implementation.period = c(NA,cutoff))
+                       implementation.period = c(NA,cutoff),
+                       trade.data = trade.data.year)
     sct.cov.liberalising <- rbind(sct.cov.liberalising, data.frame(sector=sct,
                                                            year=seq(2009,2019,1),
                                                            coverages=as.numeric(trade.coverage.estimates[1,c(4:14)])))
@@ -70,7 +74,8 @@ load(paste0(data.path,"Sector coverages liberalising.Rdata"))
 if (run.calc) {
   gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                      coverage.period = c(2019,2019),
-                     implementation.period = c(NA,cutoff))
+                     implementation.period = c(NA,cutoff),
+                     trade.data = trade.data.year)
   
   glo.cov.harmful <- trade.coverage.estimates[,ncol(trade.coverage.estimates)]
   
@@ -83,7 +88,8 @@ load(paste0(data.path,"Global coverage harmful 2019.Rdata"))
 if (run.calc){ 
   gta_trade_coverage(gta.evaluation = c("Green"),
                      coverage.period = c(2019,2019),
-                     implementation.period = c(NA,cutoff))
+                     implementation.period = c(NA,cutoff),
+                     trade.data = trade.data.year)
   
   glo.cov.liberalising <- trade.coverage.estimates[,ncol(trade.coverage.estimates)]
   
@@ -127,7 +133,8 @@ if (run.calc) {
                          group.mast = T,
                          cpc.sectors = codes,
                          keep.cpc = T,
-                         implementation.period = c(NA,cutoff))
+                         implementation.period = c(NA,cutoff),
+                         trade.data = trade.data.year)
       sct.cov.types.harmful <- rbind(sct.cov.types.harmful, data.frame(sector=sct,
                                                                     year=seq(2009,2019,1),
                                                                     coverages=as.numeric(trade.coverage.estimates[1,c(4:14)]),
@@ -168,7 +175,8 @@ if (run.calc) {
                          group.mast = T,
                          cpc.sectors = codes,
                          keep.cpc = T,
-                         implementation.period = c(NA,cutoff))
+                         implementation.period = c(NA,cutoff),
+                         trade.data = trade.data.year)
       sct.cov.types.liberalising <- rbind(sct.cov.types.liberalising, data.frame(sector=sct,
                                                                    year=seq(2009,2019,1),
                                                                    coverages=as.numeric(trade.coverage.estimates[1,c(4:14)]),
@@ -196,7 +204,8 @@ if (run.calc) {
                        cpc.sectors = codes,
                        keep.cpc = T,
                        hit.brackets = c(1,1,2,2,3,5,6,10,11,9999999),
-                       implementation.period = c(NA,cutoff))
+                       implementation.period = c(NA,cutoff),
+                       trade.data = trade.data.year)
     
     names(trade.coverage.estimates) <- c("importer","exporter","hits",2009:2019)
     temp <- trade.coverage.estimates[,c("hits",2009:2019)]
