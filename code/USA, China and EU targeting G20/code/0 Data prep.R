@@ -19,7 +19,7 @@ period <- c(as.character(as.Date(break.date)+1), cutoff)
 dest.markets <- list(c(156),c(840),c(eu.members))
 dest.markets.names <- c("China","United States of America", "EU")
 
-trade.data.year = 2017
+trade.data.year = 2018
 
 run.calc=T
 
