@@ -33,6 +33,8 @@ for (sct in sectors) {
                      importers = 'G20',
                      keep.importers = T,
                      group.importers = F, 
+                     intervention.ids = manually.removed.interventions,
+                     keep.interventions = F,
                      coverage.period = c(2016,2019))
   sct.cov.harmful <- rbind(sct.cov.harmful, data.frame(sector=sct,
                                                        imp.cty=trade.coverage.estimates$`Importing country`,
@@ -168,6 +170,8 @@ for (sct in sectors) {
                      importers = 'G20',
                      keep.importers = T,
                      group.importers = F, 
+                     intervention.ids = manually.removed.interventions,
+                     keep.interventions = F,
                      coverage.period = c(2016,2019),
                      mast.chapters = 'tariff',
                      keep.mast = F)
@@ -235,6 +239,8 @@ for (sct in sectors) {
                      exporters = 'G20',
                      keep.exporters = T,
                      group.exporters = F, 
+                     intervention.ids = manually.removed.interventions,
+                     keep.interventions = F,
                      coverage.period = c(2016,2019),
                      affected.flows = 'outward subsidy')
   sct.incentives <- rbind(sct.incentives, data.frame(sector=sct,
