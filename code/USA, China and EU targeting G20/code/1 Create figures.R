@@ -76,7 +76,7 @@ fig2.create <- function(dst) {
     geom_text(aes(x=gdp.share, y=coverage.difference, label=exporter), nudge_x = 0.002, hjust = 0, vjust=0.5, color = gta_colour$grey[1], size=4)+
     geom_point(aes(x=gdp.share, y=coverage.difference), color = gta_colour$blue[1], size=2)+
     scale_y_continuous(name=y.name, labels = percent,
-                       sec.axis = sec_axis(trans = ~., name=y.name))+
+                       sec.axis = sec_axis(trans = ~., name=y.name, labels = percent))+
     scale_x_continuous(name=x.name, labels = percent)+
     coord_cartesian(clip="off")+
     gta_theme()
