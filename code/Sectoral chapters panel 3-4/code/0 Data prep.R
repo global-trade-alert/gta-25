@@ -14,7 +14,7 @@ wdpath = "0 dev/gta-25-pb/code/Sectoral chapters panel 3-4/"
 data.path = paste0(wdpath,"data/")
 
 run.calc=T
-trade.data.year = 2018
+trade.data.year = "base"
 
 # Figure 9 data prep ------------------------------------------------------
 

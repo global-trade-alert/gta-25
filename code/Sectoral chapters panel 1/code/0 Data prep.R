@@ -15,7 +15,7 @@ data.path = paste0(wdpath,"data/")
 
 run.calc=T
 
-trade.data.year = 2018
+trade.data.year = "base"
 
 # Figure 1 data prep ------------------------------------------------------
 

@@ -15,7 +15,7 @@ data.path = paste0(wdpath,"data/")
 
 run.calc=T
 
-trade.data.year = 2018
+trade.data.year = "base"
 
 # LIST OF PERIODS TO BE ITERATED
 periods <- list(c("2017-01-01",cutoff),c("2014-01-01",break.date),c("2008-11-01",break.date))
