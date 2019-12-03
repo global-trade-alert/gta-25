@@ -19,7 +19,8 @@ period <- c(as.character(as.Date(break.date)+1), cutoff)
 dest.markets <- list(c(156),c(840),c(eu.members))
 dest.markets.names <- c("China","United States of America", "EU")
 
-trade.data.year = 2018
+trade.data.year = "base"
+gdp.year=2018
 
 run.calc=T
 
@@ -43,7 +44,7 @@ run.calc=T
 indicator <- WDIsearch(string="GDP")
 indicator <- "NY.GDP.MKTP.CD"
 
-gdp.countries <- WDI(indicator=indicator, start=trade.data.year, end=trade.data.year, extra=T)
+gdp.countries <- WDI(indicator=indicator, start=gdp.year, end=gdp.year, extra=T)
 gdp.countries <- merge(gdp.countries[,c("NY.GDP.MKTP.CD","iso3c")], gtalibrary::country.names[,c("un_code","iso_code")], by.x="iso3c", by.y="iso_code")
 gdp.countries <- subset(gdp.countries, un_code %in% g20.members)[,c("NY.GDP.MKTP.CD","un_code")]
 names(gdp.countries) <- c("gdp","un_code")
