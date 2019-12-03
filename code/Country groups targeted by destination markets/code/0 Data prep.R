@@ -23,7 +23,7 @@ trade.data.year = 2018
 # facing (1) harmful measures implemented by destination markets and (2) reforming/liberalising
 # measures implemented by destination market. The X-axis shows the destination markets. (see attachement)
 
-dest.markets <- list(c(840), c(eu.members), c(840), c(g7.members), c(brics.members), c(g20.members))
+dest.markets <- list(c(156), c(eu.members), c(840), c(g7.members), c(brics.members), c(g20.members))
 dest.markets.names <- c("China","EU","USA","G7","BRICS","G20")
 targeted <- list(c(ldc.countries),c(au.members),c(wb.low.mid.ctry),c(wb.upp.mid.ctry))
 targeted.names <- c("LDCs","African Union","Lower middle income countries","Upper middle income countries")
