@@ -29,7 +29,7 @@ for (sct in sectors) {
   gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                      cpc.sectors = codes,
                      keep.cpc = T,
-                     affected.flow = "inward",#As we are talking about protecting import shares, it makes sense to take only import barriers
+                     affected.flow = "inward", #PL: As we are talking about protecting import shares, it makes sense to take only import barriers
                      importers = 'G20',
                      keep.importers = T,
                      group.importers = F, 
@@ -90,8 +90,9 @@ sct.trade.base=merge(sct.trade.base, data.frame(i.un=aggregate(trade.value~i.un,
 sct.trade.base$sct.share=sct.trade.base$sct.trade/sct.trade.base$national.trade
 
 load(paste0(path,"data/Sector coverages harmful.Rdata"))
-data.fig5=subset(merge(sct.trade.base,sct.cov.harmful,by.x=c('i.un','cpc'),by.y=c('imp.cty','sector')),
+data.fig5=subset(merge(sct.trade.base,sct.cov.harmful,by.x=c('i.un','cpc'),by.y=c('imp.cty','sector'), all = T), ## PL: all=T added since not all sectors in all countries have coverages
                  select=c('i.un','cpc','sct.share','cov.change'))
+data.fig5$cov.change[is.na(data.fig5$cov.change)] = 0 #PL: if coverage nonexistent, change should be 0
 setnames(data.fig5,'i.un','cty')
 data.fig5$cpc.name=mapvalues(data.fig5$cpc,subset(cpc.names, cpc.digit.level==2)$cpc,as.character(subset(cpc.names, cpc.digit.level==2)$cpc.name))
 save(data.fig5, file=paste0(path,'data/fig 5.Rdata'))
@@ -137,8 +138,11 @@ currency.base$curr.rel.change=currency.base$rel.change ; currency.base$rel.chang
 
 load(paste0(path,"data/Sector coverages harmful.Rdata"))
 
-data.fig6=subset(merge(currency.base,sct.cov.harmful,by.x='cty.name',by.y='imp.cty'),
-                 select=c('cty.name','cov.change','sector','curr.rel.change'))
+data.fig6=merge(currency.base, subset(sct.trade.base, select = c("i.un", "cpc")), by.x = c("cty.name"), by.y = c("i.un"), all = T) #PL:we need to add those observations with no measures
+data.fig6=subset(merge(sct.cov.harmful,data.fig6,by.x=c('imp.cty', "sector"), by.y=c('cty.name', "cpc"), all = T),
+                 select=c('imp.cty','cov.change','sector','curr.rel.change'))
+setnames(data.fig6, "imp.cty", "cty.name")
+data.fig6$cov.change[is.na(data.fig6$cov.change)] = 0
 data.fig6$sector.name=mapvalues(data.fig6$sector,subset(cpc.names, cpc.digit.level==2)$cpc,as.character(subset(cpc.names, cpc.digit.level==2)$cpc.name))
 
 save(data.fig6, file=paste0(path,'data/fig 6.Rdata'))
@@ -160,6 +164,7 @@ for (sct in sectors) {
   gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                      cpc.sectors = codes,
                      keep.cpc = T,
+                     affected.flows = c("inward"), #PL: Similar to above, I assume we're interested in inward measures only
                      importers = 'G20',
                      keep.importers = T,
                      group.importers = F, 
@@ -188,16 +193,16 @@ for(cpc.two.digit in sectors){
   trade.base.bilateral$cpc=mapvalues(trade.base.bilateral$cpc,expanded.codes,rep(cpc.two.digit, length(expanded.codes)))
 }
 
-importer.base=subset(aggregate(trade.value~cpc+i.un,trade.base.bilateral,sum), i.un %in% subset(country.names, is.g20 ==T)$un_code,
+importer.base=subset(aggregate(trade.value~cpc+i.un,trade.base.bilateral,sum), i.un %in% subset(country.names, is.g20 ==T)$un_code & cpc %in% sectors,
                      select=c('trade.value','cpc','i.un'))
 importer.base$state='import'
 setnames(importer.base,'i.un','cty')
-exporter.base=subset(aggregate(trade.value~cpc+a.un,trade.base.bilateral,sum), a.un %in% subset(country.names, is.g20 ==T)$un_code,
+exporter.base=subset(aggregate(trade.value~cpc+a.un,trade.base.bilateral,sum), a.un %in% subset(country.names, is.g20 ==T)$un_code & cpc %in% sectors,
                      select=c('trade.value','cpc','a.un'))
 exporter.base$state='export'
 setnames(exporter.base,'a.un','cty')
 
-base=merge(expand.grid(cpc=c(sectors,NA),
+base=merge(expand.grid(cpc=c(sectors),
                        cty=subset(country.names, is.g20 ==T)$un_code,
                        state=c('import','export')),
            rbind(importer.base,exporter.base), by = c('cpc','cty','state'), all.x = T, all.y = F)
@@ -206,7 +211,8 @@ base=spread(base, state, trade.value)
 base$sect.trade.share=(base$export-base$import)/(base$export+base$import)
 
 data.fig7=merge(sct.cov.non.tar, 
-                base, by.x = c('sector','imp.cty'), by.y=c('cpc','cty'), all.x = T, all.y = F)
+                base, by.x = c('sector','imp.cty'), by.y=c('cpc','cty'), all = T)
+data.fig7[is.na(data.fig7)]=0
 data.fig7$change.sct.imp.share=data.fig7$cov.2019-data.fig7$cov.2017
 data.fig7=subset(data.fig7, select=c('sector','imp.cty','change.sct.imp.share','sect.trade.share'))
 setnames(data.fig7,'imp.cty','cty')
