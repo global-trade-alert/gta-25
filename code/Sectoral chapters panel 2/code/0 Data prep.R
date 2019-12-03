@@ -29,6 +29,7 @@ for (sct in sectors) {
   gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                      cpc.sectors = codes,
                      keep.cpc = T,
+                     affected.flow = "inward",#As we are talking about protecting import shares, it makes sense to take only import barriers
                      importers = 'G20',
                      keep.importers = T,
                      group.importers = F, 
