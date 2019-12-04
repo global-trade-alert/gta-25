@@ -9,13 +9,16 @@ library(xlsx)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
-source('0 report production/GTA 25/help files/GTA 25 cutoff and definitions.R')
 
-this.chapter=c(paste0("Sectoral chapters - Sector ",paste0(sectors)))
 
-wdpath = "0 dev/gta-25-pb/"
-output.path = paste0(wdpath,"tables & figures/Variation in annual sectoral and global trade/")
-data.path = paste0(wdpath,"code/Variation in annual sectoral and global trade/data/")
+directories=gta25_setup(internal.name="Annual trade variation",
+                        in.dev=F,
+                        author=NULL,
+                        wipe.data=F,
+                        wipe.figs=T)
+
+data.path = directories$data.path
+output.path = directories$figure.path
 
 gta_colour_palette()
 
