@@ -11,9 +11,9 @@ source('0 report production/GTA 25/help files/Producer console.R')
 
 directories=gta25_setup(internal.name="Annual trade variation",
                         in.dev=F,
-                        author=NULL,
-                        wipe.data=T,
-                        wipe.figs=T)
+                        author='pb',
+                        wipe.data=F,
+                        wipe.figs=F)
 
 data.path = directories$data.path
 
@@ -81,5 +81,3 @@ if (run.calc) {
   save(global.trade, file=paste0(data.path,"Trade global indexed 2007.Rdata"))
   
 }
-load(paste0(data.path,"Trade per sector indexed 2007.Rdata"))
-load(paste0(data.path,"Trade global indexed 2007.Rdata"))
