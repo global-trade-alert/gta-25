@@ -6,14 +6,18 @@ library(tidyverse)
 library(WDI)
 library(plyr)
 
+
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
-source('0 report production/GTA 25/help files/GTA 25 cutoff and definitions.R')
 
-this.chapter="USA, China and EU targeting G20"
 
-wdpath = "0 dev/gta-25-pb/code/USA, China and EU targeting G20/"
-data.path = paste0(wdpath,"data/")
+directories=gta25_setup(internal.name="USA, China and EU targeting G20",
+                        in.dev=F,
+                        author=NULL,
+                        wipe.data=T,
+                        wipe.figs=T)
+
+data.path = directories$data.path
 
 period <- c(as.character(as.Date(break.date)+1), cutoff)
 dest.markets <- list(c(156),c(840),c(eu.members))
@@ -125,6 +129,5 @@ if (run.calc) {
   
   save(coverages, file=paste0(data.path,"Populist era g20 targeting.Rdata"))
 }
-load(paste0(data.path,"Populist era g20 targeting.Rdata"))
 
 

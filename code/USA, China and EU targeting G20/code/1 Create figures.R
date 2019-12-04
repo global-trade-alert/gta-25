@@ -9,13 +9,16 @@ library(xlsx)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
-source('0 report production/GTA 25/help files/GTA 25 cutoff and definitions.R')
 
-this.chapter="USA, China and EU targeting G20"
 
-wdpath = "0 dev/gta-25-pb/"
-output.path = paste0(wdpath,"tables & figures/USA, China and EU targeting G20/")
-data.path = paste0(wdpath,"code/USA, China and EU targeting G20/data/")
+directories=gta25_setup(internal.name="USA, China and EU targeting G20",
+                        in.dev=F,
+                        author=NULL,
+                        wipe.data=F,
+                        wipe.figs=T)
+
+data.path = directories$data.path
+output.path = directories$figure.path
 
 gta_colour_palette()
 
