@@ -56,6 +56,3 @@ if (1 %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.
   write.xlsx(sa.src.yr, paste0(figures.path, 'Figure 2 data.xlsx'))
   
 }
-
-
-

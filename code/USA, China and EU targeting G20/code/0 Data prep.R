@@ -129,6 +129,3 @@ if (run.calc) {
   
   save(coverages, file=paste0(data.path,"Populist era g20 targeting.Rdata"))
 }
-load(paste0(data.path,"Populist era g20 targeting.Rdata"))
-
-
