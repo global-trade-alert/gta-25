@@ -23,8 +23,6 @@ output.path = directories$figure.path
 
 this.chapter="Country groups targeted by destination markets"
 
-
-
 gta_colour_palette()
 
 # Figure 1 create graph ------------------------------------------------------
@@ -54,40 +52,40 @@ write.xlsx(dest.markets.cov, file=paste0(output.path,"Table for Figure 1.xlsx"),
 # FOR LDCs AND AFRICAN UNION
 
 fig1.create <- function() {
-    
-    fig1 <- ggplot()+
-      geom_text(data=subset(fig1.data.text, exporter == "LDCs"), aes(x=1-0.2, y=coverages[order==1], label="LDCs"), nudge_y = 0.03, hjust = 0, vjust=0.5, angle=90,color = gta_colour$grey[1])+
-      geom_text(data=subset(fig1.data.text, exporter == "African Union"), aes(x=1+0.2, y=coverages[order==1], label="African Union"), nudge_y = 0.03, hjust = 0, vjust=0.5, angle=90,color = gta_colour$grey[1])+
-      geom_rect(data=subset(fig1.data.lines, exporter == "LDCs"), aes(xmin=order-0.29, xmax=order-0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
-      geom_rect(data=subset(fig1.data.lines, exporter == "African Union"), aes(xmin=order+0.29, xmax=order+0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
-      geom_point(data=subset(fig1.data, exporter == "African Union"), aes(x=order+0.2, y=coverages, colour = type),size=5)+
-      geom_point(data=subset(fig1.data, exporter == "LDCs"), aes(x=order-0.2, y=coverages, colour = type),size=5)+
-      geom_vline(xintercept = c(seq(1.5,5.5,1)),colour="#dadada")+
-      gta_plot_wrapper(data = subset(fig1.data, exporter %in% c("LDCs","African Union")),
-                       data.x = "order",
-                       data.y = "coverages",
-                       colour.labels = c("Harmful","Liberalising"),
-                       colour.legend.title = "Intervention type",
-                       y.left.limits = c(0,1),
-                       y.left.labels = percent,
-                       y.left.name = "% of trade to destination \nmarket affected",
-                       colour.palette = c(gta_colour$red[1], gta_colour$green[1]),
-                       x.bottom.name = "Destination markets",
-                       x.bottom.labels = c(unique(fig1.data$importer)),
-                       x.bottom.breaks = c(seq(1,6,1)),
-                       x.bottom.expand = c(0.05,0.05),
-                       colour.legend.col = 2,
-                       fill.palette = c(gta_colour$green[1], gta_colour$red[1]))+
-      guides(fill=FALSE)+
-      gta_theme()+
-      theme(panel.grid.major.x = element_blank(),
-            axis.text.x.bottom = element_text(face="bold", size=10))
-    
-    
-    fig1
-    
+  
+  fig1 <- ggplot()+
+    geom_text(data=subset(fig1.data.text, exporter == "LDCs"), aes(x=1-0.2, y=coverages[order==1], label="LDCs"), nudge_y = 0.03, hjust = 0, vjust=0.5, angle=90,color = gta_colour$grey[1])+
+    geom_text(data=subset(fig1.data.text, exporter == "African Union"), aes(x=1+0.2, y=coverages[order==1], label="African Union"), nudge_y = 0.03, hjust = 0, vjust=0.5, angle=90,color = gta_colour$grey[1])+
+    geom_rect(data=subset(fig1.data.lines, exporter == "LDCs"), aes(xmin=order-0.29, xmax=order-0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
+    geom_rect(data=subset(fig1.data.lines, exporter == "African Union"), aes(xmin=order+0.29, xmax=order+0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
+    geom_point(data=subset(fig1.data, exporter == "African Union"), aes(x=order+0.2, y=coverages, colour = type),size=5)+
+    geom_point(data=subset(fig1.data, exporter == "LDCs"), aes(x=order-0.2, y=coverages, colour = type),size=5)+
+    geom_vline(xintercept = c(seq(1.5,5.5,1)),colour="#dadada")+
+    gta_plot_wrapper(data = subset(fig1.data, exporter %in% c("LDCs","African Union")),
+                     data.x = "order",
+                     data.y = "coverages",
+                     colour.labels = c("Harmful","Liberalising"),
+                     colour.legend.title = "Intervention type",
+                     y.left.limits = c(0,1),
+                     y.left.labels = percent,
+                     y.left.name = "% of trade to destination \nmarket affected",
+                     colour.palette = c(gta_colour$red[1], gta_colour$green[1]),
+                     x.bottom.name = "Destination markets",
+                     x.bottom.labels = c(unique(fig1.data$importer)),
+                     x.bottom.breaks = c(seq(1,6,1)),
+                     x.bottom.expand = c(0.05,0.05),
+                     colour.legend.col = 2,
+                     fill.palette = c(gta_colour$green[1], gta_colour$red[1]))+
+    guides(fill=FALSE)+
+    gta_theme()+
+    theme(panel.grid.major.x = element_blank(),
+          axis.text.x.bottom = element_text(face="bold", size=10))
+  
+  
+  fig1
+  
   return(fig1)
-  }
+}
 
 # FOR LOWER AND UPPER MIDDLE INCOME COUNTRIES
 
@@ -147,27 +145,27 @@ figex <- ggplot()+
                    fill.palette = c(gta_colour$green[1], gta_colour$red[1]))+
   gta_theme()
 
-  figex
-  
-  gta_plot_saver(plot = figex,
-                 path = paste0(output.path),
-                 name = paste0("Example Figure with lines"),
-                 cairo_ps = T,
-                 width = 21)
-  
+figex
+
+gta_plot_saver(plot = figex,
+               path = paste0(output.path),
+               name = paste0("Example Figure with lines"),
+               cairo_ps = T,
+               width = 21)
+
 
 # Create panels per sector ------------------------------------------------
 
-  fig1 <- fig1.create()
-  fig2 <- fig2.create()
-  
-  figA <- grid.arrange(fig1, fig2, nrow=2)
+fig1 <- fig1.create()
+fig2 <- fig2.create()
 
-  gta_plot_saver(plot = figA,
-                 path = paste0(output.path),
-                 name = paste0("Figure 1 - ",this.chapter),
-                 cairo_ps = T,
-                 height = 29.7,
-                 width = 21)
-  
+figA <- grid.arrange(fig1, fig2, nrow=2)
+
+gta_plot_saver(plot = figA,
+               path = paste0(output.path),
+               name = paste0("Figure 1 - ",this.chapter),
+               cairo_ps = T,
+               height = 29.7,
+               width = 21)
+
 
