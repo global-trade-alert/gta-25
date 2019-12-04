@@ -38,3 +38,34 @@ published.ids$group[str_sub(as.character(published.ids$published.by),6,7)=='01']
 
 save(published.ids, file=paste0(data.path,'published interventions.Rdata'))
 
+
+# Figure 2 (CURRENTLY UNDER REVISION)
+# "Graph showing the total of interventions in the database for each year splitted by (1) Interventions having at least one official source, 
+# (2) Interventions coming from company self-declaration and 
+# (3) coming from other non-official sources."
+
+library(gtalibrary)
+library(gtasql)
+library(pool)
+library(RMariaDB)
+library(data.table)
+library(stringr)
+
+gta_sql_pool_open(db.title="gtamain",
+                  db.host = gta_pwd("gtamain")$host,
+                  db.name = gta_pwd("gtamain")$name,
+                  db.user = gta_pwd("gtamain")$user,
+                  db.password = gta_pwd("gtamain")$password,
+                  table.prefix = "gta_")
+
+gta.sa=gta_sql_load_table("measure")
+
+
+## number of official sources per year
+sa.src.yr=aggregate(id ~ year(creation.date) + is.source.official, subset(gta.sa, status.id==4), function(x) length(unique(x)))
+names(sa.src.yr)=c("year","is.source.official","sa.count")
+
+save(sa.src.yr, file=paste0(data.path,'state act sources.Rdata'))
+
+gta_sql_pool_close()
+gta_sql_kill_connections()

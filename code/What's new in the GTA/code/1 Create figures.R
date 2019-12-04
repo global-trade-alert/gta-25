@@ -32,3 +32,27 @@ if (1 %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.
 
 
 
+# Figure 2 (CURRENTLY UNDER REVISION) ----------------------------------------------------------------
+# "Graph showing the total of interventions in the database for each year splitted by 
+# (1) Interventions having at least one official source, 
+# (2) Interventions coming from company self-declaration and 
+# (3) coming from other non-official sources."
+
+load(paste0(data.path, 'state act sources.Rdata'))
+if (1 %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.fig)){
+  
+  fig2=ggplot(sa.src.yr, aes(x=as.factor(year), y=sa.count, fill=as.factor(is.source.official)))+
+    geom_bar(stat="identity")+
+    scale_fill_manual(values=c(gta_colour$qualitative[c(3,1)]))+
+    gta_theme()+
+    labs(x="reporting year",y="number of state acts\npublished")+
+    scale_y_continuous(sec.axis = dup_axis())+
+    guides(fill="none")
+  
+  gta_plot_saver(fig2, 
+                 figures.path,
+                 'Figure 2')
+  
+  write.xlsx(sa.src.yr, paste0(figures.path, 'Figure 2 data.xlsx'))
+  
+}
