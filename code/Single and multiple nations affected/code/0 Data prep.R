@@ -60,7 +60,7 @@ if (run.calc) {
         mast.chapter <- paste0("NOT.",mast.chapter)
       }
       #Average coverage
-      cov.avg <- mean(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
+      cov.avg <- max(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
       single.nation.cov <- rbind(single.nation.cov, data.frame(mast.chapter=mast.chapter,
                                                                nations.affected="one",
                                                                period=p,
@@ -75,7 +75,7 @@ if (run.calc) {
                        incl.exporters.strictness = "ONE",
                        trade.data = trade.data.year)
     
-    cov.avg <- mean(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
+    cov.avg <- max(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
     
     single.nation.cov <- rbind(single.nation.cov, data.frame(mast.chapter="export incentives",
                                                              nations.affected="one",
@@ -110,7 +110,7 @@ if (run.calc) {
         mast.chapter <- paste0("NOT.",mast.chapter)
       }
       
-      cov.avg <- mean(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
+      cov.avg <- max(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
       
       multiple.nation.cov <- rbind(multiple.nation.cov, data.frame(mast.chapter=mast.chapter,
                                                                nations.affected="multiple",
@@ -125,7 +125,7 @@ if (run.calc) {
                        nr.exporters = c(2,999),
                        trade.data = trade.data.year)
     
-    cov.avg <- mean(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
+    cov.avg <- max(as.numeric(trade.coverage.estimates[,c(4:ncol(trade.coverage.estimates))]))
     
     multiple.nation.cov <- rbind(multiple.nation.cov, data.frame(mast.chapter="export incentives",
                                                                  nations.affected="multiple",
