@@ -25,13 +25,13 @@ gta_colour_palette()
 # Figure 1 create graph ------------------------------------------------------
 
 
-# The 3 plot shows the share of world trade facing harmful measures 
+# The 3 plot shows the share of world trade facing harmful interventions 
 # implemented (1) from 2017-2019, (2) from 2014-2016 and (3) from NA-to end of 2016.
 # 
-# (1) World trade affected by tariff measures affecting a single nation in the home market
-# (2) World trade affected by tariff measures affecting mulitple nations in the home market
-# (3) World trade affected by all other measures affecting single nation in the home market
-# (4) World trade affected by all other measures affecting multiple nations in the home market
+# (1) World trade affected by tariff interventions affecting a single nation in the home market
+# (2) World trade affected by tariff interventions affecting mulitple nations in the home market
+# (3) World trade affected by all other interventions affecting single nation in the home market
+# (4) World trade affected by all other interventions affecting multiple nations in the home market
 # (5) World trade affected by export incentives affecting single nation in a foreign market
 # (6) World trade affected by export incentives affecting multiple nations in a foreign market
 
@@ -42,7 +42,7 @@ fig1.data$mast.chapter <- as.character(fig1.data$mast.chapter)
 fig1.data$nations.affected <- as.character(fig1.data$nations.affected)
 
 # LIST OF PERIODS TO BE ITERATED
-periods <- list(c("2017-01-01",cutoff),c("2014-01-01",break.date),c("2008-01-01",break.date))
+periods <- list(c("2017-01-01",cutoff),c("2014-01-01",break.date),c("2009-01-01",break.date))
 
 
 write.xlsx(fig1.data, file=paste0(output.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Coverages")
@@ -57,11 +57,11 @@ fig1.create <- function(prd) {
                                        c(5,10,15,10, "Tariffs"),
                                        c(5,10,10,5, "All other"),
                                        c(5,10,5,0, "Export \nincentives"),
-                                       c(10,15,20,15, "Measures affecting \na single jurisdiction"),
+                                       c(10,15,20,15, "Interventions affecting \na single jurisdiction"),
                                        c(10,15,15,10, round(subset(fig1.data, mast.chapter == "TARIFF" & period == prd & nations.affected == "one")$coverages,3)),
                                        c(10,15,10,5, round(subset(fig1.data, mast.chapter == "NOT.TARIFF" & period == prd & nations.affected == "one")$coverages,3)),
                                        c(10,15,5,0, round(subset(fig1.data, mast.chapter == "export incentives" & period == prd & nations.affected == "one")$coverages,3)),
-                                       c(15,20,20,15, "Measures affecting \nmultiple jurisdictions"),
+                                       c(15,20,20,15, "Interventions affecting \nmultiple jurisdictions"),
                                        c(15,20,15,10, round(subset(fig1.data, mast.chapter == "TARIFF" & period == prd & nations.affected == "multiple")$coverages,3)),
                                        c(15,20,10,5, round(subset(fig1.data, mast.chapter == "NOT.TARIFF" & period == prd & nations.affected == "multiple")$coverages,3)),
                                        c(15,20,5,0, round(subset(fig1.data, mast.chapter == "export incentives" & period == prd & nations.affected == "multiple")$coverages,3))))
@@ -104,7 +104,7 @@ fig1.create <- function(prd) {
     geom_text(data=data.frame(), aes(x=coordinates[14,2]-((coordinates[14,2]-coordinates[14,1])/2), y=coordinates[14,4]-((coordinates[14,4]-coordinates[14,3])/2), label = coordinates[14,5]), alpha=1, color = gta_colour$red[1])+
     geom_text(data=data.frame(), aes(x=coordinates[15,2]-((coordinates[15,2]-coordinates[15,1])/2), y=coordinates[15,4]-((coordinates[15,4]-coordinates[15,3])/2), label = coordinates[15,5]), alpha=1, color = gta_colour$red[1])+
     labs(x=NULL,y=NULL)+
-    ggtitle(paste0("Measures from ",periods[[prd]][1]," to ",periods[[prd]][2]))+
+    ggtitle(paste0("Interventions from ",periods[[prd]][1]," to ",periods[[prd]][2]))+
     gta_theme()+
     theme(plot.background = element_blank(),
           panel.background = element_blank(),
