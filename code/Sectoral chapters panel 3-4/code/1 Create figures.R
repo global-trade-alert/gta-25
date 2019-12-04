@@ -10,13 +10,17 @@ library(xlsx)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
-source('0 report production/GTA 25/help files/GTA 25 cutoff and definitions.R')
 
-this.chapter=c(paste0("Sectoral chapters - Sector ",paste0(sectors)))
 
-wdpath = "0 dev/gta-25-pb/"
-output.path = paste0(wdpath,"tables & figures/Sectoral chapters panel 3-4/")
-data.path = paste0(wdpath,"code/Sectoral chapters panel 3-4/data/")
+directories=gta25_setup(internal.name="Sectoral chapters panel 3-4",
+                        in.dev=F,
+                        author=NULL,
+                        wipe.data=F,
+                        wipe.figs=T)
+
+
+data.path = directories$data.path
+output.path = directories$figure.path
 
 gta_colour_palette()
 order.names <- data.frame(country = c("United States of America","China",c(g20.member.names[! g20.member.names %in% c("United States of America", "China")])), order = c(seq(1,19,1)))
