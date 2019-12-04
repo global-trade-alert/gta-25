@@ -73,7 +73,7 @@ fig9.create <- function(sct) {
 
 # Figure 10 create graph ------------------------------------------------------
 
-# Chart 10: Same as chart 9, but with liberalising measures.
+# Chart 10: Same as chart 9, but with liberalising interventions.
 
 load(paste0(data.path,"G20 sector exports coverages - liberalising.Rdata"))
 

@@ -29,8 +29,8 @@ gta_colour_palette()
 # Figure 1 create graph ------------------------------------------------------
 
 # Graph 1: Y-axis shows the share of bilateral exports of LDCs/African Union
-# facing (1) harmful measures implemented by destination markets and (2) reforming/liberalising
-# measures implemented by destination market. The X-axis shows the destination markets. (see attachement)
+# facing (1) harmful interventions implemented by destination markets and (2) reforming/liberalising
+# interventions implemented by destination market. The X-axis shows the destination markets. (see attachement)
 
 load(paste0(data.path,"Destination markets targeting.Rdata"))
 
