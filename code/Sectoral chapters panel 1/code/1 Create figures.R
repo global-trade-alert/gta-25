@@ -6,7 +6,7 @@ library(tidyverse)
 library(ggplot2)
 library(gridExtra)
 library(xlsx)
-
+library(scales)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
