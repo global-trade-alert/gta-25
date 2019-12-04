@@ -168,4 +168,3 @@ figex <- ggplot()+
                  height = 29.7,
                  width = 21)
   
-
