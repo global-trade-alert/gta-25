@@ -272,9 +272,15 @@ for (sct in sectors) {
 sct.incentives$exp.cty=mapvalues(sct.incentives$exp.cty,country.names$name,country.names$un_code)
 sct.incentives$incentives.change=sct.incentives$cov.2019-sct.incentives$cov.2017
 
+
 data.fig8=merge(sct.incentives, 
-                sct.cov.harmful, by.x = c('sector','exp.cty'), by.y=c('sector','imp.cty'))
+                merge(sct.cov.harmful,
+                      subset(cty.sct.trade, cpc %in% sectors)[,c("cpc","i.un")], 
+                      by.x=c("imp.cty","sector"), by.y=c("i.un","cpc"), all.y=T), 
+                by.x = c('sector','exp.cty'), by.y=c('sector','imp.cty'), all=T)
 data.fig8=subset(data.fig8, select=c('sector','exp.cty','incentives.change','cov.change'))
+data.fig8[is.na(data.fig8)]=0
+
 setnames(data.fig8,'exp.cty','cty')
 data.fig8$sector.name=mapvalues(data.fig8$sector,subset(cpc.names, cpc.digit.level==2)$cpc,as.character(subset(cpc.names, cpc.digit.level==2)$cpc.name))
 
