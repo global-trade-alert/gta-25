@@ -1,6 +1,6 @@
 rm(list=ls())
 
-# Req: These are 4 graphs placed on the same page. Create these graphs for the following sectors: 49, 47, 43, 44, 46, 28, 29
+# Req: Theese are 4 graphs placed on the same page. Create these graphs for the following sectors: 49, 47, 43, 44, 46, 28, 29
 
 library(gtalibrary)
 library(stringr)
@@ -18,6 +18,9 @@ chapter.folders=gta25_setup(internal.name = 'Sectoral chapters panel 2',
 data.path=chapter.folders$data.path
 figure.path=chapter.folders$figure.path
 
+
+
+
 # Fig 5  ----------------------------------------------------------------
 # Req: Chart 5: Scatter plot for all G20. Y-axis shows change in sectoral import share protected from 2017-2019. X-axis shows change in national import share from 2017-2019
 
@@ -33,8 +36,6 @@ for (sct in sectors) {
                      importers = 'G20',
                      keep.importers = T,
                      group.importers = F,
-                     intervention.ids = manually.removed.interventions,
-                     keep.interventions = F,
                      coverage.period = c(2016,2019))
   sct.cov.harmful <- rbind(sct.cov.harmful, data.frame(sector=sct,
                                                        imp.cty=trade.coverage.estimates$`Importing country`,
@@ -49,6 +50,11 @@ for (sct in sectors) {
 
 sct.cov.harmful$cov.change=sct.cov.harmful$cov.2019-sct.cov.harmful$cov.2017
 sct.cov.harmful$imp.cty=mapvalues(sct.cov.harmful$imp.cty,country.names$name,country.names$un_code)
+
+# balancing the panel to observed trading nations // turns out to be unnecessary since you already did this in the merger to the data.figX dfs, sorry.
+# sct.cov.harmful=merge(subset(cty.sct.trade, cpc %in% sectors)[,c("cpc","i.un")], sct.cov.harmful, by.x=c("i.un","cpc"), by.y=c("imp.cty","sector"), all.x=T)
+# sct.cov.harmful[is.na(sct.cov.harmful)]=0
+
 
 save(sct.cov.harmful, file=paste0(data.path,"/Sector coverages harmful.Rdata"))
 
@@ -67,10 +73,10 @@ for(cpc.two.digit in sectors){
 
 
 cty.sct.trade=aggregate(trade.value~i.un+cpc ,trade.base.bilateral, sum)
+
 sct.trade.base=expand.grid(i.un=country.names[country.names$is.g20==T,]$un_code,
                            cpc=sectors, 
                            trade.value=NA)
-
 for(sct in sectors){
   temp=subset(cty.sct.trade, cpc==sct)
   if(nrow(temp)>0){
@@ -145,6 +151,7 @@ data.fig6=subset(merge(sct.cov.harmful,data.fig6,by.x=c('imp.cty', "sector"), by
                  select=c('imp.cty','cov.change','sector','curr.rel.change'))
 setnames(data.fig6, "imp.cty", "cty.name")
 data.fig6$sector.name=mapvalues(data.fig6$sector,subset(cpc.names, cpc.digit.level==2)$cpc,as.character(subset(cpc.names, cpc.digit.level==2)$cpc.name))
+data.fig6[is.na(data.fig6)]=0
 
 save(data.fig6, file=paste0(data.path,'/fig 6.Rdata'))
 
@@ -169,8 +176,6 @@ for (sct in sectors) {
                      importers = 'G20',
                      keep.importers = T,
                      group.importers = F, 
-                     intervention.ids = manually.removed.interventions,
-                     keep.interventions = F,
                      coverage.period = c(2016,2019),
                      mast.chapters = 'tariff',
                      keep.mast = F)
@@ -227,22 +232,18 @@ save(data.fig7, file=paste0(data.path,'fig 7.Rdata'))
 # chart 8  ----------------------------------------------------------------
 #Chart 8: Scatter plot for G20. Y-axis same as graph 5 and 6. X-axis shows the share of sectoral exports that benefit from incentives.
 
-gta_data_slicer(implementing.country = 'G20',
-              gta.evaluation = c("Red", "Amber"),
-               cpc.sectors = codes, keep.cpc = T,
-               implementation.period = c("2016-01-01", "2019-12-31"), keep.implementation.na = F,
-               intervention.ids = manually.removed.interventions, keep.interventions = F,
-               affected.flows = "outward subsidy",
-               implementation.level = c("subnational"), keep.level = F,
-               eligible.firms = c("firm-specific"),keep.firms = F)
-master.sliced = cSplit(master.sliced, which(colnames(master.sliced)=="affected.product"), direction="long", sep=", ")
-master.sliced = subset(master.sliced, affected.product %in% subset(cpc.to.hs, cpc %in% codes)$hs)
+# gta_data_slicer(implementing.country = 'G20',
+#               gta.evaluation = c("Red", "Amber"),
+#                cpc.sectors = codes, keep.cpc = T,
+#                implementation.period = c("2016-01-01", "2019-12-31"), keep.implementation.na = F,
+#                affected.flows = "outward subsidy",
+#                implementation.level = c("subnational"), keep.level = F,
+#                eligible.firms = c("firm-specific"),keep.firms = F)
+# master.sliced = cSplit(master.sliced, which(colnames(master.sliced)=="affected.product"), direction="long", sep=", ")
+# master.sliced = subset(master.sliced, affected.product %in% subset(cpc.to.hs, cpc %in% codes)$hs)
 
 
 sct.incentives <- data.frame()
-
-
-
 
 
 for (sct in sectors) {
@@ -250,13 +251,13 @@ for (sct in sectors) {
   gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                      cpc.sectors = codes,
                      keep.cpc = T,
-                     exporters = 'G20',
-                     keep.exporters = T,
-                     group.exporters = F, 
-                     intervention.ids = manually.removed.interventions,
-                     keep.interventions = F,
+                     implementers = 'G20',
+                     keep.implementer = T,
+                     group.implementers = F,
+                     implementer.trade = "export",
                      coverage.period = c(2016,2019),
                      affected.flows = 'outward subsidy')
+  
   sct.incentives <- rbind(sct.incentives, data.frame(sector=sct,
                                                      exp.cty=trade.coverage.estimates$`Exporting country`,
                                                      cov.2016=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2016`),
