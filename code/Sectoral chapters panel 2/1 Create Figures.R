@@ -22,7 +22,7 @@ figure.path=chapter.folders$figure.path
 gta_colour_palette()
 # Chart 5 -----------------------------------------------------------------
 
-#Request: Scatter plot for all G20. Y-axis shows change in sectoral import share protected from 2017-2019. X-axis shows national import share from 2016
+#Request: Scattter plot for all G20. Y-axis shows change in sectoral import share protected from 2017-2019. X-axis shows national import share from 2016
 
 load(paste0(data.path,'fig 5.Rdata'))
 
@@ -113,7 +113,6 @@ fig8.create=function(sct){
 
 for (sct in sectors) {
   
-  if (all(c(5,6) %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.fig))){
     fig5 <- fig5.create(sct)
     fig6 <- fig6.create(sct)
     figA <- grid.arrange(fig5, fig6, nrow=2)
@@ -123,9 +122,8 @@ for (sct in sectors) {
                    cairo_ps = T,
                    height = 29.7,
                    width = 21)
-  }
   
-  if (all(c(7,8) %in% unlist(subset(producer.console, chapter.name == this.chapter)$output.fig))){
+  
     fig7 <- fig7.create(sct)
     fig8 <- fig8.create(sct)
     figB <- grid.arrange(fig7, fig8, nrow=2)
@@ -135,7 +133,7 @@ for (sct in sectors) {
                    cairo_ps = T,
                    height = 29.7,
                    width = 21)
-  }
+  
 }
 
 
