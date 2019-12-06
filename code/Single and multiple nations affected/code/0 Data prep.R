@@ -69,6 +69,18 @@ for(period in 1:length(periods)){
                        nr.exporters = c(1,1),
                        trade.data = trade.data.year)
     
+    
+    
+    if(exists("trade.coverage.estimates")){
+      
+      trade.value=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)])
+      rm(trade.coverage.estimates)
+    } else {
+      
+      trade.value=0  
+    }
+    
+    
     single.multi.data=rbind(single.multi.data,
                             data.frame(period.id=period,
                                        month=format(monat, "%y-%m"),
@@ -77,15 +89,6 @@ for(period in 1:length(periods)){
                                        target="single",
                                        trade.share=trade.value,
                                        stringsAsFactors = F))
-    
-    if(exists("trade.coverage.estimates")){
-      
-      trade.value=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)])
-      rm(trade.coverage.estimates)
-      } else {
-        
-      trade.value=0  
-    }
     
     
     rm(trade.value)
