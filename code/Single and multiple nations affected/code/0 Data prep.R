@@ -63,7 +63,7 @@ for(period in 1:length(periods)){
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("inward"),
                        coverage.period = c(year(monat),year(monat)),
-                       implementation.period = c(monat,(monat+months(1)-1)),
+                       implementation.period = c(period.start,(monat+months(1)-1)),
                        mast.chapters = "TARIFF",
                        keep.mast = T,
                        nr.exporters = c(1,1),
@@ -75,21 +75,41 @@ for(period in 1:length(periods)){
                                        month.count=mondf(period.start, monat),
                                        instrument="tariff",
                                        target="single",
-                                       trade.share=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)]),
+                                       trade.share=trade.value,
                                        stringsAsFactors = F))
     
-    rm(trade.coverage.estimates)
+    if(exists("trade.coverage.estimates")){
+      
+      trade.value=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)])
+      rm(trade.coverage.estimates)
+      } else {
+        
+      trade.value=0  
+    }
+    
+    
+    rm(trade.value)
     
     # (2) World trade affected by tariff measures affecting mulitple nations in the home market
     
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("inward"),
                        coverage.period = c(year(monat),year(monat)),
-                       implementation.period = c(monat,(monat+months(1)-1)),
+                       implementation.period = c(period.start,(monat+months(1)-1)),
                        mast.chapters = "TARIFF",
                        keep.mast = T,
                        nr.exporters = c(2,999999),
                        trade.data = trade.data.year)
+    
+    
+    if(exists("trade.coverage.estimates")){
+      
+      trade.value=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)])
+      rm(trade.coverage.estimates)
+    } else {
+      
+      trade.value=0  
+    }
     
     single.multi.data=rbind(single.multi.data,
                             data.frame(period.id=period,
@@ -97,10 +117,10 @@ for(period in 1:length(periods)){
                                        month.count=mondf(period.start, monat),
                                        instrument="tariff",
                                        target="multi",
-                                       trade.share=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)]),
+                                       trade.share=trade.value,
                                        stringsAsFactors = F))
     
-    rm(trade.coverage.estimates)
+    rm(trade.value)
     
     
     # (3) World trade affected by all other measures affecting single nation in the home market
@@ -108,11 +128,21 @@ for(period in 1:length(periods)){
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("inward"),
                        coverage.period = c(year(monat),year(monat)),
-                       implementation.period = c(monat,(monat+months(1)-1)),
+                       implementation.period = c(period.start,(monat+months(1)-1)),
                        mast.chapters = "TARIFF",
                        keep.mast = F,
                        nr.exporters = c(1,1),
                        trade.data = trade.data.year)
+    
+    
+    if(exists("trade.coverage.estimates")){
+      
+      trade.value=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)])
+      rm(trade.coverage.estimates)
+    } else {
+      
+      trade.value=0  
+    }
     
     single.multi.data=rbind(single.multi.data,
                             data.frame(period.id=period,
@@ -120,10 +150,10 @@ for(period in 1:length(periods)){
                                        month.count=mondf(period.start, monat),
                                        instrument="non-tariff",
                                        target="single",
-                                       trade.share=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)]),
+                                       trade.share=trade.value,
                                        stringsAsFactors = F))
     
-    rm(trade.coverage.estimates)
+    rm(trade.value)
     
     
     # (4) World trade affected by all other measures affecting multiple nations in the home market
@@ -131,11 +161,21 @@ for(period in 1:length(periods)){
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("inward"),
                        coverage.period = c(year(monat),year(monat)),
-                       implementation.period = c(monat,(monat+months(1)-1)),
+                       implementation.period = c(period.start,(monat+months(1)-1)),
                        mast.chapters = "TARIFF",
                        keep.mast = F,
                        nr.exporters = c(2,99999),
                        trade.data = trade.data.year)
+    
+    
+    if(exists("trade.coverage.estimates")){
+      
+      trade.value=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)])
+      rm(trade.coverage.estimates)
+    } else {
+      
+      trade.value=0  
+    }
     
     single.multi.data=rbind(single.multi.data,
                             data.frame(period.id=period,
@@ -143,10 +183,10 @@ for(period in 1:length(periods)){
                                        month.count=mondf(period.start, monat),
                                        instrument="non-tariff",
                                        target="multi",
-                                       trade.share=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)]),
+                                       trade.share=trade.value,
                                        stringsAsFactors = F))
     
-    rm(trade.coverage.estimates)
+    rm(trade.value)
     
     
     # (5*) World trade affected by export incentives affecting multiple nations in a foreign market
@@ -154,10 +194,20 @@ for(period in 1:length(periods)){
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("outward subsidy"),
                        coverage.period = c(year(monat),year(monat)),
-                       implementation.period = c(monat,(monat+months(1)-1)),
+                       implementation.period = c(period.start,(monat+months(1)-1)),
                        intervention.types = export.subsidies,
                        keep.type = T,
                        trade.data = trade.data.year)
+    
+    
+    if(exists("trade.coverage.estimates")){
+      
+      trade.value=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)])
+      rm(trade.coverage.estimates)
+    } else {
+      
+      trade.value=0  
+    }
     
     single.multi.data=rbind(single.multi.data,
                             data.frame(period.id=period,
@@ -165,10 +215,10 @@ for(period in 1:length(periods)){
                                        month.count=mondf(period.start, monat),
                                        instrument="export incentive",
                                        target="multi",
-                                       trade.share=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)]),
+                                       trade.share=trade.value,
                                        stringsAsFactors = F))
     
-    rm(trade.coverage.estimates)
+    rm(trade.value)
     
     
     # (6*) World trade affected by all instruments and any number of affected nations.
@@ -177,8 +227,18 @@ for(period in 1:length(periods)){
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("outward subsidy", "inward"),
                        coverage.period = c(year(monat),year(monat)),
-                       implementation.period = c(monat,(monat+months(1)-1)),
+                       implementation.period = c(period.start,(monat+months(1)-1)),
                        trade.data = trade.data.year)
+    
+    
+    if(exists("trade.coverage.estimates")){
+      
+      trade.value=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)])
+      rm(trade.coverage.estimates)
+    } else {
+      
+      trade.value=0  
+    }
     
     single.multi.data=rbind(single.multi.data,
                             data.frame(period.id=period,
@@ -186,10 +246,10 @@ for(period in 1:length(periods)){
                                        month.count=mondf(period.start, monat),
                                        instrument="all",
                                        target="all",
-                                       trade.share=as.numeric(trade.coverage.estimates[,ncol(trade.coverage.estimates)]),
+                                       trade.share=trade.value,
                                        stringsAsFactors = F))
     
-    rm(trade.coverage.estimates)
+    rm(trade.value)
     
     
   }
@@ -266,7 +326,7 @@ save(single.multi.data, file=paste0(data.path,"Multiple nation coverages.Rdata")
 #     
 #     
 #   }
-#   rm(trade.coverage.estimates)
+#   rm(trade.value)
 #   save(single.nation.cov, file=paste0(data.path,"Single nation coverages.Rdata"))
 # }
 # load(paste0(data.path,"Single nation coverages.Rdata"))
@@ -315,7 +375,7 @@ save(single.multi.data, file=paste0(data.path,"Multiple nation coverages.Rdata")
 #                                                                  coverages=cov.avg))
 #     
 #   }
-#   rm(trade.coverage.estimates)
+#   rm(trade.value)
 #   save(multiple.nation.cov, file=paste0(data.path,"Multiple nation coverages.Rdata"))
 # }
 # load(paste0(data.path,"Multiple nation coverages.Rdata"))
