@@ -54,7 +54,7 @@ fig1.create <- function(dst) {
     fig1 <- ggplot(data=subset(fig1.data, importer == dest.markets.names[dst]))+
       geom_text(aes(x=gdp.share, y=harmful, label=exporter), nudge_x = 0.02, hjust = 0, vjust=0.5, color = gta_colour$grey[1], size=3)+
       geom_point(aes(x=gdp.share, y=harmful), color = gta_colour$blue[1], size=2)+
-      scale_y_continuous(name=y.name, limits = c(0,1),
+      scale_y_continuous(name=y.name, limits = c(0,1), labels = percent,
                          sec.axis = sec_axis(trans = ~., name=y.name, labels = percent))+
       scale_x_continuous(name=x.name, labels = percent, limits=c(0,1))+
       coord_cartesian(clip="off")+
