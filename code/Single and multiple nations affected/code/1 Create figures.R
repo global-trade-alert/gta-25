@@ -53,11 +53,16 @@ write.xlsx(fig.data, file=paste0(output.path,"Table for Figure 1-7.xlsx"),row.na
 # Cosmetics
 fig.data$target[fig.data$target == "multi"] <- "multiple nations"
 fig.data$target[fig.data$target == "single"] <- "single nation"
+fig.data$name <- paste0(capitalize(fig.data$instrument)," measures \naffecting ",fig.data$target)
+fig.data$name[fig.data$instrument=="export incentive"] <- paste0(fig.data$name[fig.data$instrument=="export incentive"]," in foreign market")
+fig.data$name[! fig.data$instrument=="export incentive"] <- paste0(fig.data$name[! fig.data$instrument=="export incentive"]," in home market")
+
 types <- c("tariff","non-tariff","export incentive","all")
 
 fig.create <- function(tp,trg) {
 
     set = subset(fig.data, instrument == types[tp] & target == targets[trg])
+    name <- unique(set$name)
     
     fig <- ggplot(data=set)+
       geom_line(aes(x=month.count, y=trade.share, colour=as.factor(period.id)),size=1)+
@@ -67,7 +72,7 @@ fig.create <- function(tp,trg) {
                        x.bottom.name = "Month in period",
                        x.bottom.labels = c(seq(0,max(set$month.count),5),34),
                        x.bottom.breaks = c(seq(0,max(set$month.count),5),34),
-                       y.left.name = paste0("World trade affected by ",types[tp], "\nmeasures affecting ",targets[trg]),
+                       y.left.name = paste0("World trade affected by ",tolower(name)),
                        y.left.labels = percent,
                        y.left.limits = c(0,max(set$trade.share)*1.05),
                        y.left.expand = c(0.002,0.002),
