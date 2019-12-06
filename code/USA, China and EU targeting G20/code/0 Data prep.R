@@ -122,7 +122,7 @@ if (run.calc) {
   coverages$gdp.share <- coverages$trade.value/coverages$gdp
   
   # Add share difference between harmful and liberalising
-  # coverages <- pivot_wider(data=coverages, names_from = "type",values_from = "coverages")
+  coverages <- pivot_wider(data=coverages, names_from = "type",values_from = "coverages")
   # coverages$coverage.difference = coverages$harmful - coverages$liberalising
   
   save(coverages, file=paste0(data.path,"Populist era g20 targeting.Rdata"))
