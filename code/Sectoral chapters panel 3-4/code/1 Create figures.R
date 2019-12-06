@@ -48,7 +48,7 @@ names(fig9.xlsx) <- c("importer","exporter","coverage","sector")
 write.xlsx(fig9.xlsx, file=paste0(output.path,"Table for Figure 9.xlsx"),row.names=F, sheetName = "Coverages")
 
 fig9.create <- function(sct) {
-    
+  
   fig9 <- ggplot(data=subset(fig9.data, sector==sct))+
     geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill=gta_colour$grey[4], color="#FFFFFF", size=0.2, na.rm = F)+
     geom_tile(aes(x=order.y, y=order.x, fill=`2019`), color="#FFFFFF", size=0.2, na.rm = F)+
@@ -68,7 +68,7 @@ fig9.create <- function(sct) {
           axis.text.x.bottom = element_text(hjust = 1)
     )
   return(fig9)
-  }
+}
 
 # Figure 10 create graph ------------------------------------------------------
 
@@ -140,7 +140,7 @@ fig11.create <- function(sct) {
   } else {
     values = c(min(subset(fig11.data, sector == sct)$change),0,max(subset(fig11.data, sector == sct)$change))
     colors = c(gta_colour$green[1], "#FFFFFF", gta_colour$red[1])
-    }
+  }
   
   fig11 <- ggplot(data=subset(fig11.data, sector==sct))+
     geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill=gta_colour$grey[4], color="#FFFFFF", size=0.2, na.rm = F)+
@@ -231,7 +231,7 @@ for (sct in sectors) {
   
   figA <- grid.arrange(fig9, fig11, nrow=2)
   figB <- grid.arrange(fig10, fig12, nrow=2)
-
+  
   gta_plot_saver(plot = figA,
                  path = paste0(output.path),
                  name = paste0("Figure Panel 3 - Sector ",sct),
@@ -246,6 +246,6 @@ for (sct in sectors) {
                  height = 29.7,
                  width = 21)
   
-
+  
 }
 
