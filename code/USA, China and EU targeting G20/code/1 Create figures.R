@@ -56,7 +56,7 @@ fig1.create <- function(dst) {
       geom_point(aes(x=gdp.share, y=harmful), color = gta_colour$blue[1], size=2)+
       scale_y_continuous(name=y.name,
                          sec.axis = sec_axis(trans = ~., name=y.name, labels = percent), limits = c(0,1))+
-      scale_x_continuous(name=x.name)+
+      scale_x_continuous(name=x.name, labels = percent)+
       coord_cartesian(clip="off")+
       coord_fixed(ratio=1)+
       gta_theme()
