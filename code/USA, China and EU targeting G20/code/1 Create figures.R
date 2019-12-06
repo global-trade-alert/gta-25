@@ -48,7 +48,7 @@ fig1.data$exporter[fig1.data$exporter == "United States of America"] <- "USA"
 
 fig1.create <- function(dst) {
   
-  y.name = paste0("Share of export to ",dest.markets.names[dst],"\naffected by harmful interventions")
+  y.name = paste0("Percentage of exports to ",dest.markets.names[dst],"\naffected by harmful interventions")
   x.name = paste0("Share of GDP exported to ",dest.markets.names[dst])
     
     fig1 <- ggplot(data=subset(fig1.data, importer == dest.markets.names[dst]))+
@@ -72,8 +72,8 @@ fig1.create <- function(dst) {
 
 fig2.create <- function(dst) {
   
-  y.name = paste0("Share of export to ",dest.markets.names[dst],"\naffected by harmful interventions")
-  x.name = paste0("Share of export to ",dest.markets.names[dst],"\nbenefitting from liberalising interventions")
+  y.name = paste0("Percentage of exports to ",dest.markets.names[dst],"\naffected by harmful interventions")
+  x.name = paste0("Percentage of exports to ",dest.markets.names[dst],"\nbenefitting from liberalising interventions")
   
   fig2 <- ggplot(data=subset(fig1.data, importer == dest.markets.names[dst]),aes(x=liberalising, y=harmful))+
     geom_point(color = gta_colour$blue[1], size=2)+
