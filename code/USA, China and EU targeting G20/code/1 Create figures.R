@@ -52,15 +52,15 @@ fig1.create <- function(dst) {
   x.name = paste0("Share of GDP exported to ",dest.markets.names[dst])
     
     fig1 <- ggplot(data=subset(fig1.data, importer == dest.markets.names[dst]))+
-      geom_text(aes(x=gdp.share, y=harmful, label=exporter), nudge_x = 0.002, hjust = 0, vjust=0.5, color = gta_colour$grey[1], size=4)+
+      geom_text(aes(x=gdp.share, y=harmful, label=exporter), nudge_x = 0.02, hjust = 0, vjust=0.5, color = gta_colour$grey[1], size=3)+
       geom_point(aes(x=gdp.share, y=harmful), color = gta_colour$blue[1], size=2)+
-      scale_y_continuous(name=y.name,
-                         sec.axis = sec_axis(trans = ~., name=y.name, labels = percent), limits = c(0,1))+
-      scale_x_continuous(name=x.name, labels = percent)+
+      scale_y_continuous(name=y.name, limits = c(0,1),
+                         sec.axis = sec_axis(trans = ~., name=y.name, labels = percent))+
+      scale_x_continuous(name=x.name, labels = percent, limits=c(0,1))+
       coord_cartesian(clip="off")+
       coord_fixed(ratio=1)+
       gta_theme()
-      
+      fig1
   return(fig1)
   }
 
@@ -99,6 +99,7 @@ for (dst in 1:length(dest.markets.names)) {
   fig2 <- fig2.create(dst)
   
   figA <- grid.arrange(fig1, fig2, nrow=2)
+  figA
 
   gta_plot_saver(plot = figA,
                  path = paste0(output.path),
@@ -106,7 +107,6 @@ for (dst in 1:length(dest.markets.names)) {
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
-
 }
   
 
