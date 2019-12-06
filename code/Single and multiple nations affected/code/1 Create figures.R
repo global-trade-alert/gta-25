@@ -13,7 +13,7 @@ source('0 report production/GTA 25/help files/Producer console.R')
 
 directories=gta25_setup(internal.name="Single & multi-country hits",
                         in.dev=F,
-                        author="pb",
+                        author=NULL,
                         wipe.data=F,
                         wipe.figs=T)
 

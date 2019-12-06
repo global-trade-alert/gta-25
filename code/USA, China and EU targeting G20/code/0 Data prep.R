@@ -38,11 +38,8 @@ run.calc=T
 # X-axis shows the amount of exports to the destination market divided 
 # by the GDP of the exporter (share of GDP being exported to the destination market).
 
-# Graph 2: Same as above, except Y-axis shows the share of bilateral exports to destination 
-# market affected by harmful measures implemented by destination market since 2017-01-01 MINUS 
-# the share of exports to destination market profiting from liberalising measures implemented 
-# by destination market since 2017-01-01.
-
+## Graph 2: 
+## Simple scatter of y-axis from graph 1 to % bilateral exports to destination benefitting from liberalisations.
 
 # Get g20 GDP data from WDI
 indicator <- WDIsearch(string="GDP")
@@ -98,7 +95,8 @@ if (run.calc) {
       
   }
   
-  # Add trade data
+  
+   # Add trade data
   gta_trade_value_bilateral(exporting.country = g20.members,
                             keep.exporter = T,
                             importing.country = c(dest.markets[[1]], dest.markets[[2]],dest.markets[[3]]),
@@ -125,7 +123,7 @@ if (run.calc) {
   
   # Add share difference between harmful and liberalising
   coverages <- pivot_wider(data=coverages, names_from = "type",values_from = "coverages")
-  coverages$coverage.difference = coverages$harmful - coverages$liberalising
+  # coverages$coverage.difference = coverages$harmful - coverages$liberalising
   
   save(coverages, file=paste0(data.path,"Populist era g20 targeting.Rdata"))
 }
