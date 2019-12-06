@@ -41,7 +41,7 @@ fig1.data$mast.chapter <- as.character(fig1.data$mast.chapter)
 fig1.data$nations.affected <- as.character(fig1.data$nations.affected)
 
 # LIST OF PERIODS TO BE ITERATED
-periods <- list(c("2017-01-01",cutoff),c("2014-01-01",break.date),c("2009-01-01",break.date))
+periods <- list(c("2017-01-01",cutoff),c("2014-01-01","2016-11-15"),c("2009-01-01","2011-11-15"))
 
 
 write.xlsx(fig1.data, file=paste0(output.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Coverages")
