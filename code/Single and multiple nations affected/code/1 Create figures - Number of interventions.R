@@ -11,10 +11,10 @@ gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 
 directories=gta25_setup(internal.name="Single & multi-country hits",
-                        in.dev=T,
-                        author="pb",
+                        in.dev=F,
+                        author=NULL,
                         wipe.data=F,
-                        wipe.figs=T)
+                        wipe.figs=F)
 
 data.path = directories$data.path
 output.path = directories$figure.path
@@ -70,7 +70,7 @@ write.xlsx(fig9.data, file=paste0(output.path,"Table for Figure 9.xlsx"),row.nam
 fig9.create <- function() {
   scale.var <- max(fig9.data$Harmful)
   fig9 <- ggplot()+
-    geom_bar(data=fig9.data, aes(x=years, y=Harmful), stat="identity", fill=gta_colour$blue[1])+
+    geom_bar(data=fig9.data, aes(x=years, y=Harmful), stat="identity", fill=gta_colour$red[2])+
     geom_line(data = fig9.data, aes(x=years, y=percentage.discriminating*scale.var), colour=gta_colour$red[1], size=1)+    
     geom_text(data = subset(fig9.data, ! years %in% c(2000)), aes(x=years, y=Harmful, label=Harmful), nudge_y = -10, vjust=1, colour="#FFFFFF", size=3)+
     gta_plot_wrapper(data=fig9.data,

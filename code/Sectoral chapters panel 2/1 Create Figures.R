@@ -15,7 +15,7 @@ chapter.folders=gta25_setup(internal.name = 'Sectoral chapters panel 2',
                             in.dev = F,
                             author=NULL,
                             wipe.data = F,
-                            wipe.figs = T)
+                            wipe.figs = F)
 data.path=chapter.folders$data.path
 figure.path=chapter.folders$figure.path
 

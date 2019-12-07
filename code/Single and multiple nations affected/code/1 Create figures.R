@@ -15,7 +15,7 @@ directories=gta25_setup(internal.name="Single & multi-country hits",
                         in.dev=F,
                         author=NULL,
                         wipe.data=F,
-                        wipe.figs=T)
+                        wipe.figs=F)
 
 data.path = directories$data.path
 output.path = directories$figure.path
@@ -102,8 +102,7 @@ fig7.create <- function() {
                      y.left.labels = percent,
                      y.left.limits = c(0,max(set$trade.share)*1.05),
                      colour.legend.col = 2,
-                     colour.legend.title = "Measure type and target",
-                     colour.labels = unique(capitalize(set$grouping)))+
+                     colour.legend.title = "Measure type and target")+
     gta_theme()
   fig
   return(fig)
