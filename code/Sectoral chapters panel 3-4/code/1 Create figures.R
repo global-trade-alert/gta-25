@@ -7,6 +7,7 @@ library(ggplot2)
 library(gridExtra)
 library(scales)
 library(xlsx)
+library(data.table)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
@@ -219,6 +220,79 @@ fig12.create <- function(sct) {
   return(fig12)
 }
 
+# Figure 13, 14 additional create figure ------------------------------------------------------
+
+# Can you please produce a version that reveals the share of
+# trade affected during the populist era (that is from 2017-1-1 
+# until 2019-11-15)? I am not sure I will use this new version 
+# but it would be good to see what the results look like.
+
+load(paste0(data.path,"G20 sector exports coverages - populist era.Rdata"))
+setnames(sct.g20.populist,"2019","coverages")
+fig13.data <- subset(sct.g20.populist, type=="harmful")
+fig13.data <- merge(fig13.data, order.names, by.x = "importer", by.y = "country")
+fig13.data <- merge(fig13.data, order.names, by.x = "exporter", by.y = "country")
+fig13.data <- fig13.data[with(fig13.data, order(order.x,order.y)),]
+row.names(fig13.data) <- NULL
+
+write.xlsx(fig13.data[,c("importer","exporter","sector","coverages")],file=paste0(output.path,"Table for Figure 13.xlsx"),row.names=F, sheetName = "Coverages")
+
+fig13.create <- function(sct) {
+  
+  fig13 <- ggplot(data=subset(fig13.data, sector==sct))+
+    geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill=gta_colour$grey[4], color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(aes(x=order.y, y=order.x, fill=coverages), color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(data=blank.set.middle, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_rect(data=data.frame(),aes(xmax=0.5, xmin=2.5, ymin = 0.5, ymax = 2.5), size=0.8, color=gta_colour$blue[1], fill="transparent")+
+    gta_theme(x.bottom.angle = 45)+
+    scale_fill_gradientn(name="Bilateral export affected by harmful measures \nimplemented from 2017-01-01 to 2019-11-15",
+                         colours = c(gta_colour$red[4], gta_colour$red[1]), values=c(0,0.25,0.50,0.75,1), 
+                         breaks=c(0,0.25,0.5,0.75,1), labels=c("0%","25%","50%","75%", "100%"),
+                         limits=c(0,1),
+                         guide=guide_colorbar(barwidth=15, title.position = "top", hjust=1, label.hjust=0.3))+
+    scale_y_continuous(breaks=seq(1,max(fig13.data$order.y),1), labels=plot.names$country, sec.axis = sec_axis(~., breaks=seq(1,max(fig13.data$order.y),1), labels=plot.names$country, name = "Importing country"))+
+    scale_x_continuous(breaks=seq(1,max(fig13.data$order.x),1),labels=plot.names$country)+
+    labs(x="Exporting country",y="Importing country")+
+    theme(panel.background = element_blank(), 
+          panel.border=element_rect(size=1, colour="gray",fill = "transparent"), 
+          axis.text.x.bottom = element_text(hjust = 1)
+    )
+  
+  return(fig13)
+}
+
+
+fig14.data <- subset(sct.g20.populist, type=="liberalising")
+fig14.data <- merge(fig14.data, order.names, by.x = "importer", by.y = "country")
+fig14.data <- merge(fig14.data, order.names, by.x = "exporter", by.y = "country")
+fig14.data <- fig14.data[with(fig14.data, order(order.x,order.y)),]
+row.names(fig14.data) <- NULL
+
+write.xlsx(fig14.data[,c("importer","exporter","sector","coverages")],file=paste0(output.path,"Table for Figure 14.xlsx"),row.names=F, sheetName = "Coverages")
+
+fig14.create <- function(sct) {
+  
+  fig14 <- ggplot(data=subset(fig14.data, sector==sct))+
+    geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill=gta_colour$grey[4], color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(aes(x=order.y, y=order.x, fill=coverages), color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(data=blank.set.middle, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_rect(data=data.frame(),aes(xmax=0.5, xmin=2.5, ymin = 0.5, ymax = 2.5), size=0.8, color=gta_colour$blue[1], fill="transparent")+
+    gta_theme(x.bottom.angle = 45)+
+    scale_fill_gradientn(name="Bilateral export affected by liberalising measures \nimplemented from 2017-01-01 to 2019-11-15",
+                         colours = c(gta_colour$green[4], gta_colour$green[1]), values=c(0,0.25,0.50,0.75,1), 
+                         breaks=c(0,0.25,0.5,0.75,1), labels=c("0%","25%","50%","75%", "100%"),
+                         limits=c(0,1),
+                         guide=guide_colorbar(barwidth=15, title.position = "top", hjust=1, label.hjust=0.3))+
+    scale_y_continuous(breaks=seq(1,max(fig14.data$order.y),1), labels=plot.names$country, sec.axis = sec_axis(~., breaks=seq(1,max(fig14.data$order.y),1), labels=plot.names$country, name = "Importing country"))+
+    scale_x_continuous(breaks=seq(1,max(fig14.data$order.x),1),labels=plot.names$country)+
+    labs(x="Exporting country",y="Importing country")+
+    theme(panel.background = element_blank(), 
+          panel.border=element_rect(size=1, colour="gray",fill = "transparent"), 
+          axis.text.x.bottom = element_text(hjust = 1)
+    )
+  
+  return(fig14)
+}
 
 
 # Create panels per sector ------------------------------------------------
@@ -229,9 +303,12 @@ for (sct in sectors) {
   fig10 <- fig10.create(sct)
   fig11 <- fig11.create(sct)
   fig12 <- fig12.create(sct)
+  fig13 <- fig13.create(sct)
+  fig14 <- fig14.create(sct)
   
   figA <- grid.arrange(fig9, fig11, nrow=2)
   figB <- grid.arrange(fig10, fig12, nrow=2)
+  figC <- grid.arrange(fig13, fig14, nrow=2)
 
   gta_plot_saver(plot = figA,
                  path = paste0(output.path),
@@ -243,6 +320,13 @@ for (sct in sectors) {
   gta_plot_saver(plot = figB,
                  path = paste0(output.path),
                  name = paste0("Figure Panel 4 - Sector ",sct),
+                 cairo_ps = T,
+                 height = 29.7,
+                 width = 21)
+  
+  gta_plot_saver(plot = figC,
+                 path = paste0(output.path),
+                 name = paste0("Figure Panel Populist Coverages - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
