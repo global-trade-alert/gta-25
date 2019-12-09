@@ -44,7 +44,7 @@ write.xlsx(fig1.data, file=paste0(output.path,"Table for Figure 1.xlsx"),row.nam
 fig1.create <- function(sct) {
     fig1 <- ggplot(data=subset(fig1.data, cpc %in% c(sct,0)))+
     geom_rect(data=data.frame(), aes(xmin=2017, xmax=Inf, ymin=-Inf, ymax=Inf), fill=pop.shade, alpha=0.3)+
-    geom_text(aes(x=2017, y=Inf, label="Populist\n era"), hjust=-0.1, vjust=1.4, color = pop.text, lineheight = 1)+
+    geom_text(aes(x=2017, y=0.6, label="Populist\n era"), hjust=-0.1, vjust=1.4, color = pop.text, lineheight = 1)+
     geom_text(aes(x=-Inf, y=Inf, label="Pre-populist era"), hjust=-0.1, vjust=2, color = gta_colour$grey[1], lineheight = 1)+
     geom_line(aes(x=Period, y=index.2007, colour=type), size = 1)+
     # geom_point(aes(x=2019-0.2, y=glo.cov.harmful),size=3, colour=gta_colour$red[1])+
@@ -54,13 +54,14 @@ fig1.create <- function(sct) {
                      data.y="index.2007",
                      x.bottom.name = "Year",
                      x.bottom.breaks = seq(2005,2018,1),
-                     y.left.name = "Amount of sectoral and global trade indexed at 2007",
-                     y.left.labels = percent,
+                     y.left.name = "Amount of sectoral and global trade indexed at 100 in 2007",
+                     y.left.breaks = c(0.5,1,1.5),
+                     y.left.labels = scales::percent(c(0.5,1,1.5)),
                      y.right.enable = F,
-                     y.left.limits = c(0,max(subset(fig1.data, cpc %in% c(sct,0))$index.2007)),
+                     y.left.limits = c(0.5,1.51),
                      colour.legend.title = "Trade included",
                      colour.palette = c(gta_colour$blue[1],gta_colour$blue[4]),
-                     colour.labels = c("Global",paste0("Sector")),
+                     colour.labels = c("Global",paste0("This sector")),
                      colour.legend.col = 2)+
     gta_theme()
     
