@@ -27,22 +27,24 @@ load(paste0(data.path, 'published interventions.Rdata'))
 
 published.ids$cols="bla"
 published.ids$reporting.deadline=year(as.Date(published.ids$reporting.deadline))
+published.ids$position=published.ids$intervention.count+25
 
-
-fig1= ggplot(published.ids, aes(x=as.factor(reporting.deadline),y=intervention.count, fill=cols))+
+fig1=ggplot(published.ids, aes(x=as.factor(reporting.deadline),y=intervention.count, fill=cols))+
   geom_bar(stat="identity")+
+  geom_text(aes(x=as.factor(reporting.deadline), y=position, label=intervention.count), colour="black",size=3.3)+
   gta_theme()+
   scale_fill_manual(values=c(gta_colour$qualitative[c(1)]))+
   scale_y_continuous(sec.axis = dup_axis())+
   guides(fill="none")+
-  labs(x="... and reported by September of given year", y="Number of interventions implemneted\nin Q1 to Q3 2009 ...")
+  labs(x="... and reported by September of given year", y="Number of interventions implemented\nin Q1 to Q3 2009 ...")
 
 
 gta_plot_saver(fig1, 
                figure.path,
-               'Figure 1')
+               'Figure 2')
 published.ids$colsNULL
-write.xlsx(published.ids, paste0(figure.path, 'Figure 1 data.xlsx'))
+published.ids$position=NULL
+write.xlsx(published.ids, paste0(figure.path, 'Figure 2 data.xlsx'))
 
 # Figure 2 (CURRENTLY UNDER REVISION) ----------------------------------------------------------------
 # "Graph showing the total of interventions in the database for each year splitted by 
@@ -52,18 +54,19 @@ write.xlsx(published.ids, paste0(figure.path, 'Figure 1 data.xlsx'))
 
 load(paste0(data.path, 'state act sources.Rdata'))
 
-fig2=ggplot(sa.src.yr, aes(x=as.factor(year), y=sa.count, fill=as.factor(source.type)))+
+sa.src.yr$cols="bla"
+
+fig2=ggplot(sa.src.yr, aes(x=as.factor(year), y=sa.count,  fill=cols))+
   geom_bar(stat="identity")+
-  scale_fill_manual(values=c(gta_colour$qualitative[c(4,1,2)]))+
+  scale_fill_manual(values=c(gta_colour$qualitative[c(1)]))+
   gta_theme()+
-  labs(x="reporting year",y="number of state acts\npublished")+
+  labs(x="calendar year",y="Total number of reports on state interventions\npublished in a given calendar year")+
   scale_y_continuous(sec.axis = dup_axis())+
-  labs(fill="")
-                       
+  guides(fill="none") 
     
 
 gta_plot_saver(fig2, 
                figure.path,
-               'Figure 2')
+               'Figure 1')
 
-write.xlsx(sa.src.yr, paste0(figure.path, 'Figure 2 data.xlsx'))
+write.xlsx(sa.src.yr, paste0(figure.path, 'Figure 1 data.xlsx'))
