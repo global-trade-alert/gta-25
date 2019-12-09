@@ -31,7 +31,7 @@ published.ids$position=published.ids$intervention.count+25
 
 fig1=ggplot(published.ids, aes(x=as.factor(reporting.deadline),y=intervention.count, fill=cols))+
   geom_bar(stat="identity")+
-  geom_text(aes(x=as.factor(reporting.deadline), y=position, label=intervention.count), colour="black",size=3.3)+
+  geom_text(aes(x=as.factor(reporting.deadline), y=position, label=intervention.count), colour="black",size=3.5)+
   gta_theme()+
   scale_fill_manual(values=c(gta_colour$qualitative[c(1)]))+
   scale_y_continuous(sec.axis = dup_axis())+
@@ -47,10 +47,7 @@ published.ids$position=NULL
 write.xlsx(published.ids, paste0(figure.path, 'Figure 2 data.xlsx'))
 
 # Figure 2 (CURRENTLY UNDER REVISION) ----------------------------------------------------------------
-# "Graph showing the total of interventions in the database for each year splitted by 
-# (1) Interventions having at least one official source, 
-# (2) Interventions coming from company self-declaration and 
-# (3) coming from other non-official sources."
+# "Graph showing the total of interventions in the database for each year
 
 load(paste0(data.path, 'state act sources.Rdata'))
 
