@@ -42,6 +42,10 @@ blank.set.middle <- data.frame(order.x=seq(1,19,1),order.y=seq(1,19,1))
 # Please add to the title of the top panel after the word «distortions» 
 # the following words «in force on 15 November 2019»
 
+# At the bottom of the panels (or the bottom of the page) please 
+# make a note that a grey cell implies there is no bilateral trade 
+# observed in this sector.
+
 load(paste0(data.path,"G20 sector exports coverages - harmful.Rdata"))
 
 fig9.data <- sct.g20.harmful
@@ -84,6 +88,13 @@ fig9.create <- function(sct) {
 # Figure 10 create graph ------------------------------------------------------
 
 # Chart 10: Same as chart 9, but with liberalising interventions.
+
+# Please add to the title of the top panel after the word «distortions» 
+# the following words «in force on 15 November 2019»
+
+# At the bottom of the panels (or the bottom of the page) please 
+# make a note that a grey cell implies there is no bilateral trade 
+# observed in this sector. 
 
 load(paste0(data.path,"G20 sector exports coverages - liberalising.Rdata"))
 
@@ -239,6 +250,19 @@ fig12.create <- function(sct) {
 # trade affected during the populist era (that is from 2017-1-1 
 # until 2019-11-15)? I am not sure I will use this new version 
 # but it would be good to see what the results look like.
+
+# In the bottom panel please recalculate the heatmap to reveal 
+# the percentage of bilateral exports facing importer’s trade 
+# distortions implemented since 1 January 2017. I want to show 
+# what shares of bilateral trade are affected by harmful import
+# distortions implemented during the populist era. Please change 
+# the title of the chart to «Bilateral export share today facing 
+# importer’s trade distortions implemented since 1 January 2017» 
+
+# At the bottom of the panels (or the bottom of the page) please 
+# make a note that a grey cell implies there is no bilateral trade 
+# observed in this sector. 
+
 
 load(paste0(data.path,"G20 sector exports coverages - populist era.Rdata"))
 setnames(sct.g20.populist,"2019","coverages")
