@@ -16,7 +16,7 @@ directories=gta25_setup(internal.name="USA, China and EU targeting G20",
                         in.dev=F,
                         author=NULL,
                         wipe.data=F,
-                        wipe.figs=T)
+                        wipe.figs=F)
 
 data.path = directories$data.path
 output.path = directories$figure.path
