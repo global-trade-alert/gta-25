@@ -25,6 +25,8 @@ output.path = directories$figure.path
 
 gta_colour_palette()
 order.names <- data.frame(country = c("United States of America","China",c(g20.member.names[! g20.member.names %in% c("United States of America", "China")])), order = c(seq(1,19,1)))
+order.names$country <- as.character(order.names$country)
+order.names$country[order.names$country=="South Korea"] <- "Republic of Korea"
 plot.names <- data.frame(country = c("USA","China",c(g20.member.names[! g20.member.names %in% c("United States of America", "China","United Kingdom")]),"UK"), order = c(seq(1,19,1)))
 blank.set <- data.frame(order.y = rep(seq(1,19,1),19), order.x = rep(1:19, each=19))
 blank.set.middle <- data.frame(order.x=seq(1,19,1),order.y=seq(1,19,1))
@@ -36,6 +38,9 @@ blank.set.middle <- data.frame(order.x=seq(1,19,1),order.y=seq(1,19,1))
 # (top left) and all other countries alphabetically after them. Graph 
 # shows share of sectoral exports affected by trade distortions in force 
 # today implemented by the importing nation. Show in shades of red.
+
+# Please add to the title of the top panel after the word «distortions» 
+# the following words «in force on 15 November 2019»
 
 load(paste0(data.path,"G20 sector exports coverages - harmful.Rdata"))
 
@@ -52,23 +57,27 @@ write.xlsx(fig9.xlsx, file=paste0(output.path,"Table for Figure 9.xlsx"),row.nam
 fig9.create <- function(sct) {
     
   fig9 <- ggplot(data=subset(fig9.data, sector==sct))+
-    geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill=gta_colour$grey[4], color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(data=blank.set, aes(x=order.x, y=order.y, color=as.factor(1)), fill=gta_colour$grey[4], size=0.2, na.rm = F)+
     geom_tile(aes(x=order.y, y=order.x, fill=`2019`), color="#FFFFFF", size=0.2, na.rm = F)+
     geom_tile(data=blank.set.middle, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
     geom_rect(data=data.frame(),aes(xmax=0.5, xmin=2.5, ymin = 0.5, ymax = 2.5), size=0.8, color=gta_colour$blue[1], fill="transparent")+
     gta_theme(x.bottom.angle = 45)+
-    scale_fill_gradientn(name="Percentage of bilateral exports facing importer\'s trade distortions", 
+    scale_fill_gradientn(name="", 
                          colours = c(gta_colour$red[4], gta_colour$red[1]), values=c(0,0.25,0.50,0.75,1), 
                          breaks=c(0,0.25,0.5,0.75,1), labels=c("0%","25%","50%","75%", "100%"),
                          limits=c(0,1),
-                         guide=guide_colorbar(barwidth=15, title.position = "top", hjust=1, label.hjust=0.3))+
+                         guide=guide_colorbar(barwidth=15, label.hjust = 0.5))+
+    scale_colour_manual(values="#FFFFFF", label="No trade affected")+
     scale_y_continuous(breaks=seq(1,max(fig9.data$order.y),1), labels=plot.names$country, sec.axis = sec_axis(~., breaks=seq(1,max(fig9.data$order.y),1), labels=plot.names$country, name = "Importing country"))+
     scale_x_continuous(breaks=seq(1,max(fig9.data$order.x),1),labels=plot.names$country)+
     labs(x="Exporting country",y="Importing country")+
+    ggtitle("Percentage of bilateral exports facing importer\'s \ntrade distortions in force on 15 November 2019")+
+    guides(colour=guide_legend(title=NULL, position="right",barwidth=1, label.position = "bottom",keywidth = 0,hjust=0, label.hjust=0))+
     theme(panel.background = element_blank(), 
           panel.border=element_rect(size=1, colour="grey",fill = "transparent"), 
           axis.text.x.bottom = element_text(hjust = 1)
     )
+  
   return(fig9)
   }
 
@@ -91,23 +100,27 @@ write.xlsx(fig10.xlsx, file=paste0(output.path,"Table for Figure 10.xlsx"),row.n
 fig10.create <- function(sct) {
   
   fig10 <- ggplot(data=subset(fig10.data, sector==sct))+
-    geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill=gta_colour$grey[4], color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(data=blank.set, aes(x=order.x, y=order.y, colour=as.factor(1)), fill=gta_colour$grey[4], size=0.2, na.rm = F)+
     geom_tile(aes(x=order.y, y=order.x, fill=`2019`), color="#FFFFFF", size=0.2, na.rm = F)+
     geom_tile(data=blank.set.middle, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
     geom_rect(data=data.frame(),aes(xmax=0.5, xmin=2.5, ymin = 0.5, ymax = 2.5), size=0.8, color=gta_colour$blue[1], fill="transparent")+
     gta_theme(x.bottom.angle = 45)+
-    scale_fill_gradientn(name="Percentage of bilateral exports \nprofiting from importer\'s reforms", 
+    scale_fill_gradientn(name="", 
                          colours = c(gta_colour$green[4], gta_colour$green[1]), values=c(0,0.25,0.50,0.75,1), 
                          breaks=c(0,0.25,0.5,0.75,1), labels=c("0%","25%","50%","75%", "100%"),
                          limits=c(0,1),
-                         guide=guide_colorbar(barwidth=15, title.position = "top", hjust=1, label.hjust=0.3))+
+                         guide=guide_colorbar(barwidth=15, label.hjust = 0.5))+
+    scale_colour_manual(values="#FFFFFF", label="No trade affected")+
     scale_y_continuous(breaks=seq(1,max(fig10.data$order.y),1), labels=plot.names$country, sec.axis = sec_axis(~., breaks=seq(1,max(fig10.data$order.y),1), labels=plot.names$country, name = "Importing country"))+
     scale_x_continuous(breaks=seq(1,max(fig10.data$order.x),1),labels=plot.names$country)+
     labs(x="Exporting country",y="Importing country")+
+    ggtitle("Percentage of bilateral exports profiting from \nimporter\'s reforms in force on 15 November 2019")+
+    guides(colour=guide_legend(title=NULL, position="right",barwidth=1, label.position = "bottom",keywidth = 0,hjust=0, label.hjust=0))+
     theme(panel.background = element_blank(), 
           panel.border=element_rect(size=1, colour="grey",fill = "transparent"), 
           axis.text.x.bottom = element_text(hjust = 1)
     )
+  fig10
   return(fig10)
 }
 
@@ -220,7 +233,7 @@ fig12.create <- function(sct) {
   return(fig12)
 }
 
-# Figure 13, 14 additional create figure ------------------------------------------------------
+# Figure 13, 14 additional create figure, trade affected in populist era ------------------------------------------------------
 
 # Can you please produce a version that reveals the share of
 # trade affected during the populist era (that is from 2017-1-1 
@@ -240,19 +253,22 @@ write.xlsx(fig13.data[,c("importer","exporter","sector","coverages")],file=paste
 fig13.create <- function(sct) {
   
   fig13 <- ggplot(data=subset(fig13.data, sector==sct))+
-    geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill=gta_colour$grey[4], color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(data=blank.set, aes(x=order.x, y=order.y, color=as.factor(1)), fill=gta_colour$grey[4], size=0.2, na.rm = F)+
     geom_tile(aes(x=order.y, y=order.x, fill=coverages), color="#FFFFFF", size=0.2, na.rm = F)+
     geom_tile(data=blank.set.middle, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
     geom_rect(data=data.frame(),aes(xmax=0.5, xmin=2.5, ymin = 0.5, ymax = 2.5), size=0.8, color=gta_colour$blue[1], fill="transparent")+
     gta_theme(x.bottom.angle = 45)+
-    scale_fill_gradientn(name="Bilateral export affected by harmful measures \nimplemented from 2017-01-01 to 2019-11-15",
+    scale_fill_gradientn(name="",
                          colours = c(gta_colour$red[4], gta_colour$red[1]), values=c(0,0.25,0.50,0.75,1), 
                          breaks=c(0,0.25,0.5,0.75,1), labels=c("0%","25%","50%","75%", "100%"),
                          limits=c(0,1),
-                         guide=guide_colorbar(barwidth=15, title.position = "top", hjust=1, label.hjust=0.3))+
+                         guide=guide_colorbar(barwidth=15, label.hjust = 0.5))+
+    scale_colour_manual(values="#FFFFFF", label="No trade affected")+
+    ggtitle("Bilateral export share today facing importer’s \ntrade distortions implemented since 1 January 2017")+
     scale_y_continuous(breaks=seq(1,max(fig13.data$order.y),1), labels=plot.names$country, sec.axis = sec_axis(~., breaks=seq(1,max(fig13.data$order.y),1), labels=plot.names$country, name = "Importing country"))+
     scale_x_continuous(breaks=seq(1,max(fig13.data$order.x),1),labels=plot.names$country)+
     labs(x="Exporting country",y="Importing country")+
+    guides(colour=guide_legend(title=NULL, position="right",barwidth=1, label.position = "bottom",keywidth = 0,hjust=0, label.hjust=0))+
     theme(panel.background = element_blank(), 
           panel.border=element_rect(size=1, colour="gray",fill = "transparent"), 
           axis.text.x.bottom = element_text(hjust = 1)
@@ -273,19 +289,22 @@ write.xlsx(fig14.data[,c("importer","exporter","sector","coverages")],file=paste
 fig14.create <- function(sct) {
   
   fig14 <- ggplot(data=subset(fig14.data, sector==sct))+
-    geom_tile(data=blank.set, aes(x=order.x, y=order.y), fill=gta_colour$grey[4], color="#FFFFFF", size=0.2, na.rm = F)+
+    geom_tile(data=blank.set, aes(x=order.x, y=order.y, color=as.factor(1)), fill=gta_colour$grey[4], size=0.2, na.rm = F)+
     geom_tile(aes(x=order.y, y=order.x, fill=coverages), color="#FFFFFF", size=0.2, na.rm = F)+
     geom_tile(data=blank.set.middle, aes(x=order.x, y=order.y), fill="#FFFFFF", color="#FFFFFF", size=0.2, na.rm = F)+
     geom_rect(data=data.frame(),aes(xmax=0.5, xmin=2.5, ymin = 0.5, ymax = 2.5), size=0.8, color=gta_colour$blue[1], fill="transparent")+
     gta_theme(x.bottom.angle = 45)+
-    scale_fill_gradientn(name="Bilateral export affected by liberalising measures \nimplemented from 2017-01-01 to 2019-11-15",
+    scale_fill_gradientn(name="",
                          colours = c(gta_colour$green[4], gta_colour$green[1]), values=c(0,0.25,0.50,0.75,1), 
                          breaks=c(0,0.25,0.5,0.75,1), labels=c("0%","25%","50%","75%", "100%"),
                          limits=c(0,1),
-                         guide=guide_colorbar(barwidth=15, title.position = "top", hjust=1, label.hjust=0.3))+
+                         guide=guide_colorbar(barwidth=15, label.hjust = 0.5))+
+    scale_colour_manual(values="#FFFFFF", label="No trade affected")+
     scale_y_continuous(breaks=seq(1,max(fig14.data$order.y),1), labels=plot.names$country, sec.axis = sec_axis(~., breaks=seq(1,max(fig14.data$order.y),1), labels=plot.names$country, name = "Importing country"))+
     scale_x_continuous(breaks=seq(1,max(fig14.data$order.x),1),labels=plot.names$country)+
     labs(x="Exporting country",y="Importing country")+
+    ggtitle("Bilateral export share today benefitting from importer’s \ntrade reforms implemented since 1 January 2017")+
+    guides(colour=guide_legend(title=NULL, position="right",barwidth=1, label.position = "bottom",keywidth = 0,hjust=0, label.hjust=0))+
     theme(panel.background = element_blank(), 
           panel.border=element_rect(size=1, colour="gray",fill = "transparent"), 
           axis.text.x.bottom = element_text(hjust = 1)
@@ -306,9 +325,9 @@ for (sct in sectors) {
   fig13 <- fig13.create(sct)
   fig14 <- fig14.create(sct)
   
-  figA <- grid.arrange(fig9, fig11, nrow=2)
-  figB <- grid.arrange(fig10, fig12, nrow=2)
-  figC <- grid.arrange(fig13, fig14, nrow=2)
+  figA <- grid.arrange(fig9, fig13, nrow=2)
+  figB <- grid.arrange(fig10, fig14, nrow=2)
+  figC <- grid.arrange(fig11, fig12, nrow=2)
 
   gta_plot_saver(plot = figA,
                  path = paste0(output.path),
@@ -326,7 +345,7 @@ for (sct in sectors) {
   
   gta_plot_saver(plot = figC,
                  path = paste0(output.path),
-                 name = paste0("Figure Panel Populist Coverages - Sector ",sct),
+                 name = paste0("Figure Panel - change in coverages  - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
