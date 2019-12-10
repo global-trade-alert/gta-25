@@ -5,6 +5,7 @@ library(stringr)
 library(tidyverse)
 library(plyr)
 library(data.table)
+extrafont::loadfonts(device="win")
 library(ggplot2)
 library(openxlsx)
 library(gridExtra)
@@ -12,8 +13,8 @@ library(gridExtra)
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 chapter.folders=gta25_setup(internal.name = 'Sectoral chapters panel 2',
-                            in.dev = F,
-                            author=NULL,
+                            in.dev = T,
+                            author='ks',
                             wipe.data = F,
                             wipe.figs = T)
 data.path=chapter.folders$data.path
@@ -21,6 +22,7 @@ figure.path=chapter.folders$figure.path
 
 gta_colour_palette()
 symbol.size=2
+
 
 # Chart 5 -----------------------------------------------------------------
 
@@ -31,10 +33,16 @@ load(paste0(data.path,'fig 5.Rdata'))
 write.xlsx(lapply(unique(data.fig5$cpc),function(x) subset(data.fig5, cpc==x)),
            file=paste0(figure.path,'fig 5 data.xlsx'))
 
-fig5.create=function(sct){  
-  fig5 <- ggplot(data=subset(data.fig5, cpc==sct)) + geom_point(aes(x=sct.share, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('National import share 2016') + ylab('Change in sectoral import share protected 2017-2019')
+
+
+fig5.create=function(sct){ 
   
+  #cheap way to remove outliers
+  cor5=round(cor(subset(data.fig5, cpc==sct & cov.change<0.7)$sct.share, subset(data.fig5, cpc==sct & cov.change<0.7)$cov.change),2)
+  
+  fig5 <- ggplot(data=subset(data.fig5, cpc==sct)) + geom_point(aes(x=sct.share, y=cov.change, size=symbol.size))+guides(size="none") +
+    gta_theme() + xlab('National import share in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,label=paste0('Correlation: ',cor5))
   # gta_plot_saver(fig5, 
   #                paste0(path,'tables & figures/'),
   #                paste0('Figure 5 - ',sct))
@@ -50,12 +58,18 @@ fig5.create=function(sct){
 
 load(paste0(data.path,'fig 6.Rdata'))
 
+
 write.xlsx(lapply(unique(data.fig6$sector),function(x) subset(data.fig6, sector==x)),
            file=paste0(figure.path,'fig 6 data.xlsx'))
 
+
 fig6.create=function(sct){  
+  #cheap way to remove outliers
+  cor6=round(cor(subset(data.fig6, sector==sct & curr.rel.change<0.7)$curr.rel.change, subset(data.fig6, sector==sct & curr.rel.change<0.7)$cov.change),2)
+  
   fig6 <- ggplot(data=subset(data.fig6, sector==sct)) + geom_point(aes(x=curr.rel.change, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Relative currency change (avg 2019 versus 2017)') + ylab('Change in sectoral import share protected 2017-2019')
+    gta_theme() + xlab('Relative currency change (ratio of average in 2019 to average in 2016)') + ylab('Change in sectoral import share protected 2017-2019') + 
+    geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,label=paste0('Correlation: ',cor6))
   
   # gta_plot_saver(fig6, 
   #                paste0(path,'tables & figures/'),
@@ -64,6 +78,7 @@ fig6.create=function(sct){
   return(fig6)
   
 }
+
 
 # Chart 7 -----------------------------------------------------------------
 
@@ -77,8 +92,12 @@ write.xlsx(lapply(unique(data.fig7$sector),function(x) subset(data.fig7, sector=
            file=paste0(figure.path,'fig 7 data.xlsx'))
 
 fig7.create=function(sct){  
-  fig7 <- ggplot(data=subset(data.fig7, sector==sct)) + geom_point(aes(x=sect.trade.share, y=change.sct.imp.share, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Sectoral trade balance divided by total sectoral trade') + ylab('National sectoral import affected by non-tariff measures')
+  #cheap way to remove outliers
+  cor7=round(cor(subset(data.fig7, sector==sct & cov.change<0.6)$sect.trade.share, subset(data.fig7, sector==sct & cov.change<0.6)$cov.change),2)
+  
+  fig7 <- ggplot(data=subset(data.fig7, sector==sct)) + geom_point(aes(x=sect.trade.share, y=cov.change, size=symbol.size))+guides(size="none") +
+    gta_theme() + xlab('Sectoral trade balance divided by total sectoral trade in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,label=paste0('Correlation: ',cor7))
   
   # gta_plot_saver(fig7, 
   #                paste0(path,'tables & figures/'),
@@ -99,8 +118,12 @@ write.xlsx(lapply(unique(data.fig8$sector),function(x) subset(data.fig8, sector=
            file=paste0(figure.path,'fig 8 data.xlsx'))
 
 fig8.create=function(sct){  
+  cor8=round(cor(subset(data.fig8, sector==sct & incentives.change>-0.06)$incentives.change, subset(data.fig8, sector==sct & incentives.change>-0.06)$cov.change),2)
+  
   fig8 <- ggplot(data=subset(data.fig8, sector==sct)) + geom_point(aes(x=incentives.change, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Share of sectoral exports that benefit from incentives') + ylab('Change in sectoral import share protected 2017-2019')
+    gta_theme() + xlab('Share of sectoral exports that benefit from incentives in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,
+              label=paste0('Correlation: ',cor8))
   
   # gta_plot_saver(fig8, 
   #                paste0(path,'tables & figures/'),
@@ -109,7 +132,6 @@ fig8.create=function(sct){
   return(fig8)
   
 }
-
 
 # Create panels per sector ------------------------------------------------
 

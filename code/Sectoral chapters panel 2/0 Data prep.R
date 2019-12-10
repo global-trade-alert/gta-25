@@ -117,20 +117,20 @@ g20.ifs=subset(country.names,is.g20==T)$name
 g20.ifs=mapvalues(g20.ifs,c('Republic of Korea','United States of America','Russia'),c("Korea, Republic of","United States",'Russian Federation'))
 g20.ifs=mapvalues(g20.ifs,IFS.available.codes$CL_AREA_IFS$CodeText,IFS.available.codes$CL_AREA_IFS$CodeValue)
 
-startdate = '2017-01-01'
+startdate = '2016-01-01'
 enddate = '2020-01-01'
 
 queryfilter <- list(CL_FREA = "M", CL_AREA_IFS = c(g20.ifs, "U2") , CL_INDICATOR_IFS = c("ENDA_XDC_USD_RATE"))
 currency.base <- CompactDataMethod(databaseID, queryfilter, startdate, enddate,
                                     checkquery=F)[,2:6]
 
-# compute avg currency rate conversion vs usd in 2017 / 2019 (until and including october)
-currency.base$`2017`=NA
-for (i in 1:length(currency.base$Obs)) currency.base$`2017`[i] = mean(as.numeric(currency.base$Obs[[i]][str_sub(as.character(currency.base$Obs[[i]]$`@TIME_PERIOD`), 1,4)=='2017',]$`@OBS_VALUE`))
+# compute avg currency rate conversion vs usd in 2016 / 2019 (until and including october)
+currency.base$`2016`=NA
+for (i in 1:length(currency.base$Obs)) currency.base$`2016`[i] = mean(as.numeric(currency.base$Obs[[i]][str_sub(as.character(currency.base$Obs[[i]]$`@TIME_PERIOD`), 1,4)=='2016',]$`@OBS_VALUE`))
 currency.base$`2019`=NA
 for (i in 1:length(currency.base$Obs)) currency.base$`2019`[i] = mean(as.numeric(currency.base$Obs[[i]][str_sub(as.character(currency.base$Obs[[i]]$`@TIME_PERIOD`), 1,4)=='2019',]$`@OBS_VALUE`))
 
-currency.base$rel.change=(currency.base$`2019`-currency.base$`2017`)/currency.base$`2017`
+currency.base$rel.change=(currency.base$`2019`-currency.base$`2016`)/currency.base$`2016`
 
 currency.base=subset(currency.base, select=c('@REF_AREA','rel.change'))
 setnames(currency.base, names(currency.base)[1],c('cty'))
@@ -145,6 +145,7 @@ currency.base$cty.name = mapvalues(currency.base$cty.name,country.names$name,cou
 currency.base$curr.rel.change=currency.base$rel.change ; currency.base$rel.change=NULL 
 
 load(paste0(data.path,"Sector coverages harmful.Rdata"))
+
 
 data.fig6=merge(currency.base, subset(sct.trade.base, select = c("i.un", "cpc")), by.x = c("cty.name"), by.y = c("i.un"), all = T) #we need to add those observations with no measures
 data.fig6=subset(merge(sct.cov.harmful,data.fig6,by.x=c('imp.cty', "sector"), by.y=c('cty.name', "cpc"), all = T),
@@ -166,31 +167,31 @@ save(data.fig6, file=paste0(data.path,'/fig 6.Rdata'))
 
 
 # y-axis
-sct.cov.non.tar <- data.frame()
-for (sct in sectors) {
-  codes <- gta_cpc_code_expand(codes = sct)
-  gta_trade_coverage(gta.evaluation = c("Red","Amber"),
-                     cpc.sectors = codes,
-                     keep.cpc = T,
-                     affected.flows = c("inward"), 
-                     importers = 'G20',
-                     keep.importers = T,
-                     group.importers = F, 
-                     coverage.period = c(2016,2019),
-                     mast.chapters = 'tariff',
-                     keep.mast = F)
-  sct.cov.non.tar <- rbind(sct.cov.non.tar, data.frame(sector=sct,
-                                                       imp.cty=trade.coverage.estimates$`Importing country`,
-                                                       cov.2016=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2016`),
-                                                       cov.2017=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2017`),
-                                                       cov.2018=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2018`),
-                                                       cov.2019=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2019`)
-  ))
-  
-  rm(trade.coverage.estimates)
-}
-
-sct.cov.non.tar$imp.cty=mapvalues(sct.cov.non.tar$imp.cty,country.names$name,country.names$un_code)
+# sct.cov.non.tar <- data.frame()
+# for (sct in sectors) {
+#   codes <- gta_cpc_code_expand(codes = sct)
+#   gta_trade_coverage(gta.evaluation = c("Red","Amber"),
+#                      cpc.sectors = codes,
+#                      keep.cpc = T,
+#                      affected.flows = c("inward"), 
+#                      importers = 'G20',
+#                      keep.importers = T,
+#                      group.importers = F, 
+#                      coverage.period = c(2016,2019),
+#                      mast.chapters = 'tariff',
+#                      keep.mast = F)
+#   sct.cov.non.tar <- rbind(sct.cov.non.tar, data.frame(sector=sct,
+#                                                        imp.cty=trade.coverage.estimates$`Importing country`,
+#                                                        cov.2016=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2016`),
+#                                                        cov.2017=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2017`),
+#                                                        cov.2018=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2018`),
+#                                                        cov.2019=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2019`)
+#   ))
+#   
+#   rm(trade.coverage.estimates)
+# }
+# 
+# sct.cov.non.tar$imp.cty=mapvalues(sct.cov.non.tar$imp.cty,country.names$name,country.names$un_code)
 
 #x-axis
 gta_trade_value_bilateral(trade.data ='2016')
@@ -218,12 +219,13 @@ base$trade.value[is.na(base$trade.value)]=0
 base=spread(base, state, trade.value)
 base$sect.trade.share=(base$export-base$import)/(base$export+base$import)
 
-data.fig7=merge(sct.cov.non.tar, 
+load(paste0(data.path,"/Sector coverages harmful.Rdata"))
+data.fig7=merge(sct.cov.harmful, 
                 base, by.x = c('sector','imp.cty'), by.y=c('cpc','cty'), all = T)
 data.fig7[is.na(data.fig7)]=0
 data.fig7=data.fig7[data.fig7$sector!=0,]
 data.fig7$change.sct.imp.share=data.fig7$cov.2019-data.fig7$cov.2017
-data.fig7=subset(data.fig7, select=c('sector','imp.cty','change.sct.imp.share','sect.trade.share'))
+data.fig7=subset(data.fig7, select=c('sector','imp.cty','cov.change','sect.trade.share'))
 setnames(data.fig7,'imp.cty','cty')
 data.fig7$sector.name=mapvalues(data.fig7$sector,subset(cpc.names, cpc.digit.level==2)$cpc,as.character(subset(cpc.names, cpc.digit.level==2)$cpc.name))
 
@@ -270,7 +272,7 @@ for (sct in sectors) {
 }
 
 sct.incentives$exp.cty=mapvalues(sct.incentives$exp.cty,country.names$name,country.names$un_code)
-sct.incentives$incentives.change=sct.incentives$cov.2019-sct.incentives$cov.2017
+sct.incentives$incentives.change=sct.incentives$cov.2016
 
 
 data.fig8=merge(sct.incentives, 
