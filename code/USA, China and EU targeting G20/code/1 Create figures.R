@@ -16,7 +16,7 @@ directories=gta25_setup(internal.name="USA, China and EU targeting G20",
                         in.dev=F,
                         author=NULL,
                         wipe.data=F,
-                        wipe.figs=T)
+                        wipe.figs=F)
 
 data.path = directories$data.path
 output.path = directories$figure.path
@@ -65,12 +65,12 @@ fig1.create <- function(dst, scaling.x, scaling.y) {
                                                 plot=paste0("Graph 1 - Destination market ",dest.markets.names[dst])))
   
   fig1 <- ggplot(data=subset(fig1.data, importer == dest.markets.names[dst]))+
-    geom_text(aes(x=gdp.share, y=harmful, label=exporter), nudge_x = 0.02, hjust = 0, vjust=0.5, color = gta_colour$grey[1], size=3)+
+    geom_text(aes(x=gdp.share, y=harmful, label=exporter), nudge_x = 0.02*scaling.x, hjust = 0, vjust=0.5, color = gta_colour$grey[1], size=3)+
     geom_point(aes(x=gdp.share, y=harmful), color = gta_colour$blue[1], size=2)+
-    scale_y_continuous(name=y.name, limits = c(0,scaling.y), labels = percent,breaks=seq(0,1,0.25),
-                       sec.axis = sec_axis(trans = ~., name=y.name, labels = percent))+
+    scale_y_continuous(name=y.name, limits = c(0,scaling.y), labels = percent, breaks=seq(0,1,0.1),
+                       sec.axis = sec_axis(trans = ~., name=y.name, labels = percent,breaks=seq(0,1,0.1)))+
     geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig1.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)+
-    scale_x_continuous(name=x.name, labels = percent, limits=c(0,scaling.x),breaks=seq(0,1,0.25))+
+    scale_x_continuous(name=x.name, labels = percent, limits=c(0,scaling.x), breaks=seq(0,1,0.1))+
     coord_cartesian(clip="off")+
     coord_fixed(ratio=scaling.x/scaling.y)+
     gta_theme()
@@ -99,13 +99,13 @@ fig2.create <- function(dst, scaling.x, scaling.y) {
                                                 plot=paste0("Graph 2 - Destination market ",dest.markets.names[dst])))
   
   fig2 <- ggplot(data=subset(fig1.data, importer == dest.markets.names[dst]),aes(x=liberalising, y=harmful))+
-    geom_text(aes(x=liberalising, y=harmful, label=exporter), nudge_x = 0.02, hjust = 0, vjust=0.5, color = gta_colour$grey[1], size=3)+
+    geom_text(aes(x=liberalising, y=harmful, label=exporter), nudge_x = 0.02*scaling.x, hjust = 0, vjust=0.5, color = gta_colour$grey[1], size=3)+
     geom_point(color = gta_colour$blue[1], size=2)+
     geom_abline(intercept=0, slope=1, linetype="dashed")+
     geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig2.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)+
-    scale_y_continuous(name=y.name, labels = percent, breaks=seq(0,1,0.25),
-                       sec.axis = sec_axis(trans = ~., name=y.name, labels = percent), limits = c(0,scaling.y))+
-    scale_x_continuous(name=x.name, labels = percent, limits = c(0,scaling.x),breaks=seq(0,1,0.25))+
+    scale_y_continuous(name=y.name, labels = percent, breaks=seq(0,1,0.1),
+                       sec.axis = sec_axis(trans = ~., name=y.name, labels = percent, breaks=seq(0,1,0.1)), limits = c(0,scaling.y))+
+    scale_x_continuous(name=x.name, labels = percent, limits = c(0,scaling.x),breaks=seq(0,1,0.1))+
     coord_cartesian(clip="off")+
     coord_fixed(ratio=scaling.x/scaling.y)+
     gta_theme()
