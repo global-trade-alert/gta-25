@@ -327,7 +327,7 @@ fig14.create <- function(sct) {
     scale_y_continuous(breaks=seq(1,max(fig14.data$order.y),1), labels=plot.names$country, sec.axis = sec_axis(~., breaks=seq(1,max(fig14.data$order.y),1), labels=plot.names$country, name = "Importing country"))+
     scale_x_continuous(breaks=seq(1,max(fig14.data$order.x),1),labels=plot.names$country)+
     labs(x="Exporting country",y="Importing country")+
-    ggtitle("Bilateral export share today benefitting from importer’s \ntrade reforms implemented since 1 January 2017")+
+    ggtitle("Bilateral export share today benefiting from importer’s \ntrade reforms implemented since 1 January 2017")+
     guides(colour=guide_legend(title=NULL, position="right",barwidth=1, label.position = "bottom",keywidth = 0,hjust=0, label.hjust=0))+
     theme(panel.background = element_blank(), 
           panel.border=element_rect(size=1, colour="gray",fill = "transparent"), 
