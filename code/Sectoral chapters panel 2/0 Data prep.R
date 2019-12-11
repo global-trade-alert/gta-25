@@ -11,7 +11,7 @@ library(data.table)
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 chapter.folders=gta25_setup(internal.name = 'Sectoral chapters panel 2',
-                            in.dev = F,
+                            in.dev = T,
                             author='ks',
                             wipe.data = T,
                             wipe.figs = T)
@@ -24,6 +24,10 @@ figure.path=chapter.folders$figure.path
 # Fig 5  ----------------------------------------------------------------
 # Req: Chart 5: Scatter plot for all G20. Y-axis shows change in sectoral import share protected from 2017-2019. X-axis shows change in national import share from 2017-2019
 
+gta_data_slicer()
+
+in.force.15.nov=unique(subset(master.sliced, date.implemented >= as.Date('2017-01-01') & date.implemented <= as.Date('2019-11-15') & 
+                         (is.na(date.removed)|date.removed>=as.Date('2019-11-15')))$intervention.id)
 
 #y-axis
 sct.cov.harmful <- data.frame()
@@ -36,7 +40,10 @@ for (sct in sectors) {
                      importers = 'G20',
                      keep.importers = T,
                      group.importers = F,
-                     coverage.period = c(2016,2019))
+                     coverage.period = c(2016,2019),
+                     implementation.period = c('2017-01-01','2019-11-15'),
+                     intervention.ids = setdiff(unique(master.sliced$intervention.id),in.force.15.nov), # workaround for removed interventions
+                     keep.interventions = F)
   sct.cov.harmful <- rbind(sct.cov.harmful, data.frame(sector=sct,
                                                        imp.cty=trade.coverage.estimates$`Importing country`,
                                                        cov.2016=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2016`),
@@ -48,7 +55,7 @@ for (sct in sectors) {
   rm(trade.coverage.estimates)
 }
 
-sct.cov.harmful$cov.change=sct.cov.harmful$cov.2019-sct.cov.harmful$cov.2017
+sct.cov.harmful$cov.change=sct.cov.harmful$cov.2019
 sct.cov.harmful$imp.cty=mapvalues(sct.cov.harmful$imp.cty,country.names$name,country.names$un_code)
 
 # balancing the panel to observed trading nations // turns out to be unnecessary since you already did this in the merger to the data.figX dfs, sorry.
@@ -162,36 +169,7 @@ save(data.fig6, file=paste0(data.path,'/fig 6.Rdata'))
 # the X axis is the sectoral trade balance divided by total sectoral trade. Let X be the total exports of a country in a given sector,
 #let Y be total imports of the same country in the same sector. Then the measure I have in mind is (X-Y)/(X+Y). Note that this measure can be negative but the values will always lie between -1 and +1.
 
-#KS: I made y-axis for the change in coverage from 2019-2017 similar to chart 5/6/8 since no date was mentioned for chart 7's y-axis
 #KS: x-axis was made with 2016 data
-
-
-# y-axis
-# sct.cov.non.tar <- data.frame()
-# for (sct in sectors) {
-#   codes <- gta_cpc_code_expand(codes = sct)
-#   gta_trade_coverage(gta.evaluation = c("Red","Amber"),
-#                      cpc.sectors = codes,
-#                      keep.cpc = T,
-#                      affected.flows = c("inward"), 
-#                      importers = 'G20',
-#                      keep.importers = T,
-#                      group.importers = F, 
-#                      coverage.period = c(2016,2019),
-#                      mast.chapters = 'tariff',
-#                      keep.mast = F)
-#   sct.cov.non.tar <- rbind(sct.cov.non.tar, data.frame(sector=sct,
-#                                                        imp.cty=trade.coverage.estimates$`Importing country`,
-#                                                        cov.2016=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2016`),
-#                                                        cov.2017=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2017`),
-#                                                        cov.2018=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2018`),
-#                                                        cov.2019=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2019`)
-#   ))
-#   
-#   rm(trade.coverage.estimates)
-# }
-# 
-# sct.cov.non.tar$imp.cty=mapvalues(sct.cov.non.tar$imp.cty,country.names$name,country.names$un_code)
 
 #x-axis
 gta_trade_value_bilateral(trade.data ='2016')
@@ -234,17 +212,6 @@ save(data.fig7, file=paste0(data.path,'fig 7.Rdata'))
 # chart 8  ----------------------------------------------------------------
 #Chart 8: Scatter plot for G20. Y-axis same as graph 5 and 6. X-axis shows the share of sectoral exports that benefit from incentives.
 
-# gta_data_slicer(implementing.country = 'G20',
-#               gta.evaluation = c("Red", "Amber"),
-#                cpc.sectors = codes, keep.cpc = T,
-#                implementation.period = c("2016-01-01", "2019-12-31"), keep.implementation.na = F,
-#                affected.flows = "outward subsidy",
-#                implementation.level = c("subnational"), keep.level = F,
-#                eligible.firms = c("firm-specific"),keep.firms = F)
-# master.sliced = cSplit(master.sliced, which(colnames(master.sliced)=="affected.product"), direction="long", sep=", ")
-# master.sliced = subset(master.sliced, affected.product %in% subset(cpc.to.hs, cpc %in% codes)$hs)
-
-
 sct.incentives <- data.frame()
 
 
@@ -258,7 +225,12 @@ for (sct in sectors) {
                      group.implementers = F,
                      implementer.trade = "export",
                      coverage.period = c(2016,2019),
-                     affected.flows = 'outward subsidy')
+                     affected.flows = 'outward subsidy',
+                     mast.chapters = 'P',
+                     keep.mast = T,
+                     implementation.period = c('2017-01-01','2019-11-15'),
+                     intervention.ids = setdiff(unique(master.sliced$intervention.id),in.force.15.nov), # workaround for removed interventions
+                     keep.interventions = F)
   
   sct.incentives <- rbind(sct.incentives, data.frame(sector=sct,
                                                      exp.cty=trade.coverage.estimates$`Exporting country`,
@@ -272,7 +244,7 @@ for (sct in sectors) {
 }
 
 sct.incentives$exp.cty=mapvalues(sct.incentives$exp.cty,country.names$name,country.names$un_code)
-sct.incentives$incentives.change=sct.incentives$cov.2016
+sct.incentives$incentives.change=sct.incentives$cov.2019
 
 
 data.fig8=merge(sct.incentives, 

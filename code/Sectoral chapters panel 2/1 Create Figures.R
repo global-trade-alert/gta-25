@@ -13,7 +13,7 @@ library(gridExtra)
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 chapter.folders=gta25_setup(internal.name = 'Sectoral chapters panel 2',
-                            in.dev = F,
+                            in.dev = T,
                             author='ks',
                             wipe.data = F,
                             wipe.figs = T)
@@ -41,7 +41,7 @@ fig5.create=function(sct){
   cor5=round(cor(subset(data.fig5, cpc==sct & cov.change<0.7)$sct.share, subset(data.fig5, cpc==sct & cov.change<0.7)$cov.change),2)
   
   fig5 <- ggplot(data=subset(data.fig5, cpc==sct)) + geom_point(aes(x=sct.share, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('National import share in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    gta_theme() + xlab('National import share in 2016') + ylab('Sectoral imports share protected during populist era') + 
     geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,label=paste0('Correlation: ',cor5))
   # gta_plot_saver(fig5, 
   #                paste0(path,'tables & figures/'),
@@ -68,7 +68,7 @@ fig6.create=function(sct){
   cor6=round(cor(subset(data.fig6, sector==sct & curr.rel.change<0.7)$curr.rel.change, subset(data.fig6, sector==sct & curr.rel.change<0.7)$cov.change),2)
   
   fig6 <- ggplot(data=subset(data.fig6, sector==sct)) + geom_point(aes(x=curr.rel.change, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Relative currency change (ratio of average in 2019 to average in 2016)') + ylab('Change in sectoral import share protected 2017-2019') + 
+    gta_theme() + xlab('Relative currency change (ratio of average in 2019 to average in 2016)') + ylab('Sectoral imports share protected during populist era') + 
     geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,label=paste0('Correlation: ',cor6))
   
   # gta_plot_saver(fig6, 
@@ -96,7 +96,7 @@ fig7.create=function(sct){
   cor7=round(cor(subset(data.fig7, sector==sct & cov.change<0.6)$sect.trade.share, subset(data.fig7, sector==sct & cov.change<0.6)$cov.change),2)
   
   fig7 <- ggplot(data=subset(data.fig7, sector==sct)) + geom_point(aes(x=sect.trade.share, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Sectoral trade balance divided by total sectoral trade in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    gta_theme() + xlab('Sectoral trade balance divided by total sectoral trade in 2016') + ylab('Sectoral imports share protected during populist era') + 
     geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,label=paste0('Correlation: ',cor7))
   
   # gta_plot_saver(fig7, 
@@ -121,7 +121,7 @@ fig8.create=function(sct){
   cor8=round(cor(subset(data.fig8, sector==sct & incentives.change>-0.06)$incentives.change, subset(data.fig8, sector==sct & incentives.change>-0.06)$cov.change),2)
   
   fig8 <- ggplot(data=subset(data.fig8, sector==sct)) + geom_point(aes(x=incentives.change, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Share of sectoral exports that benefit from incentives in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    gta_theme() + xlab('Sectoral export share receiving incentives during populist era') + ylab('Sectoral imports share protected during populist era') + 
     geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,
               label=paste0('Correlation: ',cor8))
   
