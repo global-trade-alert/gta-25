@@ -28,6 +28,7 @@ gta_data_slicer()
 
 in.force.15.nov=unique(subset(master.sliced, date.implemented >= as.Date('2017-01-01') & date.implemented <= as.Date('2019-11-15') & 
                          (is.na(date.removed)|date.removed>=as.Date('2019-11-15')))$intervention.id)
+neg.in.force.15.nov=setdiff(unique(master.sliced$intervention.id),in.force.15.nov)
 
 #y-axis
 sct.cov.harmful <- data.frame()
@@ -42,7 +43,7 @@ for (sct in sectors) {
                      group.importers = F,
                      coverage.period = c(2016,2019),
                      implementation.period = c('2017-01-01','2019-11-15'),
-                     intervention.ids = setdiff(unique(master.sliced$intervention.id),in.force.15.nov), # workaround for removed interventions
+                     intervention.ids = neg.in.force.15.nov, # workaround for removed interventions
                      keep.interventions = F)
   sct.cov.harmful <- rbind(sct.cov.harmful, data.frame(sector=sct,
                                                        imp.cty=trade.coverage.estimates$`Importing country`,
@@ -57,11 +58,6 @@ for (sct in sectors) {
 
 sct.cov.harmful$cov.change=sct.cov.harmful$cov.2019
 sct.cov.harmful$imp.cty=mapvalues(sct.cov.harmful$imp.cty,country.names$name,country.names$un_code)
-
-# balancing the panel to observed trading nations // turns out to be unnecessary since you already did this in the merger to the data.figX dfs, sorry.
-# sct.cov.harmful=merge(subset(cty.sct.trade, cpc %in% sectors)[,c("cpc","i.un")], sct.cov.harmful, by.x=c("i.un","cpc"), by.y=c("imp.cty","sector"), all.x=T)
-# sct.cov.harmful[is.na(sct.cov.harmful)]=0
-
 
 save(sct.cov.harmful, file=paste0(data.path,"/Sector coverages harmful.Rdata"))
 
@@ -229,7 +225,7 @@ for (sct in sectors) {
                      mast.chapters = 'P',
                      keep.mast = T,
                      implementation.period = c('2017-01-01','2019-11-15'),
-                     intervention.ids = setdiff(unique(master.sliced$intervention.id),in.force.15.nov), # workaround for removed interventions
+                     intervention.ids = neg.in.force.15.nov, # workaround for removed interventions
                      keep.interventions = F)
   
   sct.incentives <- rbind(sct.incentives, data.frame(sector=sct,
