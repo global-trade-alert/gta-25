@@ -13,7 +13,7 @@ library(gridExtra)
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 chapter.folders=gta25_setup(internal.name = 'Sectoral chapters panel 2',
-                            in.dev = T,
+                            in.dev = F,
                             author='ks',
                             wipe.data = F,
                             wipe.figs = T)

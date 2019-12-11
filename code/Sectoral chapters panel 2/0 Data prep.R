@@ -11,7 +11,7 @@ library(data.table)
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 chapter.folders=gta25_setup(internal.name = 'Sectoral chapters panel 2',
-                            in.dev = T,
+                            in.dev = F,
                             author='ks',
                             wipe.data = T,
                             wipe.figs = T)
@@ -44,7 +44,7 @@ for (sct in sectors) {
                                                        cov.2018=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2018`),
                                                        cov.2019=as.numeric(trade.coverage.estimates$`Trade coverage estimate for 2019`)
   ))
-                                                       
+  
   rm(trade.coverage.estimates)
 }
 
@@ -93,8 +93,8 @@ sct.trade.base$trade.value.x=NULL
 sct.trade.base$sct.trade[is.na(sct.trade.base$sct.trade)]=0
 
 sct.trade.base=merge(sct.trade.base, data.frame(i.un=aggregate(trade.value~i.un,cty.sct.trade,sum)$i.un,
-                                      national.trade=aggregate(trade.value~i.un,cty.sct.trade,sum)$trade.value
-                                      ), by='i.un')
+                                                national.trade=aggregate(trade.value~i.un,cty.sct.trade,sum)$trade.value
+), by='i.un')
 sct.trade.base$sct.share=sct.trade.base$sct.trade/sct.trade.base$national.trade
 
 load(paste0(data.path,"/Sector coverages harmful.Rdata"))
@@ -122,7 +122,7 @@ enddate = '2020-01-01'
 
 queryfilter <- list(CL_FREA = "M", CL_AREA_IFS = c(g20.ifs, "U2") , CL_INDICATOR_IFS = c("ENDA_XDC_USD_RATE"))
 currency.base <- CompactDataMethod(databaseID, queryfilter, startdate, enddate,
-                                    checkquery=F)[,2:6]
+                                   checkquery=F)[,2:6]
 
 # compute avg currency rate conversion vs usd in 2016 / 2019 (until and including october)
 currency.base$`2016`=NA
@@ -135,8 +135,8 @@ currency.base$rel.change=(currency.base$`2019`-currency.base$`2016`)/currency.ba
 currency.base=subset(currency.base, select=c('@REF_AREA','rel.change'))
 setnames(currency.base, names(currency.base)[1],c('cty'))
 currency.base=rbind(subset(currency.base, cty!='U2'), 
-               data.frame(cty=g20.ifs[!g20.ifs %in% currency.base$cty],
-                          rel.change=subset(currency.base, cty=='U2')$rel.change))
+                    data.frame(cty=g20.ifs[!g20.ifs %in% currency.base$cty],
+                               rel.change=subset(currency.base, cty=='U2')$rel.change))
 currency.base$cty.name = mapvalues(currency.base$cty, IFS.available.codes$CL_AREA_IFS$CodeValue, IFS.available.codes$CL_AREA_IFS$CodeText)
 #convert back to gta cty names
 currency.base$cty.name = mapvalues(currency.base$cty.name,c("Korea, Republic of","United States",'Russian Federation'),c('Republic of Korea','United States of America','Russia'))
