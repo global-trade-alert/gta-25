@@ -15,6 +15,7 @@ chapter.folders=gta25_setup(internal.name = 'Jumbos in the populist era',
                             author=NULL,
                             wipe.data = F,
                             wipe.figs = T)
+
 data.path=chapter.folders$data.path
 figure.path=chapter.folders$figure.path
 
@@ -97,6 +98,14 @@ gta_plot_saver(plot = p1,
 
 
 ###### MAPS
+## jumbo counts
+jumbo.countries <- read.xlsx(paste0("0 report production/GTA 25/help files/trade per intervention_jumbos checked.xlsx"),sheetName ="populist era")
+jumbo.countries <- subset(jumbo.countries, is.na(implementing.jurisdiction)==F)
+jumbo.countries$implementing.jurisdiction=as.character(jumbo.countries$implementing.jurisdiction)
+jumbo.countries$implementing.jurisdiction[grepl("Malta",jumbo.countries$implementing.jurisdiction) & grepl("Finland",jumbo.countries$implementing.jurisdiction)]="European Union"
+names(jumbo.countries) <- c("name","implemented")
+write.xlsx(jumbo.countries[,c("name","implemented")], file=paste0(figure.path,"Countries implementing jumbo measures.xlsx"),sheetName="implementers",row.names=F)
+
 
 
 #Create map

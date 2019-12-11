@@ -14,7 +14,7 @@ chapter.folders=gta25_setup(internal.name = 'Jumbos in the populist era',
                             in.dev = F,
                             author=NULL,
                             wipe.data = T,
-                            wipe.figs = F)
+                            wipe.figs = T)
 data.path=chapter.folders$data.path
 figure.path=chapter.folders$figure.path
 
