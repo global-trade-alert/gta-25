@@ -18,7 +18,7 @@ chapter.folders=gta25_setup(internal.name = 'Jumbos in the populist era',
 data.path=chapter.folders$data.path
 figure.path=chapter.folders$figure.path
 
-jumbo.data = xlsx::read.xlsx2(file = "0 report production/GTA 25/prep pre report/trade per intervention_jumbos checked.xlsx", sheetName = "populist era")
+jumbo.data = xlsx::read.xlsx2(file = "0 report production/GTA 25/help files/trade per intervention_jumbos checked.xlsx", sheetName = "populist era")
 jumbo.data$trade.value = as.numeric(as.character(jumbo.data$trade.value))
 jumbo.data = subset(jumbo.data, is.na(trade.value)==F)
 jumbo.data$date.implemented = as.Date(as.numeric(as.character(jumbo.data$date.implemented)), origin = "1970-01-01")
@@ -56,3 +56,23 @@ gta_trade_coverage(gta.evaluation = c("Red", "Amber"),
                    trade.data = 2016,
                    trade.statistic = "value")
 #China: 433937520	370239107230	837360546774
+
+
+
+
+
+# MAPS
+jumbo.countries <- read.xlsx(paste0("0 report production/GTA 25/help files/trade per intervention_jumbos checked.xlsx"),sheetName ="populist era")
+jumbo.countries <- subset(jumbo.countries, is.na(implementing.jurisdiction)==F)
+unique1 <- unique(jumbo.countries$implementing.jurisdiction)
+jumbo.countries <- as.data.frame(table(jumbo.countries$implementing.jurisdiction))
+unique2 <- unique(jumbo.countries$Var1)
+diff.unique <- unique1[! unique1 %in% unique2]
+names(jumbo.countries) <- c("name","implemented")
+
+countries <- gtalibrary::country.names
+length(unique(jumbo.countries$name))
+jumbo.countries <- merge(jumbo.countries, countries[,c("name","un_code")], by="name")
+
+write.xlsx(jumbo.countries[,c("name","implemented")], file=paste0(figure.path,"Countries implementing jumbo measures.xlsx"),sheetName="implementers",row.names=F)
+

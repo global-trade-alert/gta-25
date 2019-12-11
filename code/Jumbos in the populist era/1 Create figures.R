@@ -94,3 +94,54 @@ gta_plot_saver(plot = p1,
                cairo_ps = T,
                height = 15,
                width = 27)
+
+
+###### MAPS
+
+
+#Create map
+load("0 gtalibrary/data/world.geo.rda")
+
+world <- world.geo
+
+data=jumbo.countries
+
+data[,c("UN","value")] <- data[,c("name","implemented")]
+data$UN <- gta_un_code_vector(data$UN)
+
+# merge data with map data
+world = merge(world, data[,c("UN","value")], by="UN", all.x=T)
+
+###### IMPORTANT, sort for X (id) again
+world <-  world[with(world, order(X)),]
+# world$value[is.na(world$value) == T] <- 0
+
+plot = ggplot() +
+  geom_polygon(data=subset(world, country != "Antarctica"), aes(x = long, y = lat, group = group, fill = value), size = 0.2, color = "white") +
+  coord_fixed() + # Important to fix world map proportions
+  labs(x="", y="") +
+  scale_fill_gradient(low = gta_colour$blue[4], high = gta_colour$blue[1], breaks=waiver(), position="bottom", na.value = "#CCCCCC") + # Set color gradient
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.background = element_blank(),
+        legend.position = "bottom",
+        plot.title = element_text(family = "", colour = "#333333", size = 11, hjust = 0.5, margin = margin(b=10)),
+        legend.title = element_text(vjust= 0.3, family="", colour = "#333333", size = 11*0.8, margin = margin(r=10)),
+        legend.text = element_text(family="", colour = "#333333", size = 11*0.8, angle = 0, hjust=0, vjust=0, margin = margin(r=10)),
+        legend.text.align = 0
+        
+  ) +
+  guides(fill=guide_legend(title="Number of jumbo intervention implemented", label.position = "top"),
+         ymax=guide_legend(titel="size"))
+
+plot
+
+gta_plot_saver(plot=plot,
+               path = paste0(figure.path),
+               name= "Map jumbo implementers in populist era",
+               eps = T,
+               png=T)
