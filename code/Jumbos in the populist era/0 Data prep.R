@@ -64,15 +64,16 @@ gta_trade_coverage(gta.evaluation = c("Red", "Amber"),
 # MAPS
 jumbo.countries <- read.xlsx(paste0("0 report production/GTA 25/help files/trade per intervention_jumbos checked.xlsx"),sheetName ="populist era")
 jumbo.countries <- subset(jumbo.countries, is.na(implementing.jurisdiction)==F)
-
 jumbo.countries$implementing.jurisdiction=as.character(jumbo.countries$implementing.jurisdiction)
+
+jumbo.country.names=as.character(unique(cSplit(jumbo.countries, which(names(jumbo.countries)=="implementing.jurisdiction"), sep=";", direction="long")$implementing.jurisdiction))
+save(jumbo.country.names, file = paste0(chapter.folders$data.path, "jumbo country names.Rdata"))
+
 jumbo.countries$implementing.jurisdiction[grepl("Malta",jumbo.countries$implementing.jurisdiction) & grepl("Finland",jumbo.countries$implementing.jurisdiction)]="European Union"
 
 names(jumbo.countries) <- c("name","implemented")
 
-countries <- gtalibrary::country.names
-length(unique(jumbo.countries$name))
-jumbo.countries <- merge(jumbo.countries, countries[,c("name","un_code")], by="name")
-
 write.xlsx(jumbo.countries[,c("name","implemented")], file=paste0(figure.path,"Countries implementing jumbo measures.xlsx"),sheetName="implementers",row.names=F)
+
+
 
