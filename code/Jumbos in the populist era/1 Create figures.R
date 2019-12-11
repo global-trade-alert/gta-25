@@ -109,13 +109,15 @@ write.xlsx(jumbo.countries[,c("name","implemented")], file=paste0(figure.path,"C
 
 
 #Create map
+load(paste0(chapter.folders$data.path, "jumbo country names.Rdata"))
+data=subset(gtalibrary::country.names, name %in% jumbo.country.names)[,c("un_code","name")]
+data$implemented=1
+
 load("0 gtalibrary/data/world.geo.rda")
 
 world <- world.geo
 
-data=jumbo.countries
-
-data[,c("UN","value")] <- data[,c("name","implemented")]
+data[,c("UN","value")] <- data[,c("un_code","implemented")]
 data$UN <- gta_un_code_vector(data$UN)
 
 # merge data with map data
@@ -125,7 +127,7 @@ world = merge(world, data[,c("UN","value")], by="UN", all.x=T)
 world <-  world[with(world, order(X)),]
 # world$value[is.na(world$value) == T] <- 0
 
-plot = ggplot() +
+plot=ggplot() +
   geom_polygon(data=subset(world, country != "Antarctica"), aes(x = long, y = lat, group = group, fill = value), size = 0.2, color = "white") +
   coord_fixed() + # Important to fix world map proportions
   labs(x="", y="") +
@@ -137,15 +139,7 @@ plot = ggplot() +
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
         panel.background = element_blank(),
-        legend.position = "bottom",
-        plot.title = element_text(family = "", colour = "#333333", size = 11, hjust = 0.5, margin = margin(b=10)),
-        legend.title = element_text(vjust= 0.3, family="", colour = "#333333", size = 11*0.8, margin = margin(r=10)),
-        legend.text = element_text(family="", colour = "#333333", size = 11*0.8, angle = 0, hjust=0, vjust=0, margin = margin(r=10)),
-        legend.text.align = 0
-        
-  ) +
-  guides(fill=guide_legend(title="Number of jumbo intervention implemented", label.position = "top"),
-         ymax=guide_legend(titel="size"))
+        legend.position = "none")
 
 plot
 
