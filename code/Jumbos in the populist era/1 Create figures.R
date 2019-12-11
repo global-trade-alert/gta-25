@@ -13,7 +13,7 @@ source('0 report production/GTA 25/help files/Producer console.R')
 chapter.folders=gta25_setup(internal.name = 'Jumbos in the populist era',
                             in.dev = F,
                             author=NULL,
-                            wipe.data = T,
+                            wipe.data = F,
                             wipe.figs = T)
 data.path=chapter.folders$data.path
 figure.path=chapter.folders$figure.path
@@ -88,14 +88,9 @@ p1 = ggplot(data=jumbo.data, aes(x=order,y=log10(trade.value/1000000000),fill=fa
                      labels = c("0"="1 billion ", "0.69897" = "5 billion", "1"="10 billion ", "1.69897" = "50 billion", "2"="100 billion "))
 p1
 
-ggsave("0 report production/GTA 25/prep pre report/Jumbo chart.png")
-
-
-# gta_plot_saver(plot = p1,
-#                path = figure.path,
-#                name = paste0("Figure Panel 2 B (7-8) - Sector ",sct),
-#                cairo_ps = T,
-#                height = 29.7,
-#                width = 21)
-
-
+gta_plot_saver(plot = p1,
+               path = figure.path,
+               name = "Jumbo bar chart",
+               cairo_ps = T,
+               height = 15,
+               width = 27)

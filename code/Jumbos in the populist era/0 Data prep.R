@@ -14,7 +14,7 @@ chapter.folders=gta25_setup(internal.name = 'Jumbos in the populist era',
                             in.dev = F,
                             author=NULL,
                             wipe.data = T,
-                            wipe.figs = T)
+                            wipe.figs = F)
 data.path=chapter.folders$data.path
 figure.path=chapter.folders$figure.path
 
@@ -25,7 +25,8 @@ jumbo.data$date.implemented = as.Date(as.numeric(as.character(jumbo.data$date.im
 jumbo.data$date.implemented = as.character(jumbo.data$date.implemented)
 jumbo.data$order = nrow(jumbo.data):1
 
-save(jumbo.data, file = "0 report production/GTA 25/prep pre report/jumbo.data.Rdata")
+
+save(jumbo.data, file = paste0(chapter.folders$data.path, "jumbo.data.Rdata"))
 
 ### SE: Calculate amount of trade affected by these jumbos overall, US & China
 
