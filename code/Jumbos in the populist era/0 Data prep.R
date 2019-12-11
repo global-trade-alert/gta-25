@@ -37,7 +37,7 @@ gta_trade_coverage(gta.evaluation = c("Red", "Amber"),
                    coverage.period=c(2017,2019),
                    trade.data = 2016,
                    trade.statistic = "value")
-#Overall: 2.64E+12	3.69E+12	3.04E+12
+#Overall: 2.64e+12	3.69E+12	3.03E+12
 
 gta_trade_coverage(gta.evaluation = c("Red", "Amber"),
                    intervention.ids = subset(jumbo.data, implementing.jurisdiction=="United States of America")$intervention.id,
@@ -46,7 +46,7 @@ gta_trade_coverage(gta.evaluation = c("Red", "Amber"),
                    coverage.period=c(2017,2019),
                    trade.data = 2016,
                    trade.statistic = "value")
-#USA: 	63219931247	294237318540	539788298278
+#USA:	63219931247	294237697282	541545362087
 
 gta_trade_coverage(gta.evaluation = c("Red", "Amber"),
                    intervention.ids = subset(jumbo.data, implementing.jurisdiction=="China")$intervention.id,
@@ -55,5 +55,4 @@ gta_trade_coverage(gta.evaluation = c("Red", "Amber"),
                    coverage.period=c(2017,2019),
                    trade.data = 2016,
                    trade.statistic = "value")
-#China: 433937520	370192776164	8.37204e+11
-
+#China: 433937520	370239107230	837360546774
