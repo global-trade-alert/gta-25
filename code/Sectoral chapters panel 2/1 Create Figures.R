@@ -181,5 +181,5 @@ for (sct in sectors) {
 }
 
 
-openxlsx::write.xlsx(stat.values, file=paste0(figure.path,"Statistical results for figure 8.xlsx"), rowNames=F)
+openxlsx::write.xlsx(stat.values, file=paste0(figure.path,"Statistical results for figures 5-8.xlsx"), rowNames=F)
 
