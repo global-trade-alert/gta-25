@@ -69,11 +69,3 @@ jumbo.countries$implementing.jurisdiction=as.character(jumbo.countries$implement
 jumbo.country.names=as.character(unique(cSplit(jumbo.countries, which(names(jumbo.countries)=="implementing.jurisdiction"), sep=";", direction="long")$implementing.jurisdiction))
 save(jumbo.country.names, file = paste0(chapter.folders$data.path, "jumbo country names.Rdata"))
 
-jumbo.countries$implementing.jurisdiction[grepl("Malta",jumbo.countries$implementing.jurisdiction) & grepl("Finland",jumbo.countries$implementing.jurisdiction)]="European Union"
-
-names(jumbo.countries) <- c("name","implemented")
-
-write.xlsx(jumbo.countries[,c("name","implemented")], file=paste0(figure.path,"Countries implementing jumbo measures.xlsx"),sheetName="implementers",row.names=F)
-
-
-
