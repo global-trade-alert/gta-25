@@ -49,7 +49,7 @@ global.trade$cpc=0
 fig1.data <- rbind(sct.trade.data, global.trade)
 
 fig1.create <- function(sct) {
-  fig1 <- ggplot(data=subset(fig1.data, cpc %in% c(sct,0)))+
+    fig1 <- ggplot(data=subset(fig1.data, cpc %in% c(sct,0)))+
     geom_rect(data=data.frame(), aes(xmin=2017, xmax=Inf, ymin=-Inf, ymax=Inf), fill=pop.shade, alpha=0.3)+
     geom_text(aes(x=2017, y=0.6, label="Populist\n era"), hjust=-0.1, vjust=1.4, color = pop.text, lineheight = 1)+
     geom_text(aes(x=-Inf, y=Inf, label="Pre-populist era"), hjust=-0.1, vjust=2, color = gta_colour$grey[1], lineheight = 1)+
@@ -71,10 +71,10 @@ fig1.create <- function(sct) {
                      colour.labels = c("Global",paste0("This sector")),
                      colour.legend.col = 2)+
     gta_theme()
-  
+    
   fig1
   return(fig1)
-}
+  }
 
 
 # Create panels per sector ------------------------------------------------
@@ -94,7 +94,7 @@ for (sct in sectors) {
   
   
   fig1 <- fig1.create(sct)
-  
+
   gta_plot_saver(plot = fig1,
                  path = s.path,
                  name = paste0("Figure 1 - Sector ",sct),
@@ -103,6 +103,6 @@ for (sct in sectors) {
   
   write.xlsx(subset(fig1.data, cpc %in% c(sct,0)), file=paste0(s.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Trade data")
   
-  
+
 }
 
