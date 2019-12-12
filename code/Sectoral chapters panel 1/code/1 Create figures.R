@@ -24,6 +24,15 @@ output.path = directories$figure.path
 
 gta_colour_palette()
 
+
+
+## setting figure paths
+first.sector.chapter=5
+sector.path=paste0(str_extract(output.path,"^.+?figures/"),paste0(first.sector.chapter:(first.sector.chapter+length(sectors)-1), " - Sector ", sectors,"/"))
+wipe.sector.path=F
+
+
+
 # Figure 1 create graph ------------------------------------------------------
 
 # Chart 1: Line graph showing share of total sectoral trade 
@@ -42,8 +51,6 @@ sct.cov.harmful$type="harmful"
 sct.cov.liberalising$type="liberalising"
 
 fig1.data <- rbind(sct.cov.harmful, sct.cov.liberalising)
-
-write.xlsx(fig1.data, file=paste0(output.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Coverages")
 
 fig1.create <- function(sct) {
     
@@ -85,8 +92,6 @@ load(paste0(data.path,"Sector coverages types harmful.Rdata"))
 sct.cov.harmful$type="all"
 fig2.data <- rbind(sct.cov.types.harmful, sct.cov.harmful)
 
-write.xlsx(fig2.data, file=paste0(output.path,"Table for Figure 2.xlsx"),row.names=F, sheetName = "Coverages")
-
 fig2.create <- function(sct) {
 
   fig2 <- ggplot(data=subset(fig2.data, sector == sct))+
@@ -121,8 +126,6 @@ fig2.create <- function(sct) {
 load(paste0(data.path,"Sector coverages types liberalising.Rdata"))
 sct.cov.liberalising$type="all"
 fig3.data <- rbind(sct.cov.types.liberalising, sct.cov.liberalising)
-
-write.xlsx(fig3.data, file=paste0(output.path,"Table for Figure 3.xlsx"),row.names=F, sheetName = "Coverages")
 
 fig3.create <- function(sct) {
   
@@ -168,7 +171,6 @@ fig4.data <- fig4.data[with(fig4.data, order(-order)),]
 row.names(fig4.data) <- NULL
 fig4.data$year <- as.numeric(as.character(fig4.data$year))
 
-write.xlsx(fig4.data[,c("sector","year","coverages","hits")], file=paste0(output.path,"Table for Figure 4.xlsx"),row.names=F, sheetName = "Coverages")
 
 fig4.create <- function(sct) {
   
@@ -202,6 +204,17 @@ fig4.create <- function(sct) {
 
 for (sct in sectors) {
   
+  
+  s.path=sector.path[grepl(paste0(sct,"/$"),sector.path)]
+  
+  dir.create(file.path(s.path), showWarnings = FALSE)
+  
+  if(wipe.sector.path){
+    wipe.all= list.files(s.path, include.dirs = F, full.names = T, recursive = T)
+    file.remove(wipe.all)
+    rm(wipe.all)
+  }
+  
   fig1 <- fig1.create(sct)
   fig2 <- fig2.create(sct)
   fig3 <- fig3.create(sct)
@@ -212,14 +225,14 @@ for (sct in sectors) {
   figC <- grid.arrange(fig1, fig2, fig3, fig4, nrow=2)
 
   gta_plot_saver(plot = figA,
-                 path = paste0(output.path),
+                 path = s.path,
                  name = paste0("Figure Panel 1 A (1-2) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   
   gta_plot_saver(plot = figB,
-                 path = paste0(output.path),
+                 path = s.path,
                  name = paste0("Figure Panel 1 B (3-4) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
@@ -227,10 +240,16 @@ for (sct in sectors) {
   
   # Four plots per page, not really feasible
   gta_plot_saver(plot = figC,
-                 path = paste0(output.path),
+                 path = s.path,
                  name = paste0("Figure Panel 1 C (1-4) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
+  
+  write.xlsx(subset(fig1.data, sector==sct), file=paste0(output.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig2.data, sector==sct), file=paste0(output.path,"Table for Figure 2.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig3.data, sector==sct), file=paste0(output.path,"Table for Figure 3.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig4.data, sector==sct)[,c("sector","year","coverages","hits")], file=paste0(output.path,"Table for Figure 4.xlsx"),row.names=F, sheetName = "Coverages")
+  
 }
 
