@@ -20,6 +20,7 @@ directories=gta25_setup(internal.name="Annual trade variation",
 data.path = directories$data.path
 output.path = directories$figure.path
 
+gta_colour_palette()
 
 
 ## setting figure paths
@@ -51,8 +52,8 @@ fig1.data <- rbind(sct.trade.data, global.trade)
 fig1.create <- function(sct) {
     fig1 <- ggplot(data=subset(fig1.data, cpc %in% c(sct,0)))+
     geom_rect(data=data.frame(), aes(xmin=2017, xmax=Inf, ymin=-Inf, ymax=Inf), fill=pop.shade, alpha=0.3)+
-    geom_text(aes(x=2017, y=0.6, label="Populist\n era"), hjust=-0.1, vjust=1.4, color = pop.text, lineheight = 1)+
-    geom_text(aes(x=-Inf, y=Inf, label="Pre-populist era"), hjust=-0.1, vjust=2, color = gta_colour$grey[1], lineheight = 1)+
+    geom_text(aes(x=2017, y=0.5, label="Populist\n era"), hjust=-0.1, vjust=0, color = pop.text, lineheight = 1)+
+    geom_text(aes(x=-Inf, y=0.5, label="Pre-populist\n era"), hjust=-0.1, vjust=0, color = gta_colour$grey[1], lineheight = 1)+
     geom_line(aes(x=Period, y=index.2007, colour=type), size = 1)+
     # geom_point(aes(x=2019-0.2, y=glo.cov.harmful),size=3, colour=gta_colour$red[1])+
     # geom_point(aes(x=2019-0.2, y=glo.cov.liberalising),size=3, colour=gta_colour$green[1])+
@@ -65,7 +66,7 @@ fig1.create <- function(sct) {
                      y.left.breaks = c(0.5,1,1.5),
                      y.left.labels = scales::percent(c(0.5,1,1.5)),
                      y.right.enable = F,
-                     y.left.limits = c(0.5,round(max(fig1.data$index.2007,1)+.1)),
+                     y.left.limits = c(0.5,round(max(fig1.data$index.2007),2+.1)),
                      colour.legend.title = "Trade included",
                      colour.palette = c(gta_colour$blue[1],gta_colour$blue[4]),
                      colour.labels = c("Global",paste0("This sector")),
