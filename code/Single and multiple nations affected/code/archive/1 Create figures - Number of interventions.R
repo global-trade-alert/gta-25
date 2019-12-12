@@ -18,6 +18,7 @@ directories=gta25_setup(internal.name="Single & multi-country hits",
 
 data.path = directories$data.path
 output.path = directories$figure.path
+help.file.path=gsub("/data/Single & multi-country hits/","/help files/",data.path)
 
 gta_colour_palette()
 
@@ -28,7 +29,7 @@ gta_colour_palette()
 
 # Read xlsx 1
 
-fig8.data <- read.xlsx(paste0(data.path,"Chapter 1 falling number of reforms.xlsx"),sheetIndex = 1)
+fig8.data <- xlsx::read.xlsx(paste0(help.file.path,"Chapter 1 falling number of reforms.xlsx"),sheetIndex = 1)
 fig8.data <- fig8.data[,c(1:2)]
 names(fig8.data) <- c("year","interventions")
 
@@ -58,7 +59,7 @@ fig8.create <- function() {
 
 # Read xlsx 2
 
-fig9.data <- read.xlsx(paste0(data.path,"Chapter 1 rising number of trade distortions.xlsx"),sheetIndex = 1)
+fig9.data <- xlsx::read.xlsx(paste0(help.file.path,"Chapter 1 rising number of trade distortions.xlsx"),sheetIndex = 1)
 fig9.data <- fig9.data[c(1:11),]
 fig9.data$All <- as.numeric(as.character(fig9.data$All))
 fig9.data$years <- as.numeric(as.character(fig9.data$years))
@@ -90,7 +91,7 @@ fig9.create <- function() {
 
 # Read xlsx 3
 
-fig10.data <- read.xlsx(paste0(data.path,"Services goods figure chapter 1.xlsx"),sheetIndex = 1)
+fig10.data <- xlsx::read.xlsx(paste0(help.file.path,"Services goods figure chapter 1.xlsx"),sheetIndex = 1)
 fig10.data <- fig10.data[c(4:5),c(2:13)]
 names(fig10.data) <- c("type",2009:2019)
 fig10.data <- pivot_longer(fig10.data, cols = c(paste0(2009:2019)), names_to = "year", values_to = "share")
