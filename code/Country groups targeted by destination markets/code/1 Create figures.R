@@ -176,15 +176,10 @@ figex <- ggplot()+
   
   figA <- grid.arrange(fig1, fig2, nrow=2)
 
-  gta_plot_saver(plot = fig1,
+  gta_plot_saver(plot = figA,
                  path = paste0(output.path),
-                 name = paste0("Figure 1.1 - ",this.chapter),
+                 name = paste0("Figure 1 - ",this.chapter),
                  cairo_ps = T,
-                 width = 21)
-  
-  gta_plot_saver(plot = fig2,
-                 path = paste0(output.path),
-                 name = paste0("Figure 1.2 - ",this.chapter),
-                 cairo_ps = T,
+                 height = 29.7,
                  width = 21)
   
