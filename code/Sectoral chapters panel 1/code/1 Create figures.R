@@ -233,7 +233,7 @@ for (sct in sectors) {
   
   gta_plot_saver(plot = figB,
                  path = s.path,
-                 name = paste0("Panel 1 B (fig 3 & 4) - Sector ",sct),
+                 name = paste0("Panel 1 B (Fig 3 & 4) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
