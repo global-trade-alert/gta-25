@@ -102,8 +102,8 @@ fig2.data.text <- aggregate(coverages ~ importer+exporter+order, fig1.data, func
 fig2.create <- function() {
   
   fig2 <- ggplot()+
-    geom_text(data=subset(fig2.data.text, exporter == "Lower middle income countries"), aes(x=1-0.2, y=coverages[order==1], label="Lower middleincome countries"), nudge_y = -0.03, hjust = 1, vjust=0.5, angle=90,color = gta_colour$grey[1])+
-    geom_text(data=subset(fig2.data.text, exporter == "Upper middle income countries"), aes(x=1+0.2, y=coverages[order==1], label="Upper middle income countries"), nudge_y = -0.03, hjust = 1, vjust=0.5, angle=90,color = gta_colour$grey[1])+
+    geom_text(data=subset(fig2.data.text, exporter == "Lower middle income countries"), aes(x=1-0.2, y=coverages[order==1], label="Lower-middle income countries"), nudge_y = -0.03, hjust = 1, vjust=0.5, angle=90,color = gta_colour$grey[1])+
+    geom_text(data=subset(fig2.data.text, exporter == "Upper middle income countries"), aes(x=1+0.2, y=coverages[order==1], label="Upper-middle income countries"), nudge_y = -0.03, hjust = 1, vjust=0.5, angle=90,color = gta_colour$grey[1])+
     geom_rect(data=subset(fig1.data.lines, exporter == "Lower middle income countries"), aes(xmin=order-0.29, xmax=order-0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
     geom_rect(data=subset(fig1.data.lines, exporter == "Upper middle income countries"), aes(xmin=order+0.29, xmax=order+0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
     geom_point(data=subset(fig1.data, exporter == "Upper middle income countries"), aes(x=order+0.2, y=coverages, colour = type),size=5)+
