@@ -139,7 +139,7 @@ fig8.create=function(sct){
   fig8 <- ggplot(data=subset(data.fig8, sector==sct)) + geom_point(aes(x=incentives.change, y=cov.change, size=symbol.size))+guides(size="none") +
     gta_theme() + xlab('Share of sectoral exports that benefit from incentives in 2016') + ylab('Sectoral imports share protected during Populist era') + 
     geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig8.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)+
-    scale_x_continuous(limits = c(0,.45))
+    scale_x_continuous(limits = c(0,min(1, max(subset(data.fig8, sector==sct & incentives.change>outlier.fig8.floor)$incentives.change)+.05)))
   
   
   return(fig8)
