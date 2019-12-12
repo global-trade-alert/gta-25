@@ -226,14 +226,14 @@ for (sct in sectors) {
 
   gta_plot_saver(plot = figA,
                  path = s.path,
-                 name = paste0("Figure Panel 1 A (1-2) - Sector ",sct),
+                 name = paste0("Panel 1 A (Fig 1 & 2) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   
   gta_plot_saver(plot = figB,
                  path = s.path,
-                 name = paste0("Figure Panel 1 B (3-4) - Sector ",sct),
+                 name = paste0("Panel 1 B (fig 3 & 4) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
@@ -241,15 +241,15 @@ for (sct in sectors) {
   # Four plots per page, not really feasible
   gta_plot_saver(plot = figC,
                  path = s.path,
-                 name = paste0("Figure Panel 1 C (1-4) - Sector ",sct),
+                 name = paste0("Panel 1 C (Fig 1-4) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   
-  write.xlsx(subset(fig1.data, sector==sct), file=paste0(s.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig2.data, sector==sct), file=paste0(s.path,"Table for Figure 2.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig3.data, sector==sct), file=paste0(s.path,"Table for Figure 3.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig4.data, sector==sct)[,c("sector","year","coverages","hits")], file=paste0(s.path,"Table for Figure 4.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig1.data, sector==sct), file=paste0(s.path,"Fig 1 data.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig2.data, sector==sct), file=paste0(s.path,"Fig 2 data.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig3.data, sector==sct), file=paste0(s.path,"Fig 3 data.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig4.data, sector==sct)[,c("sector","year","coverages","hits")], file=paste0(s.path,"Fig 4 data.xlsx"),row.names=F, sheetName = "Coverages")
   
 }
 

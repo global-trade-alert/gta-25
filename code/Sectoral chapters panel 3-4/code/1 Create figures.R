@@ -369,30 +369,30 @@ for (sct in sectors) {
 
   gta_plot_saver(plot = figA,
                  path = s.path,
-                 name = paste0("Figure Panel 3 - Sector ",sct),
+                 name = paste0("Panel 3 - Sector ",sct, " (Fig 9 & 13)"),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   
   gta_plot_saver(plot = figB,
                  path = s.path,
-                 name = paste0("Figure Panel 4 - Sector ",sct),
+                 name = paste0("Panel 4 - Sector ",sct, " (Fig 10 & 14)"),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   
   gta_plot_saver(plot = figC,
                  path = s.path,
-                 name = paste0("Figure Panel - change in coverages  - Sector ",sct),
+                 name = paste0("Panel 5 - Sector ",sct, " (Fig 11 & 12)"),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   fig9.xlsx
   write.xlsx(subset(fig9.xlsx, sector==sct), file=paste0(s.path,"Table for Figure 9.xlsx"),row.names=F, sheetName = "Coverages")
   write.xlsx(subset(fig10.xlsx, sector==sct), file=paste0(s.path,"Table for Figure 10.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig11.data, sector==sct)[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(s.path,"Table for Figure 11.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig12.data, sector==sct)[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(s.path,"Table for Figure 12.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig13.data, sector==sct)[,c("importer","exporter","sector","coverages")],file=paste0(s.path,"Table for Figure 13.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig14.data, sector==sct)[,c("importer","exporter","sector","coverages")],file=paste0(s.path,"Table for Figure 14.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig11.data, sector==sct)[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(s.path,"Fig 11 data.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig12.data, sector==sct)[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(s.path,"Fig 12 data.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig13.data, sector==sct)[,c("importer","exporter","sector","coverages")],file=paste0(s.path,"Fig 13 data.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig14.data, sector==sct)[,c("importer","exporter","sector","coverages")],file=paste0(s.path,"Fig 14 data.xlsx"),row.names=F, sheetName = "Coverages")
 
 }

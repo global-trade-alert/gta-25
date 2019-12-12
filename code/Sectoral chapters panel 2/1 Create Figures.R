@@ -167,7 +167,7 @@ for (sct in sectors){
   figA <- grid.arrange(fig5, fig6, nrow=2)
   gta_plot_saver(plot = figA,
                  path = s.path,
-                 name = paste0("Figure Panel 2 A (5-6) - Sector ",sct),
+                 name = paste0("Panel 2 A (Fig 5 & 6) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
@@ -178,23 +178,23 @@ for (sct in sectors){
   figB <- grid.arrange(fig7, fig8, nrow=2)
   gta_plot_saver(plot = figB,
                  path = s.path,
-                 name = paste0("Figure Panel 2 B (7-8) - Sector ",sct),
+                 name = paste0("Panel 2 B (Fig 7 & 8) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   
   write.xlsx(subset(data.fig5, cpc==sct),
-             file=paste0(s.path,'fig 5 data.xlsx'))
+             file=paste0(s.path,'Fig 5 data.xlsx'))
   
   write.xlsx(subset(data.fig6, sector==sct),
-             file=paste0(s.path,'fig 6 data.xlsx'))
+             file=paste0(s.path,'Fig 6 data.xlsx'))
   
   
   write.xlsx(subset(data.fig7, sector==sct),
-             file=paste0(s.path,'fig 7 data.xlsx'))
+             file=paste0(s.path,'Fig 7 data.xlsx'))
   
   write.xlsx(subset(data.fig8, sector=sct),
-             file=paste0(s.path,'fig 8 data.xlsx'))
+             file=paste0(s.path,'Fig 8 data.xlsx'))
   
   openxlsx::write.xlsx(subset(stat.values, grepl(paste0(sct,"$"),plot)), file=paste0(s.path,"Statistical results for figures 5-8.xlsx"), rowNames=F)
 }
