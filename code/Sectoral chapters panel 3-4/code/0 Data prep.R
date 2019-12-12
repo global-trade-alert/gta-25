@@ -212,3 +212,66 @@ if (run.calc) {
   }
   save(sct.g20.change.liberalising, file=paste0(data.path,"G20 sector coverage change - liberalising.Rdata"))
 }
+
+# Figure 13, 14 additional data prep ------------------------------------------------------
+
+# Can you please produce a version that reveals the share of
+# trade affected during the populist era (that is from 2017-1-1 
+# until 2019-11-15)? I am not sure I will use this new version 
+# but it would be good to see what the results look like.
+
+if (run.calc) {
+  
+  sct.g20.populist <- data.frame()
+  for (sct in sectors) {
+    codes <- gta_cpc_code_expand(codes = sct)
+    
+    gta_trade_coverage(gta.evaluation = c("Red","Amber"),
+                       implementation.period = c("2017-01-01",cutoff),
+                       implementer.role = "importer",
+                       importers = g20.members,
+                       keep.importers = T,
+                       group.importers = F,
+                       exporters = g20.members,
+                       keep.exporters = T,
+                       group.exporters = F,
+                       cpc.sectors = codes,
+                       keep.cpc = T,
+                       coverage.period = c(2019,2019),
+                       trade.data = trade.data.year)
+    
+    names(trade.coverage.estimates) <- c("importer","exporter","hits",2019)
+    temp <- trade.coverage.estimates[,c("importer","exporter",2019)]
+    temp$sector=sct
+    temp$type="harmful"
+    
+    sct.g20.populist <- rbind(sct.g20.populist, temp)
+    rm(temp)
+    
+    
+    gta_trade_coverage(gta.evaluation = c("Green"),
+                       implementation.period = c("2017-01-01",cutoff),
+                       implementer.role = "importer",
+                       importers = g20.members,
+                       keep.importers = T,
+                       group.importers = F,
+                       exporters = g20.members,
+                       keep.exporters = T,
+                       group.exporters = F,
+                       cpc.sectors = codes,
+                       keep.cpc = T,
+                       coverage.period = c(2019,2019),
+                       trade.data = trade.data.year)
+    
+    names(trade.coverage.estimates) <- c("importer","exporter","hits",2019)
+    temp <- trade.coverage.estimates[,c("importer","exporter",2019)]
+    temp$sector=sct
+    temp$type="liberalising"
+    
+    sct.g20.populist <- rbind(sct.g20.populist, temp)
+    rm(temp)
+  }
+  save(sct.g20.populist, file=paste0(data.path,"G20 sector exports coverages - populist era.Rdata"))
+}
+
+

@@ -228,5 +228,3 @@ if (run.calc) {
 
   }
 load(paste0(data.path,"Sector coverages hit brackets.Rdata"))
-
-

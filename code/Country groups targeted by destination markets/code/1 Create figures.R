@@ -6,6 +6,7 @@ library(tidyverse)
 library(ggplot2)
 library(gridExtra)
 library(xlsx)
+library(scales)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
@@ -23,15 +24,13 @@ output.path = directories$figure.path
 
 this.chapter="Country groups targeted by destination markets"
 
-
-
 gta_colour_palette()
 
 # Figure 1 create graph ------------------------------------------------------
 
 # Graph 1: Y-axis shows the share of bilateral exports of LDCs/African Union
-# facing (1) harmful measures implemented by destination markets and (2) reforming/liberalising
-# measures implemented by destination market. The X-axis shows the destination markets. (see attachement)
+# facing (1) harmful interventions implemented by destination markets and (2) reforming/liberalising
+# interventions implemented by destination market. The X-axis shows the destination markets. (see attachement)
 
 load(paste0(data.path,"Destination markets targeting.Rdata"))
 
@@ -56,8 +55,8 @@ write.xlsx(dest.markets.cov, file=paste0(output.path,"Table for Figure 1.xlsx"),
 fig1.create <- function() {
     
     fig1 <- ggplot()+
-      geom_text(data=subset(fig1.data.text, exporter == "LDCs"), aes(x=1-0.2, y=coverages[order==1], label="LDCs"), nudge_y = 0.03, hjust = 0, vjust=0.5, angle=90,color = gta_colour$grey[1])+
-      geom_text(data=subset(fig1.data.text, exporter == "African Union"), aes(x=1+0.2, y=coverages[order==1], label="African Union"), nudge_y = 0.03, hjust = 0, vjust=0.5, angle=90,color = gta_colour$grey[1])+
+      geom_text(data=subset(fig1.data.text, exporter == "LDCs"), aes(x=1-0.2, y=coverages[order==1], label="LDCs"), nudge_y = -0.05, hjust = 1, vjust=0.5, angle=90,color = gta_colour$grey[1])+
+      geom_text(data=subset(fig1.data.text, exporter == "African Union"), aes(x=1+0.2, y=coverages[order==1], label="African Union"), nudge_y = -0.05, hjust = 1, vjust=0.5, angle=90,color = gta_colour$grey[1])+
       geom_rect(data=subset(fig1.data.lines, exporter == "LDCs"), aes(xmin=order-0.29, xmax=order-0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
       geom_rect(data=subset(fig1.data.lines, exporter == "African Union"), aes(xmin=order+0.29, xmax=order+0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
       geom_point(data=subset(fig1.data, exporter == "African Union"), aes(x=order+0.2, y=coverages, colour = type),size=5)+
@@ -170,4 +169,3 @@ figex <- ggplot()+
                  height = 29.7,
                  width = 21)
   
-

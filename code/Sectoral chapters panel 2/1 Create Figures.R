@@ -13,7 +13,7 @@ library(gridExtra)
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 chapter.folders=gta25_setup(internal.name = 'Sectoral chapters panel 2',
-                            in.dev = T,
+                            in.dev = F,
                             author='ks',
                             wipe.data = F,
                             wipe.figs = T)
@@ -38,14 +38,20 @@ write.xlsx(lapply(unique(data.fig5$cpc),function(x) subset(data.fig5, cpc==x)),
 fig5.create=function(sct){ 
   
   #cheap way to remove outliers
-  cor5=round(cor(subset(data.fig5, cpc==sct & cov.change<0.7)$sct.share, subset(data.fig5, cpc==sct & cov.change<0.7)$cov.change),2)
+  fig5.lm <<- lm(cov.change ~ sct.share, subset(data.fig5, cpc==sct & cov.change<0.7))
+  
+  stat.values <<- rbind(stat.values, data.frame(r.squared = summary(fig5.lm)$r.squared,
+                                                t.value = summary(fig5.lm)$coefficients[2,3],
+                                                p.value = summary(fig5.lm)$coefficients[2,4],
+                                                formula = "cov.change ~ incentives.change",
+                                                plot=paste0("Graph 5 - Sector ",sct)))
   
   fig5 <- ggplot(data=subset(data.fig5, cpc==sct)) + geom_point(aes(x=sct.share, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('National import share in 2016') + ylab('Sectoral imports share protected during populist era') + 
-    geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,label=paste0('Correlation: ',cor5))
-  # gta_plot_saver(fig5, 
-  #                paste0(path,'tables & figures/'),
-  #                paste0('Figure 5 - ',sct))
+    gta_theme() + xlab('National import share in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig5.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
+
+  
+  rm(fig5.lm)
   
   return(fig5)
   
@@ -65,15 +71,19 @@ write.xlsx(lapply(unique(data.fig6$sector),function(x) subset(data.fig6, sector=
 
 fig6.create=function(sct){  
   #cheap way to remove outliers
-  cor6=round(cor(subset(data.fig6, sector==sct & curr.rel.change<0.7)$curr.rel.change, subset(data.fig6, sector==sct & curr.rel.change<0.7)$cov.change),2)
+  fig6.lm <<- lm(cov.change ~ curr.rel.change, subset(data.fig6, sector==sct & curr.rel.change<0.7))
   
+  stat.values <<- rbind(stat.values, data.frame(r.squared = summary(fig6.lm)$r.squared,
+                                                t.value = summary(fig6.lm)$coefficients[2,3],
+                                                p.value = summary(fig6.lm)$coefficients[2,4],
+                                                formula = "cov.change ~ incentives.change",
+                                                plot=paste0("Graph 6 - Sector ",sct)))
+
   fig6 <- ggplot(data=subset(data.fig6, sector==sct)) + geom_point(aes(x=curr.rel.change, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Relative currency change (ratio of average in 2019 to average in 2016)') + ylab('Sectoral imports share protected during populist era') + 
-    geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,label=paste0('Correlation: ',cor6))
+    gta_theme() + xlab('Relative currency change (ratio of average in 2019 to average in 2016)') + ylab('Change in sectoral import share protected 2017-2019') + 
+    geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig6.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
   
-  # gta_plot_saver(fig6, 
-  #                paste0(path,'tables & figures/'),
-  #                paste0('Figure 6 - ',sct))
+  rm(fig6.lm)
   
   return(fig6)
   
@@ -93,16 +103,19 @@ write.xlsx(lapply(unique(data.fig7$sector),function(x) subset(data.fig7, sector=
 
 fig7.create=function(sct){  
   #cheap way to remove outliers
-  cor7=round(cor(subset(data.fig7, sector==sct & cov.change<0.6)$sect.trade.share, subset(data.fig7, sector==sct & cov.change<0.6)$cov.change),2)
+  fig7.lm <<- lm(cov.change ~ sect.trade.share, subset(data.fig7, sector==sct & cov.change<0.6))
   
+  stat.values <<- rbind(stat.values, data.frame(r.squared = summary(fig7.lm)$r.squared,
+                                                t.value = summary(fig7.lm)$coefficients[2,3],
+                                                p.value = summary(fig7.lm)$coefficients[2,4],
+                                                formula = "cov.change ~ incentives.change",
+                                                plot=paste0("Graph 7 - Sector ",sct)))
+
   fig7 <- ggplot(data=subset(data.fig7, sector==sct)) + geom_point(aes(x=sect.trade.share, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Sectoral trade balance divided by total sectoral trade in 2016') + ylab('Sectoral imports share protected during populist era') + 
-    geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,label=paste0('Correlation: ',cor7))
+    gta_theme() + xlab('Sectoral trade balance divided by total sectoral trade in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig7.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
   
-  # gta_plot_saver(fig7, 
-  #                paste0(path,'tables & figures/'),
-  #                paste0('Figure 7 - ',sct))
-  
+  rm(fig7.lm)
   return(fig7)
   
   
@@ -118,22 +131,29 @@ write.xlsx(lapply(unique(data.fig8$sector),function(x) subset(data.fig8, sector=
            file=paste0(figure.path,'fig 8 data.xlsx'))
 
 fig8.create=function(sct){  
-  cor8=round(cor(subset(data.fig8, sector==sct & incentives.change>-0.06)$incentives.change, subset(data.fig8, sector==sct & incentives.change>-0.06)$cov.change),2)
+  
+  fig8.lm <<- lm(cov.change ~ incentives.change, subset(data.fig8, sector==sct & incentives.change>-0.06))
+  
+  stat.values <<- rbind(stat.values, data.frame(r.squared = summary(fig8.lm)$r.squared,
+                                                t.value = summary(fig8.lm)$coefficients[2,3],
+                                                p.value = summary(fig8.lm)$coefficients[2,4],
+                                                formula = "cov.change ~ incentives.change",
+                                                plot=paste0("Graph 8 - Sector ",sct)))
   
   fig8 <- ggplot(data=subset(data.fig8, sector==sct)) + geom_point(aes(x=incentives.change, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Sectoral export share receiving incentives during populist era') + ylab('Sectoral imports share protected during populist era') + 
-    geom_text(aes(x=Inf,y=Inf),hjust=1.05,vjust=4.5,size=4,
-              label=paste0('Correlation: ',cor8))
+    gta_theme() + xlab('Share of sectoral exports that benefit from incentives in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig8.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
   
-  # gta_plot_saver(fig8, 
-  #                paste0(path,'tables & figures/'),
-  #                paste0('Figure 8 - ',sct))
+  
+  # hjust=1.05,vjust=4.5,size=4
+  rm(fig8.lm)
   
   return(fig8)
   
 }
 
 # Create panels per sector ------------------------------------------------
+stat.values=data.frame()
 
 for (sct in sectors) {
   
@@ -161,5 +181,6 @@ for (sct in sectors) {
 }
 
 
+openxlsx::write.xlsx(stat.values, file=paste0(figure.path,"Statistical results for figures 5-8.xlsx"), rowNames=F)
 
 

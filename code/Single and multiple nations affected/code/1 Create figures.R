@@ -6,129 +6,135 @@ library(tidyverse)
 library(ggplot2)
 library(gridExtra)
 library(xlsx)
+library(Hmisc)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
-source('0 report production/GTA 25/help files/GTA 25 cutoff and definitions.R')
 
-this.chapter=c(paste0("Sectoral chapters - Sector ",paste0(sectors)))
+directories=gta25_setup(internal.name="Single & multi-country hits",
+                        in.dev=F,
+                        author=NULL,
+                        wipe.data=F,
+                        wipe.figs=F)
 
-wdpath = "0 dev/gta-25-pb/"
-output.path = paste0(wdpath,"tables & figures/Single and multiple nations affected/")
-data.path = paste0(wdpath,"code/Single and multiple nations affected/data/")
+data.path = directories$data.path
+output.path = directories$figure.path
 
 gta_colour_palette()
 
 # Figure 1 create graph ------------------------------------------------------
 
-
-# The 3 plot shows the share of world trade facing harmful measures 
-# implemented (1) from 2017-2019, (2) from 2014-2016 and (3) from NA-to end of 2016.
+### NEW Figure 1, 6.12.2019 via phone call SE<->JF
+# Create a total of seven figures, all seven are timelines on the horizontal axis.
+# The timeline counts the number of months since the start of the period.
+# The vertical axis show the share of trade affected.
 # 
+# For every month, we calculate the instrument-targeting combination of the original graph except the single-affected export incentives:
 # (1) World trade affected by tariff measures affecting a single nation in the home market
 # (2) World trade affected by tariff measures affecting mulitple nations in the home market
 # (3) World trade affected by all other measures affecting single nation in the home market
 # (4) World trade affected by all other measures affecting multiple nations in the home market
-# (5) World trade affected by export incentives affecting single nation in a foreign market
-# (6) World trade affected by export incentives affecting multiple nations in a foreign market
+# (5*) World trade affected by export incentives affecting multiple nations in a foreign market
+# (6*) World trade affected by all instruments and any number of affected nations.
 
-load(paste0(data.path,"Single nation coverages.Rdata"))
-load(paste0(data.path,"Multiple nation coverages.Rdata"))
-fig1.data <- rbind(single.nation.cov, multiple.nation.cov)
-fig1.data$mast.chapter <- as.character(fig1.data$mast.chapter)
-fig1.data$nations.affected <- as.character(fig1.data$nations.affected)
+# The seventh chart shows the different instruments/targeting all in one plot but for the populist era only.
 
-# LIST OF PERIODS TO BE ITERATED
-periods <- list(c("2017-01-01",cutoff),c("2014-01-01",break.date),c("2008-01-01",break.date))
+load(paste0(data.path,"Multiple nation coverages - period 1.Rdata"))
+period1 <- single.multi.data
+load(paste0(data.path,"Multiple nation coverages - period 2.Rdata"))
+period2 <- single.multi.data
+load(paste0(data.path,"Multiple nation coverages - period 3.Rdata"))
+period3 <- single.multi.data
 
+fig.data <- rbind(period1, period2, period3)
 
-write.xlsx(fig1.data, file=paste0(output.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Coverages")
+write.xlsx(fig.data, file=paste0(output.path,"Table for Figure 1-7.xlsx"),row.names=F, sheetName = "Coverages")
 
-fig1.create <- function(prd) {
+# Cosmetics
+fig.data$target[fig.data$target == "multi"] <- "multiple nations"
+fig.data$target[fig.data$target == "single"] <- "single nation"
+fig.data$name <- paste0(capitalize(fig.data$instrument)," measures \naffecting ",fig.data$target)
+fig.data$name[fig.data$instrument=="export incentive"] <- paste0(fig.data$name[fig.data$instrument=="export incentive"]," in foreign market")
+fig.data$name[! fig.data$instrument=="export incentive"] <- paste0(fig.data$name[! fig.data$instrument=="export incentive"]," in home market")
+
+types <- c("tariff","non-tariff","export incentive","all")
+
+fig.create <- function(tp,trg) {
+
+    set = subset(fig.data, instrument == types[tp] & target == targets[trg])
+    name <- unique(set$name)
     
-    coordinates <- data.frame()
-    coordinates <- as.data.frame(rbind(c(0,5,20,15,"Market \naffected"),
-                                       c(0,5,15,5, "Home"),
-                                       c(0,5,5,0, "Foreign"),
-                                       c(5,10,20,15, "Instrument"),
-                                       c(5,10,15,10, "Tariffs"),
-                                       c(5,10,10,5, "All other"),
-                                       c(5,10,5,0, "Export \nincentives"),
-                                       c(10,15,20,15, "Measures affecting \na single jurisdiction"),
-                                       c(10,15,15,10, round(subset(fig1.data, mast.chapter == "TARIFF" & period == prd & nations.affected == "one")$coverages,3)),
-                                       c(10,15,10,5, round(subset(fig1.data, mast.chapter == "NOT.TARIFF" & period == prd & nations.affected == "one")$coverages,3)),
-                                       c(10,15,5,0, round(subset(fig1.data, mast.chapter == "export incentives" & period == prd & nations.affected == "one")$coverages,3)),
-                                       c(15,20,20,15, "Measures affecting \nmultiple jurisdictions"),
-                                       c(15,20,15,10, round(subset(fig1.data, mast.chapter == "TARIFF" & period == prd & nations.affected == "multiple")$coverages,3)),
-                                       c(15,20,10,5, round(subset(fig1.data, mast.chapter == "NOT.TARIFF" & period == prd & nations.affected == "multiple")$coverages,3)),
-                                       c(15,20,5,0, round(subset(fig1.data, mast.chapter == "export incentives" & period == prd & nations.affected == "multiple")$coverages,3))))
-    
-    
-    coordinates$V1 <- as.numeric(as.character(coordinates$V1))
-    coordinates$V2 <- as.numeric(as.character(coordinates$V2))
-    coordinates$V3 <- as.numeric(as.character(coordinates$V3))
-    coordinates$V4 <- as.numeric(as.character(coordinates$V4))
-    
-    fig1 <- ggplot()+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[1,1], xmax=coordinates[1,2], ymin=coordinates[1,3], ymax=coordinates[1,4]), fill="transparent", alpha=1, color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[2,1], xmax=coordinates[2,2], ymin=coordinates[2,3], ymax=coordinates[2,4]), fill="transparent", alpha=1, color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[3,1], xmax=coordinates[3,2], ymin=coordinates[3,3], ymax=coordinates[3,4]), fill="transparent", alpha=1, color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[4,1], xmax=coordinates[4,2], ymin=coordinates[4,3], ymax=coordinates[4,4]), fill="transparent", alpha=1, color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[5,1], xmax=coordinates[5,2], ymin=coordinates[5,3], ymax=coordinates[5,4]), fill="transparent", alpha=1, color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[6,1], xmax=coordinates[6,2], ymin=coordinates[6,3], ymax=coordinates[6,4]), fill="transparent", alpha=1, color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[7,1], xmax=coordinates[7,2], ymin=coordinates[7,3], ymax=coordinates[7,4]), fill="transparent", alpha=1, color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[8,1], xmax=coordinates[8,2], ymin=coordinates[8,3], ymax=coordinates[8,4]), fill="transparent", alpha=1, color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[9,1], xmax=coordinates[9,2], ymin=coordinates[9,3], ymax=coordinates[9,4]), fill=gta_colour$red[1], alpha=as.numeric(as.character(coordinates[9,5])), color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[10,1], xmax=coordinates[10,2], ymin=coordinates[10,3], ymax=coordinates[10,4]), fill=gta_colour$red[1], alpha=as.numeric(as.character(coordinates[10,5])), color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[11,1], xmax=coordinates[11,2], ymin=coordinates[11,3], ymax=coordinates[11,4]), fill=gta_colour$red[1], alpha=as.numeric(as.character(coordinates[11,5])), color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[12,1], xmax=coordinates[12,2], ymin=coordinates[12,3], ymax=coordinates[12,4]), fill="transparent", alpha=1, color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[13,1], xmax=coordinates[13,2], ymin=coordinates[13,3], ymax=coordinates[13,4]), fill=gta_colour$red[1], alpha=as.numeric(as.character(coordinates[13,5])), color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[14,1], xmax=coordinates[14,2], ymin=coordinates[14,3], ymax=coordinates[14,4]), fill=gta_colour$red[1], alpha=as.numeric(as.character(coordinates[14,5])), color = gta_colour$grey[1])+
-    geom_rect(data=data.frame(), aes(xmin=coordinates[15,1], xmax=coordinates[15,2], ymin=coordinates[15,3], ymax=coordinates[15,4]), fill=gta_colour$red[1], alpha=as.numeric(as.character(coordinates[15,5])), color = gta_colour$grey[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[1,2]-((coordinates[1,2]-coordinates[1,1])/2), y=coordinates[1,4]-((coordinates[1,4]-coordinates[1,3])/2), label = coordinates[1,5]), alpha=1, color = gta_colour$grey[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[2,2]-((coordinates[2,2]-coordinates[2,1])/2), y=coordinates[2,4]-((coordinates[2,4]-coordinates[2,3])/2), label = coordinates[2,5]), alpha=1, color = gta_colour$grey[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[3,2]-((coordinates[3,2]-coordinates[3,1])/2), y=coordinates[3,4]-((coordinates[3,4]-coordinates[3,3])/2), label = coordinates[3,5]), alpha=1, color = gta_colour$grey[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[4,2]-((coordinates[4,2]-coordinates[4,1])/2), y=coordinates[4,4]-((coordinates[4,4]-coordinates[4,3])/2), label = coordinates[4,5]), alpha=1, color = gta_colour$grey[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[5,2]-((coordinates[5,2]-coordinates[5,1])/2), y=coordinates[5,4]-((coordinates[5,4]-coordinates[5,3])/2), label = coordinates[5,5]), alpha=1, color = gta_colour$grey[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[6,2]-((coordinates[6,2]-coordinates[6,1])/2), y=coordinates[6,4]-((coordinates[6,4]-coordinates[6,3])/2), label = coordinates[6,5]), alpha=1, color = gta_colour$grey[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[7,2]-((coordinates[7,2]-coordinates[7,1])/2), y=coordinates[7,4]-((coordinates[7,4]-coordinates[7,3])/2), label = coordinates[7,5]), alpha=1, color = gta_colour$grey[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[8,2]-((coordinates[8,2]-coordinates[8,1])/2), y=coordinates[8,4]-((coordinates[8,4]-coordinates[8,3])/2), label = coordinates[8,5]), alpha=1, color = gta_colour$grey[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[9,2]-((coordinates[9,2]-coordinates[9,1])/2), y=coordinates[9,4]-((coordinates[9,4]-coordinates[9,3])/2), label = coordinates[9,5]), alpha=1, color = gta_colour$red[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[10,2]-((coordinates[10,2]-coordinates[10,1])/2), y=coordinates[10,4]-((coordinates[10,4]-coordinates[10,3])/2), label = coordinates[10,5]), alpha=1, color = gta_colour$red[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[11,2]-((coordinates[11,2]-coordinates[11,1])/2), y=coordinates[11,4]-((coordinates[11,4]-coordinates[11,3])/2), label = coordinates[11,5]), alpha=1, color = gta_colour$red[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[12,2]-((coordinates[12,2]-coordinates[12,1])/2), y=coordinates[12,4]-((coordinates[12,4]-coordinates[12,3])/2), label = coordinates[12,5]), alpha=1, color = gta_colour$grey[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[13,2]-((coordinates[13,2]-coordinates[13,1])/2), y=coordinates[13,4]-((coordinates[13,4]-coordinates[13,3])/2), label = coordinates[13,5]), alpha=1, color = gta_colour$red[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[14,2]-((coordinates[14,2]-coordinates[14,1])/2), y=coordinates[14,4]-((coordinates[14,4]-coordinates[14,3])/2), label = coordinates[14,5]), alpha=1, color = gta_colour$red[1])+
-    geom_text(data=data.frame(), aes(x=coordinates[15,2]-((coordinates[15,2]-coordinates[15,1])/2), y=coordinates[15,4]-((coordinates[15,4]-coordinates[15,3])/2), label = coordinates[15,5]), alpha=1, color = gta_colour$red[1])+
-    labs(x=NULL,y=NULL)+
-    ggtitle(paste0("Measures from ",periods[[prd]][1]," to ",periods[[prd]][2]))+
-    gta_theme()+
-    theme(plot.background = element_blank(),
-          panel.background = element_blank(),
-          axis.text = element_text(size=0),
-          axis.title = element_text(size=0),
-          panel.grid.major = element_line(color="transparent"),
-          panel.grid.minor = element_line(color="transparent"),
-          panel.grid.minor.y = element_line(color="transparent"),
-          axis.text.x.bottom = element_blank(),
-          axis.text.y.left = element_blank()
-          )
-  return(fig1)
+    fig <- ggplot(data=set)+
+      geom_line(aes(x=month.count, y=trade.share, colour=as.factor(period.id)),size=1)+
+      gta_plot_wrapper(data=set,
+                       data.x="month.count",
+                       data.y="trade.share",
+                       x.bottom.name = "Month in period",
+                       x.bottom.labels = c(seq(0,max(set$month.count),5),34),
+                       x.bottom.breaks = c(seq(0,max(set$month.count),5),34),
+                       y.left.name = paste0("World trade affected by ",tolower(name)),
+                       y.left.labels = percent,
+                       y.left.limits = c(0,max(set$trade.share)*1.05),
+                       y.left.expand = c(0.002,0.002),
+                       colour.legend.col = 3,
+                       colour.legend.title = "Periods",
+                       colour.labels = c("2017-2019", "2014-2016","2009-2011"))+
+    gta_theme()
+  fig  
+  return(fig)
   }
 
 
+fig7.create <- function() {
+  
+  set = subset(fig.data, period.id == 1)
+  set$grouping <- paste0(set$instrument," measures affecting ",set$target)
+  
+  fig <- ggplot(data=set)+
+    geom_line(aes(x=month.count, y=trade.share, colour=grouping),size=1)+
+    gta_plot_wrapper(data=set,
+                     data.x="month.count",
+                     data.y="trade.share",
+                     x.bottom.name = "Month in period",
+                     x.bottom.labels = c(seq(0,max(set$month.count),5),34),
+                     x.bottom.breaks = c(seq(0,max(set$month.count),5),34),
+                     y.left.name = paste0("World trade affected by from \nJanuary 1st 2017 to November 15th 2019"),
+                     y.left.labels = percent,
+                     y.left.limits = c(0,max(set$trade.share)*1.05),
+                     colour.legend.col = 2,
+                     colour.legend.title = "Measure type and target")+
+    gta_theme()
+  fig
+  return(fig)
+}
 
 # Create panels per sector ------------------------------------------------
 
-for (prd in 1:length(periods)) {
+# save plot 1-6
+counter = 1
+for (tp in 1:length(types)) {
   
-  fig1 <- fig1.create(prd)
-
-  gta_plot_saver(plot = fig1,
-                 path = paste0(output.path),
-                 name = paste0("Figure 1 - ",periods[[prd]][1]," to ",periods[[prd]][2]),
-                 cairo_ps = T,
-                 width = 21)
+  targets <- unique(subset(fig.data, instrument == types[tp])$target)
   
+  for (trg in 1:length(targets)) {
+    fig <- fig.create(tp,trg)
+    fig
+  
+    gta_plot_saver(plot = fig,
+                   path = paste0(output.path),
+                   name = paste0("Figure ",counter," - ",types[tp], " measures affecting ",targets[trg]),
+                   cairo_ps = T,
+                   width = 21)
+    
+    counter = counter + 1
+  
+  }
 }
+
+# save plot 7
+gta_plot_saver(plot = fig7.create(),
+               path = paste0(output.path),
+               name = paste0("Figure 7 - All measure types and targets in populist era"),
+               cairo_ps = T,
+               width = 21)
 

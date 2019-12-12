@@ -3,12 +3,17 @@ rm(list=ls())
 library(gtalibrary)
 library(stringr)
 library(plyr)
+library(data.table)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
-chapter.path='0 dev/gta-25/code/'
-this.chapter="What's new in the GTA"
-data.path=paste0(chapter.path, this.chapter, '/data/')
+chapter.folders=gta25_setup(internal.name = "What's new",
+                            in.dev = F,
+                            author=NA,
+                            wipe.data = T,
+                            wipe.figs = T)
+data.path=chapter.folders$data.path
+figure.path=chapter.folders$figure.path
 
 # Figure 1 data prep ------------------------------------------------------
 # Request: Graph showing the number of new discriminatory measures documented 
@@ -16,25 +21,19 @@ data.path=paste0(chapter.path, this.chapter, '/data/')
 # Add two lines, describing the same, but for Oct. 15 and Nov. 15.
 
 gta_data_slicer(gta.evaluation = c('Amber','Red'))
-master.sliced=master.sliced[!is.na(master.sliced$date.implemented),]
-dates=c(as.Date(c('2009-01-01',paste0(2009:2020,'-09-15'))),
-        as.Date(c('2009-01-01',paste0(2009:2020,'-10-15'))),
-        as.Date(c('2009-01-01',paste0(2009:2020,'-11-15'))))
 
-published.ids=data.frame(published.by=dates[1:length(dates)], 
-                         intervention.count=unlist( 
-                           lapply(dates[1:length(dates)], function(x){
-                             length(unique(subset(master.sliced, 
-                                                  date.implemented >= dates[1] & 
-                                                    date.implemented <= dates[2] & 
-                                                    date.published < dates[match(x, dates)])$intervention.id))
-                           })
-                           , use.names = F),
-                         group=mapvalues(str_sub(as.character(dates),6,7), c('09','10','11'), c('September 15', 'October 15', 'November 15'))
-)
+cutoffs=c(paste(2009:2019, "09-15", sep="-"))
 
-published.ids=published.ids[str_sub(as.character(published.ids$published.by),3,4)!=20,]
-published.ids$group[str_sub(as.character(published.ids$published.by),6,7)=='01']=published.ids$group[1+which(str_sub(as.character(published.ids$published.by),6,7)=='01')]
+published.ids=data.frame()
+
+for(cut in cutoffs){
+  published.ids=rbind(published.ids,
+                      data.frame(reporting.deadline=cut,
+                                 intervention.count=length(unique(subset(master.sliced, date.published <=cut & date.implemented>="2009-01-01" & date.implemented <="2009-09-15")$intervention.id)),
+                                 stringsAsFactors = F))
+}
+
+
 
 save(published.ids, file=paste0(data.path,'published interventions.Rdata'))
 
@@ -61,9 +60,13 @@ gta_sql_pool_open(db.title="gtamain",
 gta.sa=gta_sql_load_table("measure")
 
 
+gta.sa$source.type="Official source"
+gta.sa$source.type[gta.sa$is.source.official==F]="News or other reports"
+gta.sa$source.type[grepl("wind.com.cn", gta.sa$source, ignore.case = T)]="Chinese company filing"
+
 ## number of official sources per year
-sa.src.yr=aggregate(id ~ year(creation.date) + is.source.official, subset(gta.sa, status.id==4), function(x) length(unique(x)))
-names(sa.src.yr)=c("year","is.source.official","sa.count")
+sa.src.yr=aggregate(id ~ year(creation.date) + source.type, subset(gta.sa, status.id==4), function(x) length(unique(x)))
+names(sa.src.yr)=c("year","source.type","sa.count")
 
 save(sa.src.yr, file=paste0(data.path,'state act sources.Rdata'))
 

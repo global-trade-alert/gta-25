@@ -6,7 +6,7 @@ library(tidyverse)
 library(ggplot2)
 library(gridExtra)
 library(xlsx)
-
+library(scales)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
@@ -28,10 +28,10 @@ gta_colour_palette()
 
 # Chart 1: Line graph showing share of total sectoral trade 
 # affected by discriminatory (red) and liberalising (green) 
-# measures. X-axis should divided into pre-populist era (2009-2016) 
+# interventions. X-axis should divided into pre-populist era (2009-2016) 
 # and populist era (2017-2019), by shading the populist era plot 
 # background. Add two dots (green and red) in 2019 showing the 
-# share of global trade affected by discriminatory and liberalising measures.
+# share of global trade affected by discriminatory and liberalising interventions.
 
 load(paste0(data.path,"Global coverage harmful 2019.Rdata"))
 load(paste0(data.path,"Global coverage liberalising 2019.Rdata"))
@@ -77,7 +77,7 @@ fig1.create <- function(sct) {
 # Figure 2 create graph ------------------------------------------------------
 
 # Chart 2: Line graph showing share of total sectoral trade affected
-# by (1) all discriminatory measures, (2) export incentives 
+# by (1) all discriminatory interventions, (2) export incentives 
 # (3) All except export incentives, (4) subsidies and (5) tariff 
 # incentives. Add shading as before for populist, pre-populist era.
 
@@ -115,7 +115,7 @@ fig2.create <- function(sct) {
 # Figure 3 create graph ------------------------------------------------------
 
 # Chart 3: Line graph showing share of total sectoral trade 
-# affected by (1) all liberalising measures, (2) subsidy reductions 
+# affected by (1) all liberalising interventions, (2) subsidy reductions 
 # and (3) tariff reductions. Add shading for populist, pre-populist era.
 
 load(paste0(data.path,"Sector coverages types liberalising.Rdata"))
