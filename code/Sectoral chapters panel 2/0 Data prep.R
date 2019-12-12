@@ -11,7 +11,7 @@ library(data.table)
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 chapter.folders=gta25_setup(internal.name = 'Sectoral chapters panel 2',
-                            in.dev = T,
+                            in.dev = F,
                             author='ks',
                             wipe.data = T,
                             wipe.figs = T)
@@ -27,7 +27,7 @@ figure.path=chapter.folders$figure.path
 gta_data_slicer()
 
 in.force.15.nov=unique(subset(master.sliced, date.implemented >= as.Date('2017-01-01') & date.implemented <= as.Date('2019-11-15') & 
-                         (is.na(date.removed)|date.removed>=as.Date('2019-11-15')))$intervention.id)
+                                (is.na(date.removed)|date.removed>=as.Date('2019-11-15')))$intervention.id)
 neg.in.force.15.nov=setdiff(unique(master.sliced$intervention.id),in.force.15.nov)
 
 #y-axis
@@ -133,7 +133,9 @@ for (i in 1:length(currency.base$Obs)) currency.base$`2016`[i] = mean(as.numeric
 currency.base$`2019`=NA
 for (i in 1:length(currency.base$Obs)) currency.base$`2019`[i] = mean(as.numeric(currency.base$Obs[[i]][str_sub(as.character(currency.base$Obs[[i]]$`@TIME_PERIOD`), 1,4)=='2019',]$`@OBS_VALUE`))
 
-currency.base$rel.change=(currency.base$`2019`-currency.base$`2016`)/currency.base$`2016`
+## These are LCU/USD exchange rates (e.g. FX-EUR is .9)
+## this being negative implies that the currency rose against USD
+currency.base$rel.change=currency.base$`2019`/currency.base$`2016`
 
 currency.base=subset(currency.base, select=c('@REF_AREA','rel.change'))
 setnames(currency.base, names(currency.base)[1],c('cty'))
