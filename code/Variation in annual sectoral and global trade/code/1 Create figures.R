@@ -20,6 +20,15 @@ directories=gta25_setup(internal.name="Annual trade variation",
 data.path = directories$data.path
 output.path = directories$figure.path
 
+
+
+## setting figure paths
+first.sector.chapter=5
+sector.path=paste0(str_extract(output.path,"^.+?figures/"),paste0(first.sector.chapter:(first.sector.chapter+length(sectors)-1), " - Sector ", sectors,"/"))
+wipe.sector.path=F
+
+
+
 gta_colour_palette()
 
 # Figure 1 create graph ------------------------------------------------------
@@ -39,10 +48,8 @@ global.trade$cpc=0
 
 fig1.data <- rbind(sct.trade.data, global.trade)
 
-write.xlsx(fig1.data, file=paste0(output.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Trade data")
-
 fig1.create <- function(sct) {
-    fig1 <- ggplot(data=subset(fig1.data, cpc %in% c(sct,0)))+
+  fig1 <- ggplot(data=subset(fig1.data, cpc %in% c(sct,0)))+
     geom_rect(data=data.frame(), aes(xmin=2017, xmax=Inf, ymin=-Inf, ymax=Inf), fill=pop.shade, alpha=0.3)+
     geom_text(aes(x=2017, y=0.6, label="Populist\n era"), hjust=-0.1, vjust=1.4, color = pop.text, lineheight = 1)+
     geom_text(aes(x=-Inf, y=Inf, label="Pre-populist era"), hjust=-0.1, vjust=2, color = gta_colour$grey[1], lineheight = 1)+
@@ -58,30 +65,44 @@ fig1.create <- function(sct) {
                      y.left.breaks = c(0.5,1,1.5),
                      y.left.labels = scales::percent(c(0.5,1,1.5)),
                      y.right.enable = F,
-                     y.left.limits = c(0.5,1.51),
+                     y.left.limits = c(0.5,round(max(fig1.data$index.2007,1)+.1)),
                      colour.legend.title = "Trade included",
                      colour.palette = c(gta_colour$blue[1],gta_colour$blue[4]),
                      colour.labels = c("Global",paste0("This sector")),
                      colour.legend.col = 2)+
     gta_theme()
-    
+  
   fig1
   return(fig1)
-  }
+}
 
 
 # Create panels per sector ------------------------------------------------
 
 for (sct in sectors) {
   
+  
+  s.path=sector.path[grepl(paste0(sct,"/$"),sector.path)]
+  
+  dir.create(file.path(s.path), showWarnings = FALSE)
+  
+  if(wipe.sector.path){
+    wipe.all= list.files(s.path, include.dirs = F, full.names = T, recursive = T)
+    file.remove(wipe.all)
+    rm(wipe.all)
+  }
+  
+  
   fig1 <- fig1.create(sct)
-
+  
   gta_plot_saver(plot = fig1,
-                 path = paste0(output.path),
+                 path = s.path,
                  name = paste0("Figure 1 - Sector ",sct),
                  cairo_ps = T,
                  width = 21)
   
-
+  write.xlsx(subset(fig1.data, cpc %in% c(sct,0)), file=paste0(s.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Trade data")
+  
+  
 }
 
