@@ -55,8 +55,8 @@ write.xlsx(dest.markets.cov, file=paste0(output.path,"Table for Figure 1.xlsx"),
 fig1.create <- function() {
     
     fig1 <- ggplot()+
-      geom_text(data=subset(fig1.data.text, exporter == "LDCs"), aes(x=1-0.2, y=coverages[order==1], label="LDCs"), nudge_y = -0.05, hjust = 1, vjust=0.5, angle=90,color = gta_colour$grey[1])+
-      geom_text(data=subset(fig1.data.text, exporter == "African Union"), aes(x=1+0.2, y=coverages[order==1], label="African Union"), nudge_y = -0.05, hjust = 1, vjust=0.5, angle=90,color = gta_colour$grey[1])+
+      geom_text(data=subset(fig1.data.text, exporter == "LDCs"), aes(x=1-0.2, y=coverages[order==1], label="LDCs"), nudge_y = -0.06, hjust = 1, vjust=0.5, angle=90,color = gta_colour$grey[1])+
+      geom_text(data=subset(fig1.data.text, exporter == "African Union"), aes(x=1+0.2, y=coverages[order==1], label="African Union"), nudge_y = -0.06, hjust = 1, vjust=0.5, angle=90,color = gta_colour$grey[1])+
       geom_rect(data=subset(fig1.data.lines, exporter == "LDCs"), aes(xmin=order-0.29, xmax=order-0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
       geom_rect(data=subset(fig1.data.lines, exporter == "African Union"), aes(xmin=order+0.29, xmax=order+0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
       geom_point(data=subset(fig1.data, exporter == "African Union"), aes(x=order+0.2, y=coverages, colour = type),size=5)+
@@ -69,18 +69,25 @@ fig1.create <- function() {
                        colour.legend.title = "Intervention type",
                        y.left.limits = c(0,1),
                        y.left.labels = percent,
-                       y.left.name = "% of trade to destination \nmarket affected",
+                       y.left.name = "% of trade to\ndestination\nmarket affected",
                        colour.palette = c(gta_colour$red[1], gta_colour$green[1]),
                        x.bottom.name = "Destination markets",
                        x.bottom.labels = c(unique(fig1.data$importer)),
                        x.bottom.breaks = c(seq(1,6,1)),
                        x.bottom.expand = c(0.05,0.05),
+                       x.top.enable = T,
+                       x.top.labels = c(unique(fig1.data$importer)),
                        colour.legend.col = 2,
                        fill.palette = c(gta_colour$green[1], gta_colour$red[1]))+
-      guides(fill=FALSE)+
-      gta_theme()+
+      guides(fill=FALSE, colour=guide_legend(title=NULL))+
+      gta_theme(legend.position = "bottom")+
       theme(panel.grid.major.x = element_blank(),
-            axis.text.x.bottom = element_text(face="bold", size=10))
+            axis.text.x.top = element_text(face="bold", size=10),
+            axis.text.x.bottom = element_blank(),
+            axis.title.x.bottom = element_blank(),
+            axis.title.y.left = element_text(angle = 0,hjust=1),
+            axis.text.y.left = element_blank(),
+            axis.title.y.right = element_blank())
     
     
     fig1
@@ -102,25 +109,32 @@ fig2.create <- function() {
     geom_point(data=subset(fig1.data, exporter == "Upper middle income countries"), aes(x=order+0.2, y=coverages, colour = type),size=5)+
     geom_point(data=subset(fig1.data, exporter == "Lower middle income countries"), aes(x=order-0.2, y=coverages, colour = type),size=5)+
     geom_vline(xintercept = c(seq(1.5,5.5,1)),colour="#dadada")+
-    gta_plot_wrapper(data = subset(fig1.data, exporter %in% c("Lower middle income countries","Upper middle income countries")),
+    gta_plot_wrapper(data = subset(fig1.data, exporter %in% c("LDCs","African Union")),
                      data.x = "order",
                      data.y = "coverages",
                      colour.labels = c("Harmful","Liberalising"),
                      colour.legend.title = "Intervention type",
                      y.left.limits = c(0,1),
                      y.left.labels = percent,
-                     y.left.name = "% of trade to destination \nmarket affected",
+                     y.left.name = "% of trade to\ndestination\nmarket affected",
                      colour.palette = c(gta_colour$red[1], gta_colour$green[1]),
                      x.bottom.name = "Destination markets",
                      x.bottom.labels = c(unique(fig1.data$importer)),
                      x.bottom.breaks = c(seq(1,6,1)),
                      x.bottom.expand = c(0.05,0.05),
+                     x.top.enable = T,
+                     x.top.labels = c(unique(fig1.data$importer)),
                      colour.legend.col = 2,
                      fill.palette = c(gta_colour$green[1], gta_colour$red[1]))+
-    guides(fill=FALSE)+
-    gta_theme()+
+    guides(fill=FALSE, colour=guide_legend(title=NULL))+
+    gta_theme(legend.position = "bottom")+
     theme(panel.grid.major.x = element_blank(),
-          axis.text.x.bottom = element_text(face="bold", size=10))
+          axis.text.x.top = element_text(face="bold", size=10),
+          axis.text.x.bottom = element_blank(),
+          axis.title.x.bottom = element_blank(),
+          axis.title.y.left = element_text(angle = 0,hjust=1),
+          axis.text.y.left = element_blank(),
+          axis.title.y.right = element_blank())
   
   fig2
   return(fig2)
@@ -146,13 +160,13 @@ figex <- ggplot()+
                    fill.palette = c(gta_colour$green[1], gta_colour$red[1]))+
   gta_theme()
 
-  figex
-  
-  gta_plot_saver(plot = figex,
-                 path = paste0(output.path),
-                 name = paste0("Example Figure with lines"),
-                 cairo_ps = T,
-                 width = 21)
+  # figex
+  # 
+  # gta_plot_saver(plot = figex,
+  #                path = paste0(output.path),
+  #                name = paste0("Example Figure with lines"),
+  #                cairo_ps = T,
+  #                width = 21)
   
 
 # Create panels per sector ------------------------------------------------
@@ -162,10 +176,15 @@ figex <- ggplot()+
   
   figA <- grid.arrange(fig1, fig2, nrow=2)
 
-  gta_plot_saver(plot = figA,
+  gta_plot_saver(plot = fig1,
                  path = paste0(output.path),
-                 name = paste0("Figure 1 - ",this.chapter),
+                 name = paste0("Figure 1.1 - ",this.chapter),
                  cairo_ps = T,
-                 height = 29.7,
+                 width = 21)
+  
+  gta_plot_saver(plot = fig2,
+                 path = paste0(output.path),
+                 name = paste0("Figure 1.2 - ",this.chapter),
+                 cairo_ps = T,
                  width = 21)
   
