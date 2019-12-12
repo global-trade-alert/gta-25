@@ -47,9 +47,9 @@ fig5.create=function(sct){
                                                 plot=paste0("Graph 5 - Sector ",sct)))
   
   fig5 <- ggplot(data=subset(data.fig5, cpc==sct)) + geom_point(aes(x=sct.share, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('National import share in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    gta_theme() + xlab('National import share in 2016') + ylab('Sectoral imports share protected during Populist era') + 
     geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig5.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
-
+  
   
   rm(fig5.lm)
   
@@ -78,9 +78,9 @@ fig6.create=function(sct){
                                                 p.value = summary(fig6.lm)$coefficients[2,4],
                                                 formula = "cov.change ~ incentives.change",
                                                 plot=paste0("Graph 6 - Sector ",sct)))
-
+  
   fig6 <- ggplot(data=subset(data.fig6, sector==sct)) + geom_point(aes(x=curr.rel.change, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Relative currency change (ratio of average in 2019 to average in 2016)') + ylab('Change in sectoral import share protected 2017-2019') + 
+    gta_theme() + xlab('Relative currency change (ratio of average in 2019 to average in 2016)') + ylab('Sectoral imports share protected during Populist era') + 
     geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig6.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
   
   rm(fig6.lm)
@@ -110,9 +110,9 @@ fig7.create=function(sct){
                                                 p.value = summary(fig7.lm)$coefficients[2,4],
                                                 formula = "cov.change ~ incentives.change",
                                                 plot=paste0("Graph 7 - Sector ",sct)))
-
+  
   fig7 <- ggplot(data=subset(data.fig7, sector==sct)) + geom_point(aes(x=sect.trade.share, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Sectoral trade balance divided by total sectoral trade in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    gta_theme() + xlab('Sectoral trade balance divided by total sectoral trade in 2016') + ylab('Sectoral imports share protected during Populist era') + 
     geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig7.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
   
   rm(fig7.lm)
@@ -141,7 +141,7 @@ fig8.create=function(sct){
                                                 plot=paste0("Graph 8 - Sector ",sct)))
   
   fig8 <- ggplot(data=subset(data.fig8, sector==sct)) + geom_point(aes(x=incentives.change, y=cov.change, size=symbol.size))+guides(size="none") +
-    gta_theme() + xlab('Share of sectoral exports that benefit from incentives in 2016') + ylab('Change in sectoral import share protected 2017-2019') + 
+    gta_theme() + xlab('Share of sectoral exports that benefit from incentives in 2016') + ylab('Sectoral imports share protected during Populist era') + 
     geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig8.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
   
   
