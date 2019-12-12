@@ -9,6 +9,7 @@ extrafont::loadfonts(device="win")
 library(ggplot2)
 library(openxlsx)
 library(gridExtra)
+library(stringr)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
@@ -35,12 +36,18 @@ outlier.fig6.ceiling=2
 outlier.fig7.ceiling=.6
 outlier.fig8.floor=-0.06
 
+
+## setting figure paths
+first.sector.chapter=5
+sector.path=paste0(str_extract(figure.path,"^.+?figures/"),paste0(first.sector.chapter:(first.sector.chapter+length(sectors)-1), " - Sector ", sectors,"/"))
+
+
+
+
+
 # Chart 5 -----------------------------------------------------------------
 
 #Request: Scattter plot for all G20. Y-axis shows change in sectoral import share protected from 2017-2019. X-axis shows national import share from 2016
-
-write.xlsx(lapply(unique(data.fig5$cpc),function(x) subset(data.fig5, cpc==x)),
-           file=paste0(figure.path,'fig 5 data.xlsx'))
 
 
 
@@ -69,10 +76,6 @@ fig5.create=function(sct){
 #Chart 6: Scatter plot for all G20. Y-axis shows change in sectoral import share protected from 2017-2019. 
 #X-axis shows the change in the exchange rate of the national currency against USD from 2017-2019
 
-write.xlsx(lapply(unique(data.fig6$sector),function(x) subset(data.fig6, sector==x)),
-           file=paste0(figure.path,'fig 6 data.xlsx'))
-
-
 fig6.create=function(sct){  
   #cheap way to remove outliers
   fig6.lm <<- lm(cov.change ~ curr.rel.change, subset(data.fig6, sector==sct & curr.rel.change<outlier.fig6.ceiling))
@@ -99,8 +102,6 @@ fig6.create=function(sct){
 #the X axis is the sectoral trade balance divided by total sectoral trade. Let X be the total exports of a country in a given sector, 
 #let Y be total imports of the same country in the same sector. Then the measure I have in mind is (X-Y)/(X+Y). Note that this measure can be negative but the values will always lie between -1 and +1.
 
-write.xlsx(lapply(unique(data.fig7$sector),function(x) subset(data.fig7, sector==x)),
-           file=paste0(figure.path,'fig 7 data.xlsx'))
 
 fig7.create=function(sct){  
   #cheap way to remove outliers
@@ -125,11 +126,6 @@ fig7.create=function(sct){
 
 #Chart 8: Scatter plot for G20. Y-axis same as graph 5 and 6. X-axis shows the share of sectoral exports that benefit from incentives.
 
-
-
-write.xlsx(lapply(unique(data.fig8$sector),function(x) subset(data.fig8, sector==x)),
-           file=paste0(figure.path,'fig 8 data.xlsx'))
-
 fig8.create=function(sct){  
   
   fig8.lm <<- lm(cov.change ~ incentives.change, subset(data.fig8, sector==sct & incentives.change>outlier.fig8.floor))
@@ -153,13 +149,22 @@ fig8.create=function(sct){
 # Create panels per sector ------------------------------------------------
 stat.values=data.frame()
 
-for (sct in sectors) {
+for (sct in sectors){
+  
+  s.path=sector.path[grepl(paste0(sct,"/$"),sector.path)]
+  
+  dir.create(file.path(s.path), showWarnings = FALSE)
+  wipe.all= list.files(s.path, include.dirs = F, full.names = T, recursive = T)
+  file.remove(wipe.all)
+  rm(wipe.all)
+
+  
   
   fig5 <- fig5.create(sct)
   fig6 <- fig6.create(sct)
   figA <- grid.arrange(fig5, fig6, nrow=2)
   gta_plot_saver(plot = figA,
-                 path = figure.path,
+                 path = s.path,
                  name = paste0("Figure Panel 2 A (5-6) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
@@ -170,15 +175,27 @@ for (sct in sectors) {
   fig8 <- fig8.create(sct)
   figB <- grid.arrange(fig7, fig8, nrow=2)
   gta_plot_saver(plot = figB,
-                 path = figure.path,
+                 path = s.path,
                  name = paste0("Figure Panel 2 B (7-8) - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   
+  write.xlsx(subset(data.fig5, cpc==sct),
+             file=paste0(s.path,'fig 5 data.xlsx'))
+  
+  write.xlsx(subset(data.fig6, sector==sct),
+             file=paste0(s.path,'fig 6 data.xlsx'))
+  
+  
+  write.xlsx(subset(data.fig7, sector==sct),
+             file=paste0(s.path,'fig 7 data.xlsx'))
+  
+  write.xlsx(subset(data.fig8, sector=sct),
+             file=paste0(s.path,'fig 8 data.xlsx'))
 }
 
 
-openxlsx::write.xlsx(stat.values, file=paste0(figure.path,"Statistical results for figures 5-8.xlsx"), rowNames=F)
-
+openxlsx::write.xlsx(stat.values, file=paste0(s.path,"Statistical results for figures 5-8.xlsx"), rowNames=F)
+unlink(figure.path, recursive = T)
 
