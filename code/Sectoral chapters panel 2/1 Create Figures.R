@@ -40,7 +40,7 @@ outlier.fig8.floor=-0.06
 ## setting figure paths
 first.sector.chapter=5
 sector.path=paste0(str_extract(figure.path,"^.+?figures/"),paste0(first.sector.chapter:(first.sector.chapter+length(sectors)-1), " - Sector ", sectors,"/"))
-
+wipe.sector.path=F
 
 
 
@@ -154,10 +154,12 @@ for (sct in sectors){
   s.path=sector.path[grepl(paste0(sct,"/$"),sector.path)]
   
   dir.create(file.path(s.path), showWarnings = FALSE)
-  wipe.all= list.files(s.path, include.dirs = F, full.names = T, recursive = T)
-  file.remove(wipe.all)
-  rm(wipe.all)
-
+  
+  if(wipe.sector.path){
+    wipe.all= list.files(s.path, include.dirs = F, full.names = T, recursive = T)
+    file.remove(wipe.all)
+    rm(wipe.all)
+  }
   
   
   fig5 <- fig5.create(sct)
@@ -193,9 +195,7 @@ for (sct in sectors){
   
   write.xlsx(subset(data.fig8, sector=sct),
              file=paste0(s.path,'fig 8 data.xlsx'))
+  
+  openxlsx::write.xlsx(subset(stat.values, grepl(paste0(sct,"$"),plot)), file=paste0(s.path,"Statistical results for figures 5-8.xlsx"), rowNames=F)
 }
-
-
-openxlsx::write.xlsx(stat.values, file=paste0(s.path,"Statistical results for figures 5-8.xlsx"), rowNames=F)
-unlink(figure.path, recursive = T)
 
