@@ -85,7 +85,8 @@ fig6.create=function(sct){
   
   fig6 <- ggplot(data=subset(data.fig6, sector==sct)) + geom_point(aes(x=curr.rel.change, y=cov.change, size=symbol.size))+guides(size="none") +
     gta_theme() + xlab('Relative currency change (ratio of average in 2019 to average in 2016)') + ylab('Sectoral imports share protected during Populist era') + 
-    geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig6.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
+    geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig6.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)+
+    scale_x_continuous(limits = c(.95,1.2))
  
   return(fig6)
   
@@ -141,7 +142,8 @@ fig8.create=function(sct){
   
   fig8 <- ggplot(data=subset(data.fig8, sector==sct)) + geom_point(aes(x=incentives.change, y=cov.change, size=symbol.size))+guides(size="none") +
     gta_theme() + xlab('Share of sectoral exports that benefit from incentives in 2016') + ylab('Sectoral imports share protected during Populist era') + 
-    geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig8.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
+    geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig8.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)+
+    scale_x_continuous(limits = c(0,.45))
   
   
   return(fig8)
