@@ -31,6 +31,16 @@ plot.names <- data.frame(country = c("USA","China",c(g20.member.names[! g20.memb
 blank.set <- data.frame(order.y = rep(seq(1,19,1),19), order.x = rep(1:19, each=19))
 blank.set.middle <- data.frame(order.x=seq(1,19,1),order.y=seq(1,19,1))
 
+
+
+## setting figure paths
+first.sector.chapter=5
+sector.path=paste0(str_extract(output.path,"^.+?figures/"),paste0(first.sector.chapter:(first.sector.chapter+length(sectors)-1), " - Sector ", sectors,"/"))
+wipe.sector.path=F
+
+
+
+
 # Figure 9 create graph ------------------------------------------------------
 
 # Chart 9: Heat Map for all G20. Y-axis shows the importing nations, 
@@ -156,7 +166,7 @@ fig11.data <- subset(fig11.data, is.na(change)==F)
 fig11.data <- fig11.data[with(fig11.data, order(order.x,order.y)),]
 row.names(fig11.data) <- NULL
 
-write.xlsx(fig11.data[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(output.path,"Table for Figure 11.xlsx"),row.names=F, sheetName = "Coverages")
+
 
 fig11.create <- function(sct) {
   
@@ -211,7 +221,6 @@ fig12.data <- subset(fig12.data, is.na(change)==F)
 fig12.data <- fig12.data[with(fig12.data, order(order.x,order.y)),]
 row.names(fig12.data) <- NULL
 
-write.xlsx(fig12.data[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(output.path,"Table for Figure 12.xlsx"),row.names=F, sheetName = "Coverages")
 
 fig12.create <- function(sct) {
   
@@ -272,8 +281,6 @@ fig13.data <- merge(fig13.data, order.names, by.x = "exporter", by.y = "country"
 fig13.data <- fig13.data[with(fig13.data, order(order.x,order.y)),]
 row.names(fig13.data) <- NULL
 
-write.xlsx(fig13.data[,c("importer","exporter","sector","coverages")],file=paste0(output.path,"Table for Figure 13.xlsx"),row.names=F, sheetName = "Coverages")
-
 fig13.create <- function(sct) {
   
   fig13 <- ggplot(data=subset(fig13.data, sector==sct))+
@@ -308,8 +315,6 @@ fig14.data <- merge(fig14.data, order.names, by.x = "exporter", by.y = "country"
 fig14.data <- fig14.data[with(fig14.data, order(order.x,order.y)),]
 row.names(fig14.data) <- NULL
 
-write.xlsx(fig14.data[,c("importer","exporter","sector","coverages")],file=paste0(output.path,"Table for Figure 14.xlsx"),row.names=F, sheetName = "Coverages")
-
 fig14.create <- function(sct) {
   
   fig14 <- ggplot(data=subset(fig14.data, sector==sct))+
@@ -342,6 +347,17 @@ fig14.create <- function(sct) {
 
 for (sct in sectors) {
   
+  s.path=sector.path[grepl(paste0(sct,"/$"),sector.path)]
+  
+  dir.create(file.path(s.path), showWarnings = FALSE)
+  
+  if(wipe.sector.path){
+    wipe.all= list.files(s.path, include.dirs = F, full.names = T, recursive = T)
+    file.remove(wipe.all)
+    rm(wipe.all)
+  }
+  
+  
   fig9 <- fig9.create(sct)
   fig10 <- fig10.create(sct)
   fig11 <- fig11.create(sct)
@@ -354,25 +370,30 @@ for (sct in sectors) {
   figC <- grid.arrange(fig11, fig12, nrow=2)
 
   gta_plot_saver(plot = figA,
-                 path = paste0(output.path),
+                 path = s.path,
                  name = paste0("Figure Panel 3 - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   
   gta_plot_saver(plot = figB,
-                 path = paste0(output.path),
+                 path = s.path,
                  name = paste0("Figure Panel 4 - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   
   gta_plot_saver(plot = figC,
-                 path = paste0(output.path),
+                 path = s.path,
                  name = paste0("Figure Panel - change in coverages  - Sector ",sct),
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
   
+  
+  write.xlsx(subset(fig11.data, sector==sct)[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(output.path,"Table for Figure 11.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig12.data, sector==sct)[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(output.path,"Table for Figure 12.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig13.data, sector==sct)[,c("importer","exporter","sector","coverages")],file=paste0(output.path,"Table for Figure 13.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig14.data, sector==sct)[,c("importer","exporter","sector","coverages")],file=paste0(output.path,"Table for Figure 14.xlsx"),row.names=F, sheetName = "Coverages")
 
 }
