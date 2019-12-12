@@ -66,7 +66,6 @@ row.names(fig9.data) <- NULL
 
 fig9.xlsx <- fig9.data[,c("importer","exporter","2019","sector")]
 names(fig9.xlsx) <- c("importer","exporter","coverage","sector")
-write.xlsx(fig9.xlsx, file=paste0(output.path,"Table for Figure 9.xlsx"),row.names=F, sheetName = "Coverages")
 
 fig9.create <- function(sct) {
     
@@ -116,7 +115,6 @@ row.names(fig10.data) <- NULL
 
 fig10.xlsx <- fig10.data[,c("importer","exporter","2019","sector")]
 names(fig10.xlsx) <- c("importer","exporter","coverage","sector")
-write.xlsx(fig10.xlsx, file=paste0(output.path,"Table for Figure 10.xlsx"),row.names=F, sheetName = "Coverages")
 
 fig10.create <- function(sct) {
   
@@ -389,11 +387,12 @@ for (sct in sectors) {
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
-  
-  
-  write.xlsx(subset(fig11.data, sector==sct)[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(output.path,"Table for Figure 11.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig12.data, sector==sct)[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(output.path,"Table for Figure 12.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig13.data, sector==sct)[,c("importer","exporter","sector","coverages")],file=paste0(output.path,"Table for Figure 13.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig14.data, sector==sct)[,c("importer","exporter","sector","coverages")],file=paste0(output.path,"Table for Figure 14.xlsx"),row.names=F, sheetName = "Coverages")
+  fig9.xlsx
+  write.xlsx(subset(fig9.xlsx, sector==sct), file=paste0(s.path,"Table for Figure 9.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig10.xlsx, sector==sct), file=paste0(s.path,"Table for Figure 10.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig11.data, sector==sct)[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(s.path,"Table for Figure 11.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig12.data, sector==sct)[,c("importer","exporter","change","sector","populist","pre.populist")],file=paste0(s.path,"Table for Figure 12.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig13.data, sector==sct)[,c("importer","exporter","sector","coverages")],file=paste0(s.path,"Table for Figure 13.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig14.data, sector==sct)[,c("importer","exporter","sector","coverages")],file=paste0(s.path,"Table for Figure 14.xlsx"),row.names=F, sheetName = "Coverages")
 
 }

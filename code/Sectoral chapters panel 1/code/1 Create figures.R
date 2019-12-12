@@ -246,10 +246,10 @@ for (sct in sectors) {
                  height = 29.7,
                  width = 21)
   
-  write.xlsx(subset(fig1.data, sector==sct), file=paste0(output.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig2.data, sector==sct), file=paste0(output.path,"Table for Figure 2.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig3.data, sector==sct), file=paste0(output.path,"Table for Figure 3.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig4.data, sector==sct)[,c("sector","year","coverages","hits")], file=paste0(output.path,"Table for Figure 4.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig1.data, sector==sct), file=paste0(s.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig2.data, sector==sct), file=paste0(s.path,"Table for Figure 2.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig3.data, sector==sct), file=paste0(s.path,"Table for Figure 3.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig4.data, sector==sct)[,c("sector","year","coverages","hits")], file=paste0(s.path,"Table for Figure 4.xlsx"),row.names=F, sheetName = "Coverages")
   
 }
 
