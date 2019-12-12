@@ -23,12 +23,21 @@ figure.path=chapter.folders$figure.path
 gta_colour_palette()
 symbol.size=2
 
+## loading data
+load(paste0(data.path,'fig 5.Rdata'))
+load(paste0(data.path,'fig 6.Rdata'))
+load(paste0(data.path,'fig 7.Rdata'))
+load(paste0(data.path,'fig 8.Rdata'))
+
+## setting data limits for OLS
+outlier.fig5.ceiling=.7
+outlier.fig6.ceiling=2
+outlier.fig7.ceiling=.6
+outlier.fig8.floor=-0.06
 
 # Chart 5 -----------------------------------------------------------------
 
 #Request: Scattter plot for all G20. Y-axis shows change in sectoral import share protected from 2017-2019. X-axis shows national import share from 2016
-
-load(paste0(data.path,'fig 5.Rdata'))
 
 write.xlsx(lapply(unique(data.fig5$cpc),function(x) subset(data.fig5, cpc==x)),
            file=paste0(figure.path,'fig 5 data.xlsx'))
@@ -38,7 +47,7 @@ write.xlsx(lapply(unique(data.fig5$cpc),function(x) subset(data.fig5, cpc==x)),
 fig5.create=function(sct){ 
   
   #cheap way to remove outliers
-  fig5.lm <<- lm(cov.change ~ sct.share, subset(data.fig5, cpc==sct & cov.change<0.7))
+  fig5.lm <<- lm(cov.change ~ sct.share, subset(data.fig5, cpc==sct & cov.change<outlier.fig5.ceiling))
   
   stat.values <<- rbind(stat.values, data.frame(r.squared = summary(fig5.lm)$r.squared,
                                                 t.value = summary(fig5.lm)$coefficients[2,3],
@@ -50,9 +59,7 @@ fig5.create=function(sct){
     gta_theme() + xlab('National import share in 2016') + ylab('Sectoral imports share protected during Populist era') + 
     geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig5.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
   
-  
-  rm(fig5.lm)
-  
+ 
   return(fig5)
   
 }
@@ -62,16 +69,13 @@ fig5.create=function(sct){
 #Chart 6: Scatter plot for all G20. Y-axis shows change in sectoral import share protected from 2017-2019. 
 #X-axis shows the change in the exchange rate of the national currency against USD from 2017-2019
 
-load(paste0(data.path,'fig 6.Rdata'))
-
-
 write.xlsx(lapply(unique(data.fig6$sector),function(x) subset(data.fig6, sector==x)),
            file=paste0(figure.path,'fig 6 data.xlsx'))
 
 
 fig6.create=function(sct){  
   #cheap way to remove outliers
-  fig6.lm <<- lm(cov.change ~ curr.rel.change, subset(data.fig6, sector==sct & curr.rel.change<0.7))
+  fig6.lm <<- lm(cov.change ~ curr.rel.change, subset(data.fig6, sector==sct & curr.rel.change<outlier.fig6.ceiling))
   
   stat.values <<- rbind(stat.values, data.frame(r.squared = summary(fig6.lm)$r.squared,
                                                 t.value = summary(fig6.lm)$coefficients[2,3],
@@ -82,9 +86,7 @@ fig6.create=function(sct){
   fig6 <- ggplot(data=subset(data.fig6, sector==sct)) + geom_point(aes(x=curr.rel.change, y=cov.change, size=symbol.size))+guides(size="none") +
     gta_theme() + xlab('Relative currency change (ratio of average in 2019 to average in 2016)') + ylab('Sectoral imports share protected during Populist era') + 
     geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig6.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
-  
-  rm(fig6.lm)
-  
+ 
   return(fig6)
   
 }
@@ -96,14 +98,12 @@ fig6.create=function(sct){
 #the X axis is the sectoral trade balance divided by total sectoral trade. Let X be the total exports of a country in a given sector, 
 #let Y be total imports of the same country in the same sector. Then the measure I have in mind is (X-Y)/(X+Y). Note that this measure can be negative but the values will always lie between -1 and +1.
 
-load(paste0(data.path,'fig 7.Rdata'))
-
 write.xlsx(lapply(unique(data.fig7$sector),function(x) subset(data.fig7, sector==x)),
            file=paste0(figure.path,'fig 7 data.xlsx'))
 
 fig7.create=function(sct){  
   #cheap way to remove outliers
-  fig7.lm <<- lm(cov.change ~ sect.trade.share, subset(data.fig7, sector==sct & cov.change<0.6))
+  fig7.lm <<- lm(cov.change ~ sect.trade.share, subset(data.fig7, sector==sct & cov.change<outlier.fig7.ceiling))
   
   stat.values <<- rbind(stat.values, data.frame(r.squared = summary(fig7.lm)$r.squared,
                                                 t.value = summary(fig7.lm)$coefficients[2,3],
@@ -115,7 +115,6 @@ fig7.create=function(sct){
     gta_theme() + xlab('Sectoral trade balance divided by total sectoral trade in 2016') + ylab('Sectoral imports share protected during Populist era') + 
     geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig7.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
   
-  rm(fig7.lm)
   return(fig7)
   
   
@@ -125,14 +124,14 @@ fig7.create=function(sct){
 
 #Chart 8: Scatter plot for G20. Y-axis same as graph 5 and 6. X-axis shows the share of sectoral exports that benefit from incentives.
 
-load(paste0(data.path,'fig 8.Rdata'))
+
 
 write.xlsx(lapply(unique(data.fig8$sector),function(x) subset(data.fig8, sector==x)),
            file=paste0(figure.path,'fig 8 data.xlsx'))
 
 fig8.create=function(sct){  
   
-  fig8.lm <<- lm(cov.change ~ incentives.change, subset(data.fig8, sector==sct & incentives.change>-0.06))
+  fig8.lm <<- lm(cov.change ~ incentives.change, subset(data.fig8, sector==sct & incentives.change>outlier.fig8.floor))
   
   stat.values <<- rbind(stat.values, data.frame(r.squared = summary(fig8.lm)$r.squared,
                                                 t.value = summary(fig8.lm)$coefficients[2,3],
@@ -144,9 +143,6 @@ fig8.create=function(sct){
     gta_theme() + xlab('Share of sectoral exports that benefit from incentives in 2016') + ylab('Sectoral imports share protected during Populist era') + 
     geom_label(aes(x=Inf, y=Inf, label=paste0("R-Squared: ",round(summary(fig8.lm)$r.squared, 3))), hjust=1.1, vjust=1.5)
   
-  
-  # hjust=1.05,vjust=4.5,size=4
-  rm(fig8.lm)
   
   return(fig8)
   
