@@ -41,7 +41,8 @@ fig1=ggplot(published.ids, aes(x=as.factor(reporting.deadline),y=intervention.co
 
 gta_plot_saver(fig1, 
                figure.path,
-               'Figure 2')
+               'Figure 2',
+               eps = T)
 published.ids$colsNULL
 published.ids$position=NULL
 write.xlsx(published.ids, paste0(figure.path, 'Figure 2 data.xlsx'))
@@ -64,6 +65,7 @@ fig2=ggplot(sa.src.yr, aes(x=as.factor(year), y=sa.count,  fill=cols))+
 
 gta_plot_saver(fig2, 
                figure.path,
-               'Figure 1')
+               'Figure 1',
+               eps = T)
 
 write.xlsx(sa.src.yr, paste0(figure.path, 'Figure 1 data.xlsx'))
