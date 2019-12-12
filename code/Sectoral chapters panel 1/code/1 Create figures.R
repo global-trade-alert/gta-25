@@ -31,6 +31,8 @@ first.sector.chapter=5
 sector.path=paste0(str_extract(output.path,"^.+?figures/"),paste0(first.sector.chapter:(first.sector.chapter+length(sectors)-1), " - Sector ", sectors,"/"))
 wipe.sector.path=F
 
+x.bottom.angle = 45
+x.bottom.align = 1
 
 
 # Figure 1 create graph ------------------------------------------------------
@@ -76,8 +78,8 @@ fig1.create <- function(sct) {
                      colour.legend.title = "Type of intervention",
                      colour.palette = c(gta_colour$red[1],gta_colour$green[1]),
                      colour.legend.col = 2)+
-    gta_theme()
-  
+      gta_theme(x.bottom.angle = x.bottom.angle, x.bottom.align = x.bottom.align)
+    
   return(fig1)
   }
 
@@ -112,7 +114,7 @@ fig2.create <- function(sct) {
                      colour.legend.title = "Trade distortions in force",
                      colour.palette = c(gta_colour$qualitative[c(1:4)],gta_colour$red[1]),
                      colour.legend.col = 2)+
-    gta_theme()
+    gta_theme(x.bottom.angle = x.bottom.angle, x.bottom.align = x.bottom.align)
   
   return(fig2)
 }
@@ -147,7 +149,7 @@ fig3.create <- function(sct) {
                      colour.legend.title = "Commercial policy reforms",
                      colour.palette = c(gta_colour$qualitative[c(1:2)],gta_colour$green[1]),
                      colour.legend.col = 2)+
-    gta_theme()
+    gta_theme(x.bottom.angle = x.bottom.angle, x.bottom.align = x.bottom.align)
   
   return(fig3)
 }
@@ -193,7 +195,7 @@ fig4.create <- function(sct) {
                      fill.palette = rev(c(gta_colour$red.shades(5))),
                      fill.legend.col = 3,
                      fill.labels = unique(fig4.data$hits))+
-    gta_theme()
+    gta_theme(x.bottom.angle = x.bottom.angle, x.bottom.align = x.bottom.align)
   
   return(fig4)
 }
