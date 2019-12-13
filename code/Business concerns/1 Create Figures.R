@@ -1,15 +1,7 @@
 rm(list=ls())
 
-library(gtalibrary)
-library(stringr)
-library(tidyverse)
-library(plyr)
-library(data.table)
-extrafont::loadfonts(device="win")
 library(ggplot2)
-library(openxlsx)
-library(gridExtra)
-library(stringr)
+library(gtalibrary)
 
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
@@ -40,8 +32,9 @@ fig1 = ggplot(confidence.data) +
   theme(legend.title = element_blank())+
   scale_color_manual(labels = c("China", "Eurozone", "Japan", "USA"),
                      values = c(gta_colour$qualitative[1:4])) +
-  labs(y="Business confidence index", x ="Year") +
-  scale_x_date(breaks = as.Date(paste0(c(2008,2012,2016,2019),'-11-15')), limits = as.Date(c("2008-01-15","2019-11-15")), expand=c(0,0))
+  labs(y="OECD Business confidence index\n(accessed 13 December 2019)", x ="Year") +
+  scale_x_date(breaks = as.Date(paste0(c(2008:2019),'-01-15')), labels = scales::date_format("%Y"),
+               limits = as.Date(c("2008-01-15","2019-11-15")), expand=c(0,0))
 
 
 fig1
