@@ -42,7 +42,7 @@ gta25_setup <- function(internal.name=NULL,
   
   producer.console=rbind(producer.console,
                          data.frame(internal.name="USA, China and EU targeting G20",
-                                    report.number=3,
+                                    report.number=5,
                                     report.name="G20 exposure to major powers",
                                     create.fig.script="1 Create figures.R",
                                     create.fig.numbers=c(5:8),
@@ -50,7 +50,7 @@ gta25_setup <- function(internal.name=NULL,
   
   producer.console=rbind(producer.console,
                          data.frame(internal.name="Targeting LDCs etc",
-                                    report.number=4,
+                                    report.number=6,
                                     report.name="Harm to developing country interests",
                                     create.fig.script="1 Create figures.R",
                                     create.fig.numbers=c(5:8),
@@ -66,7 +66,7 @@ gta25_setup <- function(internal.name=NULL,
   
   producer.console=rbind(producer.console,
                          data.frame(internal.name="What's new",
-                                    report.number=12,
+                                    report.number=16,
                                     report.name="What's new in the GTA",
                                     create.fig.script="1 Create figures.R",
                                     create.fig.numbers=c(5:8),
@@ -74,13 +74,44 @@ gta25_setup <- function(internal.name=NULL,
   
   producer.console=rbind(producer.console,
                          data.frame(internal.name="Jumbos in the populist era",
-                                    report.number=2,
+                                    report.number=4,
                                     report.name="Jumbo protectionism in the populist era",
                                     create.fig.script="1 Create figures.R",
                                     create.fig.numbers=c(5:8),
                                     stringsAsFactors = F))
   
- 
+  producer.console=rbind(producer.console,
+                         data.frame(internal.name="annex - p. 1 - title tables",
+                                    report.number=99,
+                                    report.name="annex - p. 1 - title tables",
+                                    create.fig.script="1 Create figures.R",
+                                    create.fig.numbers=c(5:8),
+                                    stringsAsFactors = F))
+  
+  producer.console=rbind(producer.console,
+                         data.frame(internal.name="annex - p. 2 - maps",
+                                    report.number=99,
+                                    report.name="annex - p. 2 - maps",
+                                    create.fig.script="1 Create figures.R",
+                                    create.fig.numbers=c(5:8),
+                                    stringsAsFactors = F))
+  
+  producer.console=rbind(producer.console,
+                         data.frame(internal.name="annex - p. 3 & 4 - top - criterion charts",
+                                    report.number=99,
+                                    report.name="annex - p. 3 & 4 - top - criterion charts",
+                                    create.fig.script="1 Create figures.R",
+                                    create.fig.numbers=c(5:8),
+                                    stringsAsFactors = F))
+  
+  producer.console=rbind(producer.console,
+                         data.frame(internal.name="annex - p. 3 & 4 - bottom - bar charts",
+                                    report.number=99,
+                                    report.name="annex - p. 3 & 4 - bottom - bar charts",
+                                    create.fig.script="1 Create figures.R",
+                                    create.fig.numbers=c(5:8),
+                                    stringsAsFactors = F))
+  
   ## set up data and figure folders
   
   if(in.dev){
