@@ -71,7 +71,7 @@ fig.create <- function(tp,trg) {
       gta_plot_wrapper(data=set,
                        data.x="month.count",
                        data.y="trade.share",
-                       x.bottom.name = "Months into period",
+                       x.bottom.name = "Months from start of interval",
                        x.bottom.labels = c(seq(0,max(set$month.count),5),34),
                        x.bottom.breaks = c(seq(0,max(set$month.count),5),34),
                        y.left.name = paste0("World trade affected by ",tolower(name)),
@@ -79,7 +79,7 @@ fig.create <- function(tp,trg) {
                        y.left.limits = c(0,max(set$trade.share)*1.05),
                        y.left.expand = c(0.002,0.002),
                        colour.legend.col = 3,
-                       colour.legend.title = "Periods",
+                       colour.legend.title = "Interval",
                        colour.labels = c("2017-2019", "2014-2016","2009-2011"))+
     gta_theme()
   fig  
@@ -113,30 +113,61 @@ fig7.create <- function() {
 # Create panels per sector ------------------------------------------------
 
 # save plot 1-6
-counter = 1
-for (tp in 1:length(types)) {
-  
-  targets <- unique(subset(fig.data, instrument == types[tp])$target)
-  
-  for (trg in 1:length(targets)) {
-    fig <- fig.create(tp,trg)
-    fig
-  
-    gta_plot_saver(plot = fig,
-                   path = paste0(output.path),
-                   name = paste0("Figure ",counter," - ",types[tp], " interventions affecting ",targets[trg]),
-                   cairo_ps = T,
-                   width = 21)
-    
-    counter = counter + 1
-  
-  }
-}
+# counter = 1
+# for (tp in 1:length(types)) {
+#   
+#   targets <- unique(subset(fig.data, instrument == types[tp])$target)
+#   
+#   for (trg in 1:length(targets)) {
+#     fig <- fig.create(tp,trg)
+#     fig
+#   
+#     gta_plot_saver(plot = fig,
+#                    path = paste0(output.path),
+#                    name = paste0("Figure ",counter," - ",types[tp], " interventions affecting ",targets[trg]),
+#                    cairo_ps = T,
+#                    width = 21)
+#     
+#     counter = counter + 1
+#   
+#   }
+# }
 
-# save plot 7
+
+## Figure 1
+counter=1
+tp=1
+trg=1
+
+targets <- unique(subset(fig.data, instrument == types[tp])$target)
+
+fig <- fig.create(tp,trg)
+     fig
+   gta_plot_saver(plot = fig,
+                  path = paste0(output.path),
+                  name = paste0("Figure ",counter," - ",types[tp], " interventions affecting ",targets[trg]),
+                  cairo_ps = T,
+                  width = 21)
+
+# Figure 2
 gta_plot_saver(plot = fig7.create(),
                path = paste0(output.path),
-               name = paste0("Figure 7 - All intervention types and targets in populist era"),
+               name = paste0("Figure 2 - All intervention types and targets in populist era"),
+               cairo_ps = T,
+               width = 21)
+
+
+## Figure 3
+counter=3
+tp=4
+trg=1
+targets <- unique(subset(fig.data, instrument == types[tp])$target)
+
+fig <- fig.create(tp,trg)
+fig
+gta_plot_saver(plot = fig,
+               path = paste0(output.path),
+               name = paste0("Figure ",counter," - ",types[tp], " interventions affecting ",targets[trg]),
                cairo_ps = T,
                width = 21)
 
