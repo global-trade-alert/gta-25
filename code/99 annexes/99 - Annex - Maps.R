@@ -93,6 +93,8 @@ world$breaks[world$value >= 101 & world$value <=200] <- "3"
 world$breaks[world$value >= 51 & world$value <=100] <- "2"
 world$breaks[world$value >= 1 & world$value <=50] <- "1"
 
+world.xlsx <- unique(subset(world, UN > 0)[,c("country","value")])
+write.xlsx(world.xlsx, file=paste0(output.path,"map_",unique(conversion$name[conversion$i.un==cty]),"_top_data.xlsx"),sheetName = "Results",row.names=F)
 
 map1 = ggplot() +
   geom_polygon(data= subset(world, country != "Antarctica"), aes(x = long, y = lat, group = group, fill = breaks), size = 0.15, color = "white") +
@@ -155,6 +157,9 @@ world <-  world[with(world, order(X)),]
 world$value[is.na(world$value) == T] <- 0
 
 marked.country <- gta_un_code_vector(cty)
+
+world.xlsx <- unique(subset(world, UN > 0)[,c("country","value")])
+write.xlsx(world.xlsx, file=paste0(output.path,"map_",unique(conversion$name[conversion$i.un==cty]),"_bottom_data.xlsx"),sheetName = "Results",row.names=F)
 
 
 # CALCULATE THE GRADIENT BREAKS
