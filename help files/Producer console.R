@@ -57,6 +57,14 @@ gta25_setup <- function(internal.name=NULL,
                                     stringsAsFactors = F))
   
   producer.console=rbind(producer.console,
+                         data.frame(internal.name="business concerns",
+                                    report.number=7,
+                                    report.name="Why business is so concerned",
+                                    create.fig.script="1 Create figures.R",
+                                    create.fig.numbers=c(5:8),
+                                    stringsAsFactors = F))
+  
+  producer.console=rbind(producer.console,
                          data.frame(internal.name="Annual trade variation",
                                     report.number=99,
                                     report.name="Variance in sectoral to total trade",
