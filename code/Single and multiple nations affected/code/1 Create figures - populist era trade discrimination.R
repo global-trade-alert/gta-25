@@ -11,13 +11,19 @@ library(Hmisc)
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 
-directories=gta25_setup(internal.name="Single & multi-country hits",
+
+#### THIS was split into several chapters. I will thus have to change the output path several times below.
+
+
+### CHAPTER "Shifting commercial policy"
+
+directories=gta25_setup(internal.name="Single & multi-country hits - trade shares",
                         in.dev=F,
                         author=NULL,
                         wipe.data=F,
                         wipe.figs=F)
 
-data.path = directories$data.path
+data.path = gsub(" - trade shares","",directories$data.path)
 output.path = directories$figure.path
 
 gta_colour_palette()

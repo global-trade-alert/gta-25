@@ -34,11 +34,28 @@ gta25_setup <- function(internal.name=NULL,
   
   producer.console=rbind(producer.console,
                          data.frame(internal.name="Single & multi-country hits",
-                                    report.number=1,
+                                    report.number=999,
                                     report.name="Three phases of targeted protectionism",
                                     create.fig.script="1 Create figures.R",
                                     create.fig.numbers=c(5:8),
                                     stringsAsFactors = F))
+  
+  producer.console=rbind(producer.console,
+                         data.frame(internal.name="Single & multi-country hits - shifting",
+                                    report.number=2,
+                                    report.name="Shifting commercial policy trends",
+                                    create.fig.script="1 Create figures.R",
+                                    create.fig.numbers=c(5:8),
+                                    stringsAsFactors = F))
+  
+  producer.console=rbind(producer.console,
+                         data.frame(internal.name="Single & multi-country hits - trade shares",
+                                    report.number=3,
+                                    report.name="Populist era trade discrimination",
+                                    create.fig.script="1 Create figures.R",
+                                    create.fig.numbers=c(5:8),
+                                    stringsAsFactors = F))
+  
   
   producer.console=rbind(producer.console,
                          data.frame(internal.name="USA, China and EU targeting G20",
