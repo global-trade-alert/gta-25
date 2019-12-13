@@ -27,7 +27,7 @@ gta_colour_palette()
 
 
 ## setting figure paths
-first.sector.chapter=5
+first.sector.chapter=8
 sector.path=paste0(str_extract(output.path,"^.+?figures/"),paste0(first.sector.chapter:(first.sector.chapter+length(sectors)-1), " - Sector ", sectors,"/"))
 wipe.sector.path=F
 

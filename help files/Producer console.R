@@ -74,7 +74,7 @@ gta25_setup <- function(internal.name=NULL,
   
   producer.console=rbind(producer.console,
                          data.frame(internal.name="What's new",
-                                    report.number=16,
+                                    report.number=15,
                                     report.name="What's new in the GTA",
                                     create.fig.script="1 Create figures.R",
                                     create.fig.numbers=c(5:8),
