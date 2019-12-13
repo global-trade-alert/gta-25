@@ -30,30 +30,26 @@ gta_colour_palette()
 # The vertical axis show the share of trade affected.
 # 
 # For every month, we calculate the instrument-targeting combination of the original graph except the single-affected export incentives:
-# (1) World trade affected by tariff measures affecting a single nation in the home market
-# (2) World trade affected by tariff measures affecting mulitple nations in the home market
-# (3) World trade affected by all other measures affecting single nation in the home market
-# (4) World trade affected by all other measures affecting multiple nations in the home market
+# (1) World trade affected by tariff interventions affecting a single nation in the home market
+# (2) World trade affected by tariff interventions affecting mulitple nations in the home market
+# (3) World trade affected by all other interventions affecting single nation in the home market
+# (4) World trade affected by all other interventions affecting multiple nations in the home market
 # (5*) World trade affected by export incentives affecting multiple nations in a foreign market
 # (6*) World trade affected by all instruments and any number of affected nations.
 
 # The seventh chart shows the different instruments/targeting all in one plot but for the populist era only.
 
-load(paste0(data.path,"Multiple nation coverages - period 1.Rdata"))
-period1 <- single.multi.data
-load(paste0(data.path,"Multiple nation coverages - period 2.Rdata"))
-period2 <- single.multi.data
-load(paste0(data.path,"Multiple nation coverages - period 3.Rdata"))
-period3 <- single.multi.data
+load(paste0(data.path,"Multiple nation coverages.Rdata"))
 
-fig.data <- rbind(period1, period2, period3)
+fig.data <- rbind(single.multi.data)
 
 write.xlsx(fig.data, file=paste0(output.path,"Table for Figure 1-7.xlsx"),row.names=F, sheetName = "Coverages")
 
 # Cosmetics
 fig.data$target[fig.data$target == "multi"] <- "multiple nations"
 fig.data$target[fig.data$target == "single"] <- "single nation"
-fig.data$name <- paste0(capitalize(fig.data$instrument)," measures \naffecting ",fig.data$target)
+fig.data$target[fig.data$target == "all"] <- "all nations"
+fig.data$name <- paste0(capitalize(fig.data$instrument)," interventions \naffecting ",fig.data$target)
 fig.data$name[fig.data$instrument=="export incentive"] <- paste0(fig.data$name[fig.data$instrument=="export incentive"]," in foreign market")
 fig.data$name[! fig.data$instrument=="export incentive"] <- paste0(fig.data$name[! fig.data$instrument=="export incentive"]," in home market")
 
@@ -88,7 +84,7 @@ fig.create <- function(tp,trg) {
 fig7.create <- function() {
   
   set = subset(fig.data, period.id == 1)
-  set$grouping <- paste0(set$instrument," measures affecting ",set$target)
+  set$grouping <- paste0(set$instrument," interventions affecting ",set$target)
   
   fig <- ggplot(data=set)+
     geom_line(aes(x=month.count, y=trade.share, colour=grouping),size=1)+
@@ -102,7 +98,7 @@ fig7.create <- function() {
                      y.left.labels = percent,
                      y.left.limits = c(0,max(set$trade.share)*1.05),
                      colour.legend.col = 2,
-                     colour.legend.title = "Measure type and target")+
+                     colour.legend.title = "Intervention type and target")+
     gta_theme()
   fig
   return(fig)
@@ -122,7 +118,7 @@ for (tp in 1:length(types)) {
   
     gta_plot_saver(plot = fig,
                    path = paste0(output.path),
-                   name = paste0("Figure ",counter," - ",types[tp], " measures affecting ",targets[trg]),
+                   name = paste0("Figure ",counter," - ",types[tp], " interventions affecting ",targets[trg]),
                    cairo_ps = T,
                    width = 21)
     
@@ -134,7 +130,7 @@ for (tp in 1:length(types)) {
 # save plot 7
 gta_plot_saver(plot = fig7.create(),
                path = paste0(output.path),
-               name = paste0("Figure 7 - All measure types and targets in populist era"),
+               name = paste0("Figure 7 - All intervention types and targets in populist era"),
                cairo_ps = T,
                width = 21)
 
