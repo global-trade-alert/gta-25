@@ -94,7 +94,7 @@ fig7.create <- function() {
                      x.bottom.name = "Months into period",
                      x.bottom.labels = c(seq(0,max(set$month.count),5),34),
                      x.bottom.breaks = c(seq(0,max(set$month.count),5),34),
-                     y.left.name = paste0("World trade affected from \nJanuary 1st 2017 to November 15th 2019"),
+                     y.left.name = paste0("World trade affected from \nJanuary 2017 to November 2019"),
                      y.left.labels = percent,
                      y.left.limits = c(0,max(set$trade.share)*1.05),
                      colour.legend.col = 2,
