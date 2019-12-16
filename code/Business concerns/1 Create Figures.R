@@ -43,7 +43,7 @@ fig1
 
 gta_plot_saver(plot = fig1,
                path = figure.path,
-               name = paste0("Business confidence index"),
+               name = paste0("Figure 1 - Business confidence index"),
                cairo_ps = T,
                height = 17,
                width = 21)
