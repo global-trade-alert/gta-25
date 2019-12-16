@@ -137,6 +137,14 @@ gta25_setup <- function(internal.name=NULL,
                                     create.fig.numbers=c(5:8),
                                     stringsAsFactors = F))
   
+  producer.console=rbind(producer.console,
+                         data.frame(internal.name="front matter",
+                                    report.number=0,
+                                    report.name="front matter",
+                                    create.fig.script="1 Create figures.R",
+                                    create.fig.numbers=c(5:8),
+                                    stringsAsFactors = F))
+  
   ## set up data and figure folders
   
   if(in.dev){
