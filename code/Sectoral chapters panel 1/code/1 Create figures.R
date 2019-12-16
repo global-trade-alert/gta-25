@@ -241,13 +241,14 @@ for (sct in sectors) {
                  width = 21)
   
   # Four plots per page, not really feasible
-  gta_plot_saver(plot = figC,
-                 path = s.path,
-                 name = paste0("Panel 1 C (Fig 1-4) - Sector ",sct),
-                 cairo_ps = T,
-                 height = 29.7,
-                 width = 21)
-  
+  # 191216 Removed from final version
+  # gta_plot_saver(plot = figC,
+  #                path = s.path,
+  #                name = paste0("Panel 1 C (Fig 1-4) - Sector ",sct),
+  #                cairo_ps = T,
+  #                height = 29.7,
+  #                width = 21)
+  # 
   write.xlsx(subset(fig1.data, sector==sct), file=paste0(s.path,"Fig 1 data.xlsx"),row.names=F, sheetName = "Coverages")
   write.xlsx(subset(fig2.data, sector==sct), file=paste0(s.path,"Fig 2 data.xlsx"),row.names=F, sheetName = "Coverages")
   write.xlsx(subset(fig3.data, sector==sct), file=paste0(s.path,"Fig 3 data.xlsx"),row.names=F, sheetName = "Coverages")

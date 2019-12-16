@@ -380,13 +380,16 @@ for (sct in sectors) {
                  cairo_ps = T,
                  height = 29.7,
                  width = 21)
+
+  # 191216 Removed from final version 
+  # gta_plot_saver(plot = figC,
+  #                path = s.path,
+  #                name = paste0("Panel 5 - Sector ",sct, " (Fig 11 & 12)"),
+  #                cairo_ps = T,
+  #                height = 29.7,
+  #                width = 21)
   
-  gta_plot_saver(plot = figC,
-                 path = s.path,
-                 name = paste0("Panel 5 - Sector ",sct, " (Fig 11 & 12)"),
-                 cairo_ps = T,
-                 height = 29.7,
-                 width = 21)
+  
   fig9.xlsx
   write.xlsx(subset(fig9.xlsx, sector==sct), file=paste0(s.path,"Table for Figure 9.xlsx"),row.names=F, sheetName = "Coverages")
   write.xlsx(subset(fig10.xlsx, sector==sct), file=paste0(s.path,"Table for Figure 10.xlsx"),row.names=F, sheetName = "Coverages")

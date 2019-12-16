@@ -11,6 +11,19 @@ library(openxlsx)
 library(gridExtra)
 library(stringr)
 
+################ NO NEED TO RUN THIS CODE
+################ NO NEED TO RUN THIS CODE
+################ NO NEED TO RUN THIS CODE
+################ NO NEED TO RUN THIS CODE
+# 191216 Removed from final version
+
+
+
+
+
+
+
+
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 chapter.folders=gta25_setup(internal.name = 'Sectoral chapters panel 2',
