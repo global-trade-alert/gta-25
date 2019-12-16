@@ -23,13 +23,17 @@ gta_colour_palette()
 
 ###### MAPS
 
-# The first map would show the number of times each country's commercial interests have been hit from 1 Jan 2017 to 15 Nov 2019. 
+# The first map would show the number of times 
+# each country's commercial interests have been hit from 1 Jan 2017 to 15 Nov 2019. 
 
-load("0 gtalibrary/data/world.geo.rda")
+load(paste0(data.path,"Nr of hits in populist era.Rdata"))
+write.xlsx(nr.hits[,c("affected.jurisdiction","intervention.id")], file=paste0(figure.path,"Nr of hits in populist era.xlsx"),sheetName="Nr of hits",row.names=F)
+data=nr.hits
 
+world.geo <- gtalibrary::world.geo
 world <- world.geo
 
-data[,c("UN","value")] <- data[,c("un_code","implemented")]
+data[,c("UN","value")] <- data[,c("a.un","intervention.id")]
 data$UN <- gta_un_code_vector(data$UN)
 
 # merge data with map data
@@ -42,8 +46,12 @@ world <-  world[with(world, order(X)),]
 plot=ggplot() +
   geom_polygon(data=subset(world, country != "Antarctica"), aes(x = long, y = lat, group = group, fill = value), size = 0.2, color = "white") +
   coord_fixed() + # Important to fix world map proportions
+  scale_x_continuous(limits=c(-13900000,17000000))+
   labs(x="", y="") +
-  scale_fill_gradient(low = gta_colour$blue[4], high = gta_colour$blue[1], breaks=waiver(), position="bottom", na.value = "#CCCCCC") + # Set color gradient
+  scale_fill_gradientn(name="", na.value="#dadada",
+                       colours = c(gta_colour$red[4], gta_colour$red[1]), values=c(0,0.25,0.5,0.75,1), 
+                       # breaks=c(0,250,500,750), labels=c("0","250","500","750"),
+                       guide=guide_colorbar(barwidth=15, label.hjust = 0.5))+
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
@@ -51,23 +59,41 @@ plot=ggplot() +
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
         panel.background = element_blank(),
-        legend.position = "none")
+        legend.position = c(0.55,0),
+        legend.justification = c(0.5,0.3),
+        legend.direction = "horizontal",
+        plot.title = element_text(family = "", colour = "#333333", size = 11, hjust = 0.5, margin = margin(b=10)),
+        legend.title = element_text(vjust= 0.3, family="", colour = "#333333", size = 11*0.8, margin = margin(r=10,b=5)),
+        legend.text = element_text(family="", colour = "#333333", size = 11*0.8, angle = 0, hjust=0, vjust=0, margin = margin(r=10)),
+        legend.text.align = 0,
+        plot.background = element_rect(fill="#FFFFFF"),
+        plot.margin = unit(c(0.0,0.0,0.05,0.0), "npc"),
+        
+  ) +
+  guides(fill=guide_legend(title="Number of times harmed by \ninterventions implemented from \nJanuary 1st 2017 to September 15th 2019", label.position = "bottom",title.position = "top"),
+         ymax=guide_legend(titel="size"))
 
 plot
 
 gta_plot_saver(plot=plot,
                path = paste0(figure.path),
-               name= "TOP - Number of hits",
+               name= "Number of hits in populist era",
                eps = T,
                png=T)
 
 
 
-# The second map would show the share of a country's exports that are affected by harmful foreign measures implemented from 1 Jan 2017 to 15 Nov 2019. 
+# The second map would show the share of a country's 
+# exports that are affected by harmful foreign measures 
+# implemented from 1 Jan 2017 to 15 Nov 2019. 
 
-world <- world.geo
+load(paste0(data.path,"Exports affected in populist era.Rdata"))
+write.xlsx(ex.coverages[,c("affected.jurisdiction","coverages")], file=paste0(figure.path,"Exports affected in populist era.xlsx"),sheetName="Nr of hits",row.names=F)
+data=ex.coverages
 
-data[,c("UN","value")] <- data[,c("un_code","implemented")]
+world <- gtalibrary::world.geo
+
+data[,c("UN","value")] <- data[,c("un","coverage")]
 data$UN <- gta_un_code_vector(data$UN)
 
 # merge data with map data
@@ -83,8 +109,12 @@ world <-  world[with(world, order(X)),]
 plot=ggplot() +
   geom_polygon(data=subset(world, country != "Antarctica"), aes(x = long, y = lat, group = group, fill = value), size = 0.2, color = "white") +
   coord_fixed() + # Important to fix world map proportions
+  scale_x_continuous(limits=c(-13900000,17000000))+
   labs(x="", y="") +
-  scale_fill_gradient(low = gta_colour$blue[4], high = gta_colour$blue[1], breaks=waiver(), position="bottom", na.value = "#CCCCCC") + # Set color gradient
+  scale_fill_gradientn(name="", na.value="#dadada",
+                       colours = c(gta_colour$red[4], gta_colour$red[1]), values=c(0,0.25,0.50,0.75,max(data$value)), 
+                       breaks=c(0,0.25,0.5,0.75,1), labels=c("0%","25%","50%","75%","100%"),
+                       guide=guide_colorbar(barwidth=15, label.hjust = 0.5))+
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
@@ -92,12 +122,24 @@ plot=ggplot() +
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
         panel.background = element_blank(),
-        legend.position = "none")
+        legend.position = c(0.55,0),
+        legend.justification = c(0.5,0.3),
+        legend.direction = "horizontal",
+        plot.title = element_text(family = "", colour = "#333333", size = 11, hjust = 0.5, margin = margin(b=10)),
+        legend.title = element_text(vjust= 0.3, family="", colour = "#333333", size = 11*0.8, margin = margin(r=10,b=5)),
+        legend.text = element_text(family="", colour = "#333333", size = 11*0.8, angle = 0, hjust=0, vjust=0, margin = margin(r=10)),
+        legend.text.align = 0,
+        plot.background = element_rect(fill="#FFFFFF"),
+        plot.margin = unit(c(0.0,0.0,0.05,0.0), "npc"),
+        
+  ) +
+  guides(fill=guide_legend(title="Share of exports affected by \ninterventions implemented from \nJanuary 1st 2017 to September 15th 2019", label.position = "bottom",title.position = "top"),
+         ymax=guide_legend(titel="size"))
 
 plot
 
 gta_plot_saver(plot=plot,
                path = paste0(figure.path),
-               name= "BOTTOM - Affected export shares",
+               name= "Exporting countries affected by populist era interventions",
                eps = T,
                png=T)
