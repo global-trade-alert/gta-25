@@ -135,12 +135,14 @@ fig2
                  path = paste0(output.path),
                  name = paste0("Figure 1 - Number of discriminatory measures"),
                  cairo_ps = T,
+                 pdf = T,
                  width = 21)
 
   gta_plot_saver(plot = fig2,
                  path = paste0(output.path),
                  name = paste0("Figure 2 - Number of reforms"),
                  cairo_ps = T,
+                 pdf = T,
                  width = 21)
   
   

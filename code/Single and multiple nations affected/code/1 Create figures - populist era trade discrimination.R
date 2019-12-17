@@ -147,6 +147,7 @@ fig <- fig.create(tp,trg)
                   path = paste0(output.path),
                   name = paste0("Figure ",counter," - ",types[tp], " interventions affecting ",targets[trg]),
                   cairo_ps = T,
+                  pdf = T,
                   width = 21)
 
 # Figure 2
@@ -154,6 +155,7 @@ gta_plot_saver(plot = fig7.create(),
                path = paste0(output.path),
                name = paste0("Figure 2 - All intervention types and targets in populist era"),
                cairo_ps = T,
+               pdf = T,
                width = 21)
 
 
@@ -169,5 +171,6 @@ gta_plot_saver(plot = fig,
                path = paste0(output.path),
                name = paste0("Figure ",counter," - ",types[tp], " interventions affecting ",targets[trg]),
                cairo_ps = T,
+               pdf = T,
                width = 21)
 

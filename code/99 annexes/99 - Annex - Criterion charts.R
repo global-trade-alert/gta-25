@@ -388,6 +388,10 @@ for(cty in countries) {
   cairo_ps(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".eps", sep=""), bg = "white", width=10, height=8, family="Open Sans")
   print(p1)
   dev.off()
+  
+  cairo_pdf(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".pdf", sep=""), bg = "white", width=10, height=8, family="Open Sans")
+  print(p1)
+  dev.off()
   # 
   
   

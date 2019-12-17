@@ -375,6 +375,7 @@ for (sct in sectors) {
                  path = s.path,
                  name = paste0("Figure 3 - Sector ",sct, " (data 13 & 14)"),
                  cairo_ps = T,
+                 pdf = T,
                  height = 29.7,
                  width = 21)
   
@@ -382,6 +383,7 @@ for (sct in sectors) {
                  path = s.path,
                  name = paste0("Figure 4 - Sector ",sct, " (data 9 & 10)"),
                  cairo_ps = T,
+                 pdf = T,
                  height = 29.7,
                  width = 21)
   

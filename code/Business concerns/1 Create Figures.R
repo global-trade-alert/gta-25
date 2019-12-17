@@ -2,7 +2,7 @@ rm(list=ls())
 
 library(ggplot2)
 library(gtalibrary)
-
+windowsFonts("OpenSans" = windowsFont("OpenSans"))
 gta_setwd()
 source('0 report production/GTA 25/help files/Producer console.R')
 chapter.folders=gta25_setup(internal.name = 'business concerns',
@@ -45,6 +45,7 @@ gta_plot_saver(plot = fig1,
                path = figure.path,
                name = paste0("Figure 1 - Business confidence index"),
                cairo_ps = T,
+               pdf = T,
                height = 17,
                width = 21)
 

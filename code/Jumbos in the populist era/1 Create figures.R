@@ -93,6 +93,7 @@ gta_plot_saver(plot = p1,
                path = figure.path,
                name = "Jumbo bar chart",
                cairo_ps = T,
+               pdf = T,
                height = 15,
                width = 27)
 
@@ -146,5 +147,6 @@ plot
 gta_plot_saver(plot=plot,
                path = paste0(figure.path),
                name= "Map jumbo implementers in populist era",
-               eps = T,
+               cairo_ps = T,
+               pdf = T,
                png=T)

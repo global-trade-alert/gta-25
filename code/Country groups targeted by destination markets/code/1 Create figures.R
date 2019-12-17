@@ -1,5 +1,6 @@
 rm(list=ls())
 
+library(tidyr)
 library(gtalibrary)
 library(stringr)
 library(tidyverse)
@@ -180,6 +181,7 @@ figex <- ggplot()+
                  path = paste0(output.path),
                  name = paste0("Figure 1 - ",this.chapter),
                  cairo_ps = T,
+                 pdf = T,
                  height = 29.7,
                  width = 21)
   

@@ -131,7 +131,8 @@ map1
 gta_plot_saver(plot=map1,
                path=output.path,
                name=paste0("map_",unique(conversion$name[conversion$i.un==cty]),"_top"),
-               eps=T,
+               pdf=T,
+               cairo_ps = T,
                width = 21,
                height = 12)
 
@@ -204,7 +205,8 @@ map2
 gta_plot_saver(plot=map2,
                path=output.path,
                name=paste0("map_",unique(conversion$name[conversion$i.un==cty]),"_bottom"),
-               eps=T,
+               cairo_ps=T,
+               pdf=T,
                width = 21,
                height = 12)
 print(cty)

@@ -230,6 +230,7 @@ for (sct in sectors) {
                  path = s.path,
                  name = paste0("Figure 2 A (data 1 & 2) - Sector ",sct),
                  cairo_ps = T,
+                 pdf = T,
                  height = 29.7,
                  width = 21)
   
@@ -237,6 +238,7 @@ for (sct in sectors) {
                  path = s.path,
                  name = paste0("Figure 2 B (data 3 & 4) - Sector ",sct),
                  cairo_ps = T,
+                 pdf = T,
                  height = 29.7,
                  width = 21)
   
@@ -249,10 +251,10 @@ for (sct in sectors) {
   #                height = 29.7,
   #                width = 21)
   # 
-  write.xlsx(subset(fig1.data, sector==sct), file=paste0(s.path,"Fig 2A data 1.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig2.data, sector==sct), file=paste0(s.path,"Fig 2A data 2.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig3.data, sector==sct), file=paste0(s.path,"Fig 2B data 3.xlsx"),row.names=F, sheetName = "Coverages")
-  write.xlsx(subset(fig4.data, sector==sct)[,c("sector","year","coverages","hits")], file=paste0(s.path,"Fig 2B data 4.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig1.data, sector==sct), file=paste0(s.path,"Table for Figure 2A data 1.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig2.data, sector==sct), file=paste0(s.path,"Table for Figure 2A data 2.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig3.data, sector==sct), file=paste0(s.path,"Table for Figure 2B data 3.xlsx"),row.names=F, sheetName = "Coverages")
+  write.xlsx(subset(fig4.data, sector==sct)[,c("sector","year","coverages","hits")], file=paste0(s.path,"Table for Figure 2B data 4.xlsx"),row.names=F, sheetName = "Coverages")
   
 }
 

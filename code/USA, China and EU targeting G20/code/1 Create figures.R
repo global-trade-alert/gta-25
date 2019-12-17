@@ -131,6 +131,7 @@ for (dst in 1:length(dest.markets.names)) {
                  path = paste0(output.path),
                  name = paste0("Figure 1 - Destination market ",dest.markets.names[dst]),
                  cairo_ps = T,
+                 pdf = T,
                  height = 29.7,
                  width = 21)
 }

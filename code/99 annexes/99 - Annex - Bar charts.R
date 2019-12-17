@@ -102,6 +102,10 @@ annex.bar.charts <- function(member=NULL) {
   grid.draw(g)
   dev.off()
   
+  cairo_pdf(paste0(output.path, g20.member.names[member],"_bottom_protectionist.pdf"), bg = "white", width=11, height=11/1.8, family="Open Sans")
+  grid.draw(g)
+  dev.off()
+  
   ## liberalising
   
   (
@@ -150,6 +154,10 @@ annex.bar.charts <- function(member=NULL) {
   dev.off()
   
   cairo_ps(paste0(output.path, g20.member.names[member],"_bottom_liberalising.eps"), bg = "white", width=11, height=11/1.8, family="Open Sans")
+  grid.draw(g)
+  dev.off()
+  
+  cairo_pdf(paste0(output.path, g20.member.names[member],"_bottom_liberalising.pdf"), bg = "white", width=11, height=11/1.8, family="Open Sans")
   grid.draw(g)
   dev.off()
 

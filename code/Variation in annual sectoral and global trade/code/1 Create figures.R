@@ -100,6 +100,7 @@ for (sct in sectors) {
                  path = s.path,
                  name = paste0("Figure 1 - Sector ",sct),
                  cairo_ps = T,
+                 pdf = T,
                  width = 21)
   
   write.xlsx(subset(fig1.data, cpc %in% c(sct,0)), file=paste0(s.path,"Table for Figure 1.xlsx"),row.names=F, sheetName = "Trade data")

@@ -82,7 +82,7 @@ gta_plot_saver(plot=plot,
                path = paste0(figure.path),
                name= "Number of hits in populist era",
                pdf = T,
-               eps = T,
+               cairo_ps = T,
                png=T)
 
 
@@ -146,6 +146,6 @@ plot
 gta_plot_saver(plot=plot,
                path = paste0(figure.path),
                name= "Exporting countries affected by populist era interventions",
-               eps = T,
+               cairo_ps = T,
                pdf=T,
                png=T)
