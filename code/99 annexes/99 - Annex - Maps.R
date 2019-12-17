@@ -62,7 +62,7 @@ conversion$name[conversion$name=="United States of America"]<-"the United States
 conversion$name[conversion$name=="Republic of Korea"]<-"South Korea"
 conversion$name[conversion$name=="Russian Federation"]<-"Russia"
 
-cty = "410"
+# cty = "410"
 #################### MAPS  ###########################
 for(cty in g20.members){
 
@@ -138,10 +138,6 @@ gta_plot_saver(plot=map1,
                height = 12)
 
 
-
-
-
-
 map.annex<-aggregate(intervention.id ~ i.un, data=subset(master, gta.evaluation!="Green" & currently.in.force=="Yes" & a.un==cty), function(x) length(unique(x)))
 
 world <- world.0
@@ -211,6 +207,7 @@ gta_plot_saver(plot=map2,
                pdf=T,
                width = 21,
                height = 12)
+
 print(cty)
 
 
