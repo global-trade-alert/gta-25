@@ -31,6 +31,8 @@ write.xlsx(nr.hits[,c("affected.jurisdiction","intervention.id")], file=paste0(f
 data=nr.hits
 
 world.geo <- gtalibrary::world.geo
+# load("0 gtalibrary/data/world.geo.rda")
+
 world <- world.geo
 
 data[,c("UN","value")] <- data[,c("a.un","intervention.id")]
@@ -48,10 +50,13 @@ plot=ggplot() +
   coord_fixed() + # Important to fix world map proportions
   scale_x_continuous(limits=c(-13900000,17000000))+
   labs(x="", y="") +
-  scale_fill_gradientn(name="", na.value="#dadada",
-                       colours = c(gta_colour$red[4], gta_colour$red[1]), values=c(0,0.25,0.5,0.75,1), 
-                       # breaks=c(0,250,500,750), labels=c("0","250","500","750"),
-                       guide=guide_colorbar(barwidth=15, label.hjust = 0.5))+
+  scale_fill_gradient(name="Number of hits to a nation’s commercial interests due to \nprotectionism implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)", 
+                      na.value="#dadada",
+                      low = gta_colour$red[4], 
+                      high = gta_colour$red[1], 
+                      breaks=c(seq(0,max(world$value[is.na(world$value)==F]),200)),
+                      # labels=c("0","250","500","750"),
+                      guide=guide_colorbar(barwidth=15, label.hjust = 0.5, title.position = "top"))+
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
@@ -69,15 +74,14 @@ plot=ggplot() +
         plot.background = element_rect(fill="#FFFFFF"),
         plot.margin = unit(c(0.0,0.0,0.05,0.0), "npc"),
         
-  ) +
-  guides(fill=guide_legend(title="Number of times harmed by \ninterventions implemented from \nJanuary 1st 2017 to September 15th 2019", label.position = "bottom",title.position = "top"),
-         ymax=guide_legend(titel="size"))
+  ) 
 
 plot
 
 gta_plot_saver(plot=plot,
                path = paste0(figure.path),
                name= "Number of hits in populist era",
+               pdf = T,
                eps = T,
                png=T)
 
@@ -111,10 +115,13 @@ plot=ggplot() +
   coord_fixed() + # Important to fix world map proportions
   scale_x_continuous(limits=c(-13900000,17000000))+
   labs(x="", y="") +
-  scale_fill_gradientn(name="", na.value="#dadada",
-                       colours = c(gta_colour$red[4], gta_colour$red[1]), values=c(0,0.25,0.50,0.75,max(data$value)), 
-                       breaks=c(0,0.25,0.5,0.75,1), labels=c("0%","25%","50%","75%","100%"),
-                       guide=guide_colorbar(barwidth=15, label.hjust = 0.5))+
+  scale_fill_gradient(name="Share of national goods exports exposed to \nprotectionism implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)", 
+                      na.value="#dadada",
+                      low = gta_colour$red[4], 
+                      high = gta_colour$red[1], 
+                      breaks=c(0,seq(0,1,0.25),1),
+                      # labels=c("0","250","500","750"),
+                      guide=guide_colorbar(barwidth=15, label.hjust = 0.5, title.position = "top"))+
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
@@ -132,9 +139,7 @@ plot=ggplot() +
         plot.background = element_rect(fill="#FFFFFF"),
         plot.margin = unit(c(0.0,0.0,0.05,0.0), "npc"),
         
-  ) +
-  guides(fill=guide_legend(title="Share of exports affected by \ninterventions implemented from \nJanuary 1st 2017 to September 15th 2019", label.position = "bottom",title.position = "top"),
-         ymax=guide_legend(titel="size"))
+  )
 
 plot
 
@@ -142,4 +147,5 @@ gta_plot_saver(plot=plot,
                path = paste0(figure.path),
                name= "Exporting countries affected by populist era interventions",
                eps = T,
+               pdf=T,
                png=T)
