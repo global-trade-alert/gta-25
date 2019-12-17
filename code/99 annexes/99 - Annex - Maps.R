@@ -118,6 +118,7 @@ map1 = ggplot() +
         legend.title = element_text(vjust= 0.3, family="", colour = "#333333", size = 11*0.8, margin = margin(r=10,b=5)),
         legend.text = element_text(family="", colour = "#333333", size = 11*0.8, angle = 0, hjust=0, vjust=0, margin = margin(r=10)),
         legend.text.align = 0,
+        legend.background = element_rect(fill="transparent"),
         plot.background = element_rect(fill="#FFFFFF"),
         plot.margin = unit(c(0.0,0.0,0.05,0.0), "npc"),
         
@@ -192,6 +193,7 @@ map2 = ggplot() +
         legend.title = element_text(vjust= 0.3, family="", colour = "#333333", size = 11*0.8, margin = margin(r=10,b=5)),
         legend.text = element_text(family="", colour = "#333333", size = 11*0.8, angle = 0, hjust=0, vjust=0, margin = margin(r=10)),
         legend.text.align = 0,
+        legend.background = element_rect(fill="transparent"),
         plot.background = element_rect(fill="#FFFFFF"),
         plot.margin = unit(c(0.0,0.0,0.05,0.0), "npc")
 
