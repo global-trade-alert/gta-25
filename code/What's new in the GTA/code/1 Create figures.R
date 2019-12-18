@@ -25,17 +25,14 @@ gta_colour_palette()
 load(paste0(data.path, 'published interventions.Rdata'))
 
 
-published.ids$cols="bla"
 published.ids$reporting.deadline=year(as.Date(published.ids$reporting.deadline))
 published.ids$position=published.ids$intervention.count+25
 
-fig1=ggplot(published.ids, aes(x=as.factor(reporting.deadline),y=intervention.count, fill=cols))+
-  geom_bar(stat="identity")+
+fig1=ggplot(published.ids, aes(x=as.factor(reporting.deadline),y=intervention.count))+
+  geom_bar(stat="identity",fill=gta_colour$qualitative[1])+
   geom_text(aes(x=as.factor(reporting.deadline), y=position, label=intervention.count), colour="black",size=3.5)+
   gta_theme()+
-  scale_fill_manual(values=c(gta_colour$qualitative[c(1)]))+
   scale_y_continuous(sec.axis = dup_axis())+
-  guides(fill="none")+
   labs(x="... and reported by September of given year", y="Number of interventions implemented\nin Q1 to Q3 2009 ...")
 
 
@@ -45,7 +42,6 @@ gta_plot_saver(fig1,
                cairo_ps = T,
                pdf = T)
 
-published.ids$colsNULL
 published.ids$position=NULL
 write.xlsx(published.ids, paste0(figure.path, 'Figure 2 data.xlsx'))
 
@@ -58,8 +54,7 @@ fig2=ggplot(sa.src.yr, aes(x=as.factor(year), y=sa.count))+
   geom_bar(stat="identity",fill=gta_colour$qualitative[1])+
   gta_theme()+
   labs(x="calendar year",y="Total number of reports on state interventions\npublished in a given calendar year")+
-  scale_y_continuous(sec.axis = dup_axis())+
-  guides(fill="none") 
+  scale_y_continuous(sec.axis = dup_axis())
     
 
 gta_plot_saver(fig2, 
