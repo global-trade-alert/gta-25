@@ -26,126 +26,165 @@ gta_colour_palette()
 # The first map would show the number of times 
 # each country's commercial interests have been hit from 1 Jan 2017 to 15 Nov 2019. 
 
-load(paste0(data.path,"Nr of hits in populist era.Rdata"))
-write.xlsx(nr.hits[,c("affected.jurisdiction","intervention.id")], file=paste0(figure.path,"Nr of hits in populist era.xlsx"),sheetName="Nr of hits",row.names=F)
-data=nr.hits
+load(paste0(data.path,"Nr of hits in populist era - harmful.Rdata"))
+nr.hits$type <- "harmful"
+nr.hits.temp <- nr.hits
+load(paste0(data.path,"Nr of hits in populist era - liberalising.Rdata"))
+nr.hits$type <- "liberalising"
+nr.hits <- rbind(nr.hits, nr.hits.temp)
+write.xlsx(nr.hits[,c("affected.jurisdiction","intervention.id","type")], file=paste0(figure.path,"Nr of hits in populist era.xlsx"),sheetName="Nr of hits",row.names=F)
 
-world.geo <- gtalibrary::world.geo
-# load("0 gtalibrary/data/world.geo.rda")
-
-world <- world.geo
-
-data[,c("UN","value")] <- data[,c("a.un","intervention.id")]
-data$UN <- gta_un_code_vector(data$UN)
-
-# merge data with map data
-world = merge(world, data[,c("UN","value")], by="UN", all.x=T)
-
-###### IMPORTANT, sort for X (id) again
-world <-  world[with(world, order(X)),]
-# world$value[is.na(world$value) == T] <- 0
-
-plot=ggplot() +
-  geom_polygon(data=subset(world, country != "Antarctica"), aes(x = long, y = lat, group = group, fill = value), size = 0.2, color = "white") +
-  coord_fixed() + # Important to fix world map proportions
-  scale_x_continuous(limits=c(-13900000,17000000))+
-  labs(x="", y="") +
-  scale_fill_gradient(name="Number of hits to a nation’s commercial interests due to \nprotectionism implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)", 
-                      na.value="#dadada",
-                      low = gta_colour$red[4], 
-                      high = gta_colour$red[1], 
-                      breaks=c(seq(0,max(world$value[is.na(world$value)==F]),200)),
-                      # labels=c("0","250","500","750"),
-                      guide=guide_colorbar(barwidth=15, label.hjust = 0.5, title.position = "top"))+
-  theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(),
-        axis.title.y=element_blank(),
-        axis.text.y=element_blank(),
-        axis.ticks.y=element_blank(),
-        panel.background = element_blank(),
-        legend.position = c(0.55,0),
-        legend.justification = c(0.5,0.3),
-        legend.direction = "horizontal",
-        plot.title = element_text(family = "", colour = "#333333", size = 11, hjust = 0.5, margin = margin(b=10)),
-        legend.title = element_text(vjust= 0.3, family="", colour = "#333333", size = 11*0.8, margin = margin(r=10,b=5)),
-        legend.text = element_text(family="", colour = "#333333", size = 11*0.8, angle = 0, hjust=0, vjust=0, margin = margin(r=10)),
-        legend.text.align = 0,
-        plot.background = element_rect(fill="#FFFFFF"),
-        plot.margin = unit(c(0.0,0.0,0.05,0.0), "npc"),
-        
-  ) 
-
-plot
-
-gta_plot_saver(plot=plot,
-               path = paste0(figure.path),
-               name= "Number of hits in populist era",
-               pdf = T,
-               cairo_ps = T,
-               png=T)
-
+map.nr.hits <- function(type.eval=NULL, color.low=NULL, color.high=NULL, legend.name=NULL) {
+  world.geo <- gtalibrary::world.geo
+  # load("0 gtalibrary/data/world.geo.rda")
+  
+  world <- world.geo
+  data <- subset(nr.hits, type == type.eval)
+  data[,c("UN","value")] <- data[,c("a.un","intervention.id")]
+  data$UN <- gta_un_code_vector(data$UN)
+  
+  # merge data with map data
+  world = merge(world, data[,c("UN","value")], by="UN", all.x=T)
+  
+  ###### IMPORTANT, sort for X (id) again
+  world <-  world[with(world, order(X)),]
+  # world$value[is.na(world$value) == T] <- 0
+  
+  plot=ggplot() +
+    geom_polygon(data=subset(world, country != "Antarctica"), aes(x = long, y = lat, group = group, fill = value), size = 0.2, color = "white") +
+    coord_fixed() + # Important to fix world map proportions
+    scale_x_continuous(limits=c(-13900000,17000000))+
+    labs(x="", y="") +
+    scale_fill_gradient(name=legend.name, 
+                        na.value="#dadada",
+                        low = color.low, 
+                        high = color.high, 
+                        breaks=c(min(world$value[is.na(world$value)==F]),seq(0,1500,200),max(world$value[is.na(world$value)==F])),
+                        # labels=c("0","250","500","750"),
+                        guide=guide_colorbar(barwidth=15, label.hjust = 0.5, title.position = "top"))+
+    theme(axis.title.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.x=element_blank(),
+          axis.title.y=element_blank(),
+          axis.text.y=element_blank(),
+          axis.ticks.y=element_blank(),
+          panel.background = element_blank(),
+          legend.position = c(0.55,0),
+          legend.justification = c(0.5,0.3),
+          legend.direction = "horizontal",
+          plot.title = element_text(family = "", colour = "#333333", size = 11, hjust = 0.5, margin = margin(b=10)),
+          legend.title = element_text(vjust= 0.3, family="", colour = "#333333", size = 11*0.8, margin = margin(r=10,b=5)),
+          legend.text = element_text(family="", colour = "#333333", size = 11*0.8, angle = 0, hjust=0, vjust=0, margin = margin(r=10)),
+          legend.text.align = 0,
+          plot.background = element_rect(fill="#FFFFFF"),
+          plot.margin = unit(c(0.0,0.0,0.05,0.0), "npc"),
+          
+    ) 
+  
+  print(plot)
+  
+  gta_plot_saver(plot=plot,
+                 path = paste0(figure.path),
+                 name= paste0("Number of hits in populist era - ",type.eval),
+                 pdf = T,
+                 cairo_ps = T,
+                 png=T)
+}
 
 
 # The second map would show the share of a country's 
 # exports that are affected by harmful foreign measures 
 # implemented from 1 Jan 2017 to 15 Nov 2019. 
 
-load(paste0(data.path,"Exports affected in populist era.Rdata"))
-write.xlsx(ex.coverages[,c("affected.jurisdiction","coverages")], file=paste0(figure.path,"Exports affected in populist era.xlsx"),sheetName="Nr of hits",row.names=F)
-data=ex.coverages
+load(paste0(data.path,"Exports affected in populist era - harmful.Rdata"))
+ex.coverages$type = "harmful"
+ex.coverages.temp <- ex.coverages
+load(paste0(data.path,"Exports affected in populist era - liberalising.Rdata"))
+ex.coverages$type = "liberalising"
+ex.coverages <- rbind(ex.coverages, ex.coverages.temp)
+write.xlsx(ex.coverages[,c("affected.jurisdiction","coverage","type")], file=paste0(figure.path,"Exports affected in populist era.xlsx"),sheetName="Nr of hits",row.names=F)
 
-world <- gtalibrary::world.geo
+map.coverage <- function(type.eval=NULL, color.low=NULL, color.high=NULL, legend.name=NULL, breaks.manual = NULL) {
 
-data[,c("UN","value")] <- data[,c("un","coverage")]
-data$UN <- gta_un_code_vector(data$UN)
+  world <- gtalibrary::world.geo
+  data <- subset(ex.coverages, type == type.eval)
+  data[,c("UN","value")] <- data[,c("un","coverage")]
+  data$UN <- gta_un_code_vector(data$UN)
+  
+  # merge data with map data
+  world = merge(world, data[,c("UN","value")], by="UN", all.x=T)
+  
+  ###### IMPORTANT, sort for X (id) again
+  world <-  world[with(world, order(X)),]
+  # world$value[is.na(world$value) == T] <- 0
 
-# merge data with map data
-world = merge(world, data[,c("UN","value")], by="UN", all.x=T)
+  if (is.null(breaks.manual)){
+    breaks <- c(min(world$value[is.na(world$value)==F]),seq(0,1,0.25),max(world$value[is.na(world$value)==F]))
+  }else {
+    eval(parse(text=paste0("breaks <- ",breaks.manual)))
+  }
+    
+  plot=ggplot() +
+    geom_polygon(data=subset(world, country != "Antarctica"), aes(x = long, y = lat, group = group, fill = value), size = 0.2, color = "white") +
+    coord_fixed() + # Important to fix world map proportions
+    scale_x_continuous(limits=c(-13900000,17000000))+
+    labs(x="", y="") +
+    scale_fill_gradient(name=legend.name, 
+                        na.value="#dadada",
+                        low = color.low, 
+                        high = color.high, 
+                        breaks=breaks,
+                        labels=scales::percent,
+                        guide=guide_colorbar(barwidth=15, label.hjust = 0.5, title.position = "top"))+
+    theme(axis.title.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.x=element_blank(),
+          axis.title.y=element_blank(),
+          axis.text.y=element_blank(),
+          axis.ticks.y=element_blank(),
+          panel.background = element_blank(),
+          legend.position = c(0.55,0),
+          legend.justification = c(0.5,0.3),
+          legend.direction = "horizontal",
+          plot.title = element_text(family = "", colour = "#333333", size = 11, hjust = 0.5, margin = margin(b=10)),
+          legend.title = element_text(vjust= 0.3, family="", colour = "#333333", size = 11*0.8, margin = margin(r=10,b=5)),
+          legend.text = element_text(family="", colour = "#333333", size = 11*0.8, angle = 0, hjust=0, vjust=0, margin = margin(r=10)),
+          legend.text.align = 0,
+          plot.background = element_rect(fill="#FFFFFF"),
+          plot.margin = unit(c(0.0,0.0,0.05,0.0), "npc"),
+          
+    )
+  
+  print(plot)
+  
+  gta_plot_saver(plot=plot,
+                 path = paste0(figure.path),
+                 name= paste0("Exporting countries affected by populist era interventions - ",type.eval),
+                 cairo_ps = T,
+                 pdf=T,
+                 png=T)
+  
 
-###### IMPORTANT, sort for X (id) again
-world <-  world[with(world, order(X)),]
-# world$value[is.na(world$value) == T] <- 0
+}
 
 
+map.nr.hits(type.eval="harmful",
+            legend.name = "Number of hits to a nation’s commercial interests due \nto protectionism implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)",
+            color.low = gta_colour$red[4],
+            color.high = gta_colour$red[1])
 
+map.nr.hits(type.eval="liberalising",
+            legend.name = "Number of times a nation’s commercial interests benefited \nfrom trade reforms implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)",
+            color.low = gta_colour$green[4],
+            color.high = gta_colour$green[1])
 
-plot=ggplot() +
-  geom_polygon(data=subset(world, country != "Antarctica"), aes(x = long, y = lat, group = group, fill = value), size = 0.2, color = "white") +
-  coord_fixed() + # Important to fix world map proportions
-  scale_x_continuous(limits=c(-13900000,17000000))+
-  labs(x="", y="") +
-  scale_fill_gradient(name="Share of national goods exports exposed to \nprotectionism implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)", 
-                      na.value="#dadada",
-                      low = gta_colour$red[4], 
-                      high = gta_colour$red[1], 
-                      breaks=c(0,seq(0,1,0.25),1),
-                      # labels=c("0","250","500","750"),
-                      guide=guide_colorbar(barwidth=15, label.hjust = 0.5, title.position = "top"))+
-  theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(),
-        axis.title.y=element_blank(),
-        axis.text.y=element_blank(),
-        axis.ticks.y=element_blank(),
-        panel.background = element_blank(),
-        legend.position = c(0.55,0),
-        legend.justification = c(0.5,0.3),
-        legend.direction = "horizontal",
-        plot.title = element_text(family = "", colour = "#333333", size = 11, hjust = 0.5, margin = margin(b=10)),
-        legend.title = element_text(vjust= 0.3, family="", colour = "#333333", size = 11*0.8, margin = margin(r=10,b=5)),
-        legend.text = element_text(family="", colour = "#333333", size = 11*0.8, angle = 0, hjust=0, vjust=0, margin = margin(r=10)),
-        legend.text.align = 0,
-        plot.background = element_rect(fill="#FFFFFF"),
-        plot.margin = unit(c(0.0,0.0,0.05,0.0), "npc"),
-        
-  )
+map.coverage(type.eval="harmful",
+            legend.name = "Share of national goods exports exposed to \nprotectionism implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)",
+            color.low = gta_colour$red[4],
+            color.high = gta_colour$red[1])
 
-plot
-
-gta_plot_saver(plot=plot,
-               path = paste0(figure.path),
-               name= "Exporting countries affected by populist era interventions",
-               cairo_ps = T,
-               pdf=T,
-               png=T)
+map.coverage(type.eval="liberalising",
+             legend.name = "Share of national goods exports benefiting from \ntrade reforms implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)",
+             color.low = gta_colour$green[4],
+             color.high = gta_colour$green[1],
+             breaks.manual = "c(min(world$value[is.na(world$value)==F]),seq(0,0.6,0.2),max(world$value[is.na(world$value)==F]))")
