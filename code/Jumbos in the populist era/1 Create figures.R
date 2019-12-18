@@ -114,7 +114,7 @@ load(paste0(chapter.folders$data.path, "jumbo country names.Rdata"))
 data=subset(gtalibrary::country.names, name %in% jumbo.country.names)[,c("un_code","name")]
 data$implemented=1
 
-load("0 gtalibrary/data/world.geo.rda")
+world.geo <- gtalibrary::world.geo
 
 world <- world.geo
 
