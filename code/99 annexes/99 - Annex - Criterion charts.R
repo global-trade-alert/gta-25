@@ -15,7 +15,7 @@ rm(list = ls())
 # font_import()
 # loadfonts()
 loadfonts(device="postscript")
-loadfonts(device="win")
+loadfonts(device = "win")
 windowsFonts(my_font=windowsFont("Open Sans"))
 
 ## setup
@@ -253,21 +253,25 @@ for(cty in countries) {
           axis.text.y.right = element_text(size=8.5),
           axis.text.x.bottom = element_text(size=8.5))
   
-  # gta_plot_saver(plot=p1,
-  #                path="tables & figures/annex - p. 3 & 4 - top - criterion charts/",
-  #                name = paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"))
+  gta_plot_saver(plot=p1,
+                 path=output.path,
+                 name = paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),
+                 cairo_ps = T,
+                 pdf = T,
+                 width = 25,
+                 height = (25/10)*8)
   # draw it
-  png(paste(output.path, paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".png", sep=""), width=3000, height=2400, res=300)
-  print(p1)
-  dev.off()
-  
-  cairo_ps(paste(output.path, paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".eps", sep=""), bg = "white", width=10, height=8, family="Open Sans")
-  print(p1)
-  dev.off()
-  
-  cairo_pdf(paste(output.path, paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".pdf", sep=""), bg = "white", width=10, height=8, family="Open Sans")
-  print(p1)
-  dev.off()
+  # png(paste(output.path, paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".png", sep=""), width=3000, height=2400, res=300)
+  # print(p1)
+  # dev.off()
+  # 
+  # cairo_ps(paste(output.path, paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".eps", sep=""), bg = "white", width=10, height=8, family="Open Sans")
+  # print(p1)
+  # dev.off()
+  # 
+  # cairo_pdf(paste(output.path, paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".pdf", sep=""), bg = "white", width=10, height=8, family="Open Sans")
+  # print(p1)
+  # dev.off()
   # 
   
   
@@ -299,19 +303,26 @@ for(cty in countries) {
   #                path="tables & figures/annex - p. 3 & 4 - top - criterion charts/",
   #                name = paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"))
   
+  gta_plot_saver(plot=p1,
+                 path=output.path,
+                 name = paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),
+                 cairo_ps = T,
+                 pdf = T,
+                 width = 25,
+                 height = (25/10)*8)
   
   # draw it
-  png(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".png", sep=""), width=3000, height=2400, res=300)
-  print(p1)
-  dev.off()
-  
-  cairo_ps(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".eps", sep=""), bg = "white", width=10, height=8, family="Open Sans")
-  print(p1)
-  dev.off()
-  
-  cairo_pdf(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".pdf", sep=""), bg = "white", width=10, height=8, family="Open Sans")
-  print(p1)
-  dev.off()
+  # png(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".png", sep=""), width=3000, height=2400, res=300)
+  # print(p1)
+  # dev.off()
+  # 
+  # cairo_ps(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".eps", sep=""), bg = "white", width=10, height=8, family="Open Sans")
+  # print(p1)
+  # dev.off()
+  # 
+  # cairo_pdf(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".pdf", sep=""), bg = "white", width=10, height=8, family="Open Sans")
+  # print(p1)
+  # dev.off()
   
 }
 
@@ -348,18 +359,28 @@ for(cty in countries) {
   # gta_plot_saver(plot=p1,
   #                path="tables & figures/annex - p. 3 & 4 - top - criterion charts/",
   #                name = paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"))
+  
+  
+  gta_plot_saver(plot=p1,
+                 path=output.path,
+                 name = paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),
+                 cairo_ps = T,
+                 pdf = T,
+                 width = 25,
+                 height = (25/10)*8)
+  
   # draw it
-  png(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".png", sep=""), width=3000, height=2400, res=300)
-  print(p1)
-  dev.off()
-  
-  cairo_ps(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".eps", sep=""), bg = "white", width=10, height=8, family="Open Sans")
-  print(p1)
-  dev.off()
-  
-  cairo_pdf(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".pdf", sep=""), bg = "white", width=10, height=8, family="Open Sans")
-  print(p1)
-  dev.off()
+  # png(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".png", sep=""), width=3000, height=2400, res=300)
+  # print(p1)
+  # dev.off()
+  # 
+  # cairo_ps(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".eps", sep=""), bg = "white", width=10, height=8, family="Open Sans")
+  # print(p1)
+  # dev.off()
+  # 
+  # cairo_pdf(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_protectionist"),".pdf", sep=""), bg = "white", width=10, height=8, family="Open Sans")
+  # print(p1)
+  # dev.off()
   # 
   
   
@@ -392,18 +413,27 @@ for(cty in countries) {
   #                path="tables & figures/annex - p. 3 & 4 - top - criterion charts/",
   #                name = paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"))
   # 
+  
+  gta_plot_saver(plot=p1,
+                 path=output.path,
+                 name = paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),
+                 cairo_ps = T,
+                 pdf = T,
+                 width = 25,
+                 height = (25/10)*8)
+  
   # draw it
-  png(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".png", sep=""), width=3000, height=2400, res=300)
-  print(p1)
-  dev.off()
-  
-  cairo_ps(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".eps", sep=""), bg = "white", width=10, height=8, family="Open Sans")
-  print(p1)
-  dev.off()
-  
-  cairo_pdf(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".pdf", sep=""), bg = "white", width=10, height=8, family="Open Sans")
-  print(p1)
-  dev.off()
+  # png(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".png", sep=""), width=3000, height=2400, res=300)
+  # print(p1)
+  # dev.off()
+  # 
+  # cairo_ps(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".eps", sep=""), bg = "white", width=10, height=8, family="Open Sans")
+  # print(p1)
+  # dev.off()
+  # 
+  # cairo_pdf(paste(output.path,paste0(conversion$comtrade[conversion$i.un==cty],"_top_liberalising"),".pdf", sep=""), bg = "white", width=10, height=8, family="Open Sans")
+  # print(p1)
+  # dev.off()
   # 
   
   

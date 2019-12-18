@@ -27,11 +27,6 @@ gta_colour_palette()
 # each country's commercial interests have been hit from 1 Jan 2017 to 15 Nov 2019. 
 
 load(paste0(data.path,"Nr of hits in populist era - harmful.Rdata"))
-nr.hits$type <- "harmful"
-nr.hits.temp <- nr.hits
-load(paste0(data.path,"Nr of hits in populist era - liberalising.Rdata"))
-nr.hits$type <- "liberalising"
-nr.hits <- rbind(nr.hits, nr.hits.temp)
 write.xlsx(nr.hits[,c("affected.jurisdiction","intervention.id","type")], file=paste0(figure.path,"Nr of hits in populist era.xlsx"),sheetName="Nr of hits",row.names=F)
 
 map.nr.hits <- function(type.eval=NULL, color.low=NULL, color.high=NULL, legend.name=NULL) {
@@ -97,11 +92,6 @@ map.nr.hits <- function(type.eval=NULL, color.low=NULL, color.high=NULL, legend.
 # implemented from 1 Jan 2017 to 15 Nov 2019. 
 
 load(paste0(data.path,"Exports affected in populist era - harmful.Rdata"))
-ex.coverages$type = "harmful"
-ex.coverages.temp <- ex.coverages
-load(paste0(data.path,"Exports affected in populist era - liberalising.Rdata"))
-ex.coverages$type = "liberalising"
-ex.coverages <- rbind(ex.coverages, ex.coverages.temp)
 write.xlsx(ex.coverages[,c("affected.jurisdiction","coverage","type")], file=paste0(figure.path,"Exports affected in populist era.xlsx"),sheetName="Nr of hits",row.names=F)
 
 map.coverage <- function(type.eval=NULL, color.low=NULL, color.high=NULL, legend.name=NULL, breaks.manual = NULL) {
