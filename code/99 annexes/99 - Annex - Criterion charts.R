@@ -15,7 +15,7 @@ rm(list = ls())
 # font_import()
 # loadfonts()
 loadfonts(device="postscript")
-loadfonts(device = "pdf")
+loadfonts(device = "win")
 windowsFonts(my_font=windowsFont("Open Sans"))
 
 ## setup

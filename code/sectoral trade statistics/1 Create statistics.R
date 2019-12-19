@@ -46,7 +46,7 @@ for (sct in sectors) {
   total.sec.trade=sum(subset(trade.base.bilateral, hs6 %in% sec.hs)$trade.value)
   
   sec.stats=data.frame("Total trade in 2018 (USD bn)"=round(total.sec.trade/1000000000,2),
-                       "Share of 2018 world trade"=round(total.sec.trade/world.trade,2))
+                       "Share of 2018 world trade"=round(total.sec.trade/world.trade,4))
  
   write.xlsx(sec.stats, file=paste0(s.path,"Trade statistics for 2018 in sector ",sct,".xlsx"),row.names=F, sheetName = "sector trade stats")
   

@@ -55,7 +55,6 @@ setnames(conversion, old="un_code", new="i.un")
 
 world.0 <- gtalibrary::world.geo
 
-
 conversion$name=as.character(conversion$name)
 conversion$name[conversion$name=="United Kingdom of Great Britain and Northern Ireland"]<-"the United Kingdom"
 conversion$name[conversion$name=="United States of America"]<-"the United States"
