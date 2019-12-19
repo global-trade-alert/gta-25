@@ -13,8 +13,8 @@ source('0 report production/GTA 25/help files/Producer console.R')
 directories=gta25_setup(internal.name="Single & multi-country hits",
                         in.dev=F,
                         author=NULL,
-                        wipe.data=T,
-                        wipe.figs=T)
+                        wipe.data=F,
+                        wipe.figs=F)
 
 data.path = directories$data.path
 
@@ -36,10 +36,10 @@ export.subsidies=int.mast.types$intervention.type[int.mast.types$is.export.promo
 # The vertical axis show the share of trade affected.
 # 
 # For every month, we calculate the instrument-targeting combination of the original graph except the single-affected export incentives:
-# (1) World trade affected by tariff measures affecting a single nation in the home market
-# (2) World trade affected by tariff measures affecting mulitple nations in the home market
-# (3) World trade affected by all other measures affecting single nation in the home market
-# (4) World trade affected by all other measures affecting multiple nations in the home market
+# (1) World trade affected by tariff interventions affecting a single nation in the home market
+# (2) World trade affected by tariff interventions affecting mulitple nations in the home market
+# (3) World trade affected by all other interventions affecting single nation in the home market
+# (4) World trade affected by all other interventions affecting multiple nations in the home market
 # (5*) World trade affected by export incentives affecting multiple nations in a foreign market
 # (6*) World trade affected by all instruments and any number of affected nations.
 
@@ -58,7 +58,7 @@ for(period in 1:length(periods)){
     monat=as.Date(monat, origin="1970-01-01")
     
     print(paste("starting",format(monat, "%y-%m")))
-    # (1) World trade affected by tariff measures affecting a single nation in the home market
+    # (1) World trade affected by tariff interventions affecting a single nation in the home market
     
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("inward"),
@@ -93,7 +93,7 @@ for(period in 1:length(periods)){
     
     rm(trade.value)
     
-    # (2) World trade affected by tariff measures affecting mulitple nations in the home market
+    # (2) World trade affected by tariff interventions affecting mulitple nations in the home market
     
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("inward"),
@@ -126,7 +126,7 @@ for(period in 1:length(periods)){
     rm(trade.value)
     
     
-    # (3) World trade affected by all other measures affecting single nation in the home market
+    # (3) World trade affected by all other interventions affecting single nation in the home market
     
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("inward"),
@@ -159,7 +159,7 @@ for(period in 1:length(periods)){
     rm(trade.value)
     
     
-    # (4) World trade affected by all other measures affecting multiple nations in the home market
+    # (4) World trade affected by all other interventions affecting multiple nations in the home market
     
     gta_trade_coverage(gta.evaluation = c("Red","Amber"),
                        affected.flows = c("inward"),
