@@ -115,7 +115,7 @@ fig2.create <- function(dst, scaling.x, scaling.y) {
 
 
 # Create panels per sector ------------------------------------------------
-limits.x.1 <- c(0.25,0.75,0.5)
+limits.x.1 <- c(0.20,0.4,0.2)
 limits.y.1 <- c(0.75,0.75,0.5)
 limits.x.2 <- c(1,0.75,0.5)
 limits.y.2 <- c(0.75,0.75,0.5)
