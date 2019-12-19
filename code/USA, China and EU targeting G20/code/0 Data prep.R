@@ -14,8 +14,8 @@ source('0 report production/GTA 25/help files/Producer console.R')
 directories=gta25_setup(internal.name="USA, China and EU targeting G20",
                         in.dev=F,
                         author=NULL,
-                        wipe.data=T,
-                        wipe.figs=T)
+                        wipe.data=F,
+                        wipe.figs=F)
 
 data.path = directories$data.path
 
@@ -24,7 +24,7 @@ dest.markets <- list(c(156),c(840),c(eu.members))
 dest.markets.names <- c("China","United States of America", "EU")
 
 trade.data.year = "base"
-gdp.year=2018
+gdp.year=2016
 
 run.calc=T
 
@@ -101,7 +101,7 @@ if (run.calc) {
                             keep.exporter = T,
                             importing.country = c(dest.markets[[1]], dest.markets[[2]],dest.markets[[3]]),
                             keep.importer = T,
-                            trade.data = trade.data.year)
+                            trade.data = gdp.year)
   
   trade.base.bilateral$i.un[trade.base.bilateral$i.un %in% eu.members] <- 999
   trade.data <- aggregate(trade.value ~ a.un+i.un, trade.base.bilateral, function(x) sum(x))
