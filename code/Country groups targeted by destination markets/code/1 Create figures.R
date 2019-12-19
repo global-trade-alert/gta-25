@@ -62,7 +62,7 @@ fig1.create <- function() {
       geom_rect(data=subset(fig1.data.lines, exporter == "African Union"), aes(xmin=order+0.29, xmax=order+0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
       geom_point(data=subset(fig1.data, exporter == "African Union"), aes(x=order+0.2, y=coverages, colour = type),size=5)+
       geom_point(data=subset(fig1.data, exporter == "LDCs"), aes(x=order-0.2, y=coverages, colour = type),size=5)+
-      geom_vline(xintercept = c(seq(1.5,5.5,1)),colour="#dadada")+
+      geom_vline(xintercept = c(seq(1.5,length(c(unique(fig1.data$importer)))-.5,1)),colour="#dadada")+
       gta_plot_wrapper(data = subset(fig1.data, exporter %in% c("LDCs","African Union")),
                        data.x = "order",
                        data.y = "coverages",
@@ -74,7 +74,7 @@ fig1.create <- function() {
                        colour.palette = c(gta_colour$red[1], gta_colour$green[1]),
                        x.bottom.name = "Destination market",
                        x.bottom.labels = c(unique(fig1.data$importer)),
-                       x.bottom.breaks = c(seq(1,6,1)),
+                       x.bottom.breaks = c(seq(1,length(c(unique(fig1.data$importer))),1)),
                        x.bottom.expand = c(0.05,0.05),
                        x.top.enable = T,
                        x.top.labels = c(unique(fig1.data$importer)),
@@ -109,7 +109,7 @@ fig2.create <- function() {
     geom_rect(data=subset(fig1.data.lines, exporter == "Upper middle income countries"), aes(xmin=order+0.29, xmax=order+0.11, ymin=liberalising, ymax=harmful, fill=colour), alpha=0.3)+
     geom_point(data=subset(fig1.data, exporter == "Upper middle income countries"), aes(x=order+0.2, y=coverages, colour = type),size=5)+
     geom_point(data=subset(fig1.data, exporter == "Lower middle income countries"), aes(x=order-0.2, y=coverages, colour = type),size=5)+
-    geom_vline(xintercept = c(seq(1.5,5.5,1)),colour="#dadada")+
+    geom_vline(xintercept = c(seq(1.5,length(c(unique(fig1.data$importer)))-.5,1)),colour="#dadada")+
     gta_plot_wrapper(data = subset(fig1.data, exporter %in% c("LDCs","African Union")),
                      data.x = "order",
                      data.y = "coverages",
@@ -121,7 +121,7 @@ fig2.create <- function() {
                      colour.palette = c(gta_colour$red[1], gta_colour$green[1]),
                      x.bottom.name = "Destination market",
                      x.bottom.labels = c(unique(fig1.data$importer)),
-                     x.bottom.breaks = c(seq(1,6,1)),
+                     x.bottom.breaks = c(seq(1,length(c(unique(fig1.data$importer))),1)),
                      x.bottom.expand = c(0.05,0.05),
                      x.top.enable = T,
                      x.top.labels = c(unique(fig1.data$importer)),
