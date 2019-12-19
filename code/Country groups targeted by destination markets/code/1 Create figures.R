@@ -72,7 +72,7 @@ fig1.create <- function() {
                        y.left.labels = percent,
                        y.left.name = "% of trade to\ndestination\nmarket affected",
                        colour.palette = c(gta_colour$red[1], gta_colour$green[1]),
-                       x.bottom.name = "Destination markets",
+                       x.bottom.name = "Destination market",
                        x.bottom.labels = c(unique(fig1.data$importer)),
                        x.bottom.breaks = c(seq(1,6,1)),
                        x.bottom.expand = c(0.05,0.05),
