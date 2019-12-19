@@ -52,8 +52,8 @@ fig.data <- rbind(single.multi.data)
 write.xlsx(fig.data, file=paste0(output.path,"Table for Figure 1-7.xlsx"),row.names=F, sheetName = "Coverages")
 
 # Cosmetics
-fig.data$target[fig.data$target == "multi"] <- "multiple nations"
-fig.data$target[fig.data$target == "single"] <- "single nation"
+fig.data$target[fig.data$target == "multi"] <- "multiple exporters"
+fig.data$target[fig.data$target == "single"] <- "single exporter"
 fig.data$target[fig.data$target == "all"] <- "all nations"
 fig.data$name <- paste0(capitalize(fig.data$instrument)," interventions \naffecting ",fig.data$target)
 fig.data$name[fig.data$instrument=="export incentive"] <- paste0(fig.data$name[fig.data$instrument=="export incentive"]," in foreign market")
@@ -71,7 +71,7 @@ fig.create <- function(tp,trg) {
       gta_plot_wrapper(data=set,
                        data.x="month.count",
                        data.y="trade.share",
-                       x.bottom.name = "Months from start of interval",
+                       x.bottom.name = "Months after 1 January of interval",
                        x.bottom.labels = c(seq(0,max(set$month.count),5),34),
                        x.bottom.breaks = c(seq(0,max(set$month.count),5),34),
                        y.left.name = paste0("World trade affected by ",tolower(name)),
@@ -97,7 +97,7 @@ fig7.create <- function() {
     gta_plot_wrapper(data=set,
                      data.x="month.count",
                      data.y="trade.share",
-                     x.bottom.name = "Months into period",
+                     x.bottom.name = "Months after 1 January 2017",
                      x.bottom.labels = c(seq(0,max(set$month.count),5),34),
                      x.bottom.breaks = c(seq(0,max(set$month.count),5),34),
                      y.left.name = paste0("World trade affected from \nJanuary 2017 to November 2019"),
