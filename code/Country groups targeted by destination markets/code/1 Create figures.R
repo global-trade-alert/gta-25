@@ -142,34 +142,6 @@ fig2.create <- function() {
 }
 
 
-# EXAMPLE PLOT WITH LINES ------------------------------------------------
-
-figex <- ggplot()+
-  geom_line(data=subset(fig1.data, exporter == "African Union"), aes(x=order, y=coverages, colour=type), alpha=0.3)+
-  geom_point(data=subset(fig1.data, exporter == "African Union"), aes(x=order, y=coverages, colour = type),size=3)+
-  gta_plot_wrapper(data = subset(fig1.data, exporter %in% c("LDCs","African Union")),
-                   data.x = "order",
-                   data.y = "coverages",
-                   colour.labels = c("Harmful","Liberalising"),
-                   colour.legend.title = "Intervention type",
-                   y.left.limits = c(0,1),
-                   colour.palette = c(gta_colour$red[1], gta_colour$green[1]),
-                   x.bottom.name = "Destination markets",
-                   x.bottom.labels = c(unique(fig1.data$importer)),
-                   x.bottom.breaks = c(seq(1,6,1)),
-                   colour.legend.col = 2,
-                   fill.palette = c(gta_colour$green[1], gta_colour$red[1]))+
-  gta_theme()
-
-  # figex
-  # 
-  # gta_plot_saver(plot = figex,
-  #                path = paste0(output.path),
-  #                name = paste0("Example Figure with lines"),
-  #                cairo_ps = T,
-  #                width = 21)
-  
-
 # Create panels per sector ------------------------------------------------
 
   fig1 <- fig1.create()
