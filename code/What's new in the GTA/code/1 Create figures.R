@@ -50,7 +50,7 @@ write.xlsx(published.ids, paste0(figure.path, 'Figure 2 data.xlsx'))
 
 load(paste0(data.path, 'state act sources.Rdata'))
 
-fig2=ggplot(sa.src.yr, aes(x=as.factor(year), y=sa.count))+
+fig2=ggplot(aggregate(sa.count ~ year, sa.src.yr, sum), aes(x=as.factor(year), y=sa.count))+
   geom_bar(stat="identity",fill=gta_colour$qualitative[1])+
   gta_theme()+
   labs(x="calendar year",y="Total number of reports on state interventions\npublished in a given calendar year")+
