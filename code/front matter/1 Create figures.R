@@ -164,7 +164,7 @@ map.nr.hits(type.eval="harmful",
             color.high = gta_colour$red[1])
 
 map.nr.hits(type.eval="liberalising",
-            legend.name = "Number of times a nation’s commercial interests benefited \nfrom trade reforms implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)",
+            legend.name = "Number of times a nation’s commercial interests benefitted \nfrom trade reforms implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)",
             color.low = gta_colour$green[4],
             color.high = gta_colour$green[1])
 
@@ -174,7 +174,7 @@ map.coverage(type.eval="harmful",
             color.high = gta_colour$red[1])
 
 map.coverage(type.eval="liberalising",
-             legend.name = "Share of national goods exports benefiting from \ntrade reforms implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)",
+             legend.name = "Share of national goods exports benefitting from \ntrade reforms implemented from 1 January 2017 \nto 15 November 2019 (the Populist era)",
              color.low = gta_colour$green[4],
              color.high = gta_colour$green[1],
              breaks.manual = "c(min(world$value[is.na(world$value)==F]),seq(0,0.6,0.2),max(world$value[is.na(world$value)==F]))")
