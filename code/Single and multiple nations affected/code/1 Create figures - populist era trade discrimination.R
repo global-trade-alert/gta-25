@@ -1,4 +1,4 @@
-rm(list=ls())
+krm(list=ls())
 
 library(gtalibrary)
 library(stringr)
@@ -92,7 +92,8 @@ fig7.create <- function() {
   set = subset(fig.data, period.id == 1)
   set$grouping <- paste0(set$instrument," interventions affecting ",set$target)
   
-  fig <- ggplot(data=set)+
+  
+    fig=ggplot(data=set)+
     geom_line(aes(x=month.count, y=trade.share, colour=grouping),size=1)+
     gta_plot_wrapper(data=set,
                      data.x="month.count",
@@ -104,8 +105,15 @@ fig7.create <- function() {
                      y.left.labels = percent,
                      y.left.limits = c(0,max(set$trade.share)*1.05),
                      colour.legend.col = 2,
-                     colour.legend.title = "Intervention type and target")+
-    gta_theme()
+                     colour.legend.title = "Intervention type and target",
+                     colour.labels = c("all interventions affecting all nations",
+                                       "export incentive interventions \naffecting multiple exporters",
+                                       "non−tariff interventions affecting \nmultiple exporters",
+                                       "non−tariff interventions affecting \nsingle exporter",
+                                       "tariff interventions affecting \nmultiple exporters",
+                                       "tariff interventions affecting \nsingle exporte"))+
+    gta_theme()+
+      theme(legend.text = element_text(margin=margin(b=3,t=3)))
   fig
   return(fig)
 }
