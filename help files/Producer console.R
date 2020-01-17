@@ -41,6 +41,15 @@ gta25_setup <- function(internal.name=NULL,
                                     stringsAsFactors = F))
   
   producer.console=rbind(producer.console,
+                         data.frame(internal.name="Sectoral trade statistics",
+                                    report.number=999,
+                                    report.name="Sectoral trade statistics",
+                                    create.fig.script="1 Create figures.R",
+                                    create.fig.numbers=c(5:8),
+                                    stringsAsFactors = F))
+  
+  
+  producer.console=rbind(producer.console,
                          data.frame(internal.name="Single & multi-country hits - shifting",
                                     report.number=2,
                                     report.name="Shifting commercial policy trends",
